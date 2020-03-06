@@ -1,0 +1,3 @@
+CONFIG.data = {
+  "urls": []
+};
