@@ -1,3 +1,133 @@
 {
-  "name": "sample"
+  "name": "sample",
+
+  "metadata": {
+    "src": "E:/Dropbox/amnh/Knight2020/data/all_normalized.csv",
+    "id": "Catalog No",
+    "cols": [
+      {"fromKey": "Title", "toKey": "title"},
+      {"fromKey": "Catalog No", "toKey": "url", "pattern": "https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno={value}"}
+    ]
+  },
+
+  "sets": {
+    "mexico": {"query": "Country CONTAINS Mexico"},
+    "lumholtz": {"query": "Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1905"},
+    "lumholtzItem": {"query": "Catalog No = 30 / 1739 *", "limit": 1}
+  },
+
+  "positions": {
+    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "xLogarithm": 0, "yLogarithm": 0}
+  },
+
+  "textures": {
+    "default": {
+      "assets": [
+        {"width": 512, "height": 512, "cellw": 1, "cellh": 1, "src": "img/textures/default.png"}
+      ]
+    },
+    "mexico": {
+      "set": "mexico",
+      "assets": [
+        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico1.jpg"},
+        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico2.jpg"},
+        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico3.jpg"}
+      ]
+    },
+    "lumholtzItem": {
+      "set": "lumholtzItem",
+      "assets": [
+        {"width": 512, "height": 512, "cellw": 512, "cellh": 512, "src": "img/textures/lumholtzItem.jpg"}
+      ]
+    }
+  },
+
+  "content": {
+    "default": {
+      "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from all over the world"
+    },
+    "mexico": {
+      "set": "mexico",
+      "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from Mexico"
+    },
+    "lumholtz": {
+      "set": "lumholtz",
+      "image": "https://lbry-web-007.amnh.org/digital/files/thumbnails/05d7c86dfd3d1eaba0b26ce30555e17a.jpg",
+      "imageCaption": "Tarahumara women, Guadalupe, Chihuahua, 1892",
+      "imageCaptionUrl": "https://lbry-web-007.amnh.org/digital/items/show/18793",
+      "title": "Lumholtz Mexico Expeditions",
+      "html": "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>"
+    },
+    "lumholtzItem": {
+      "set": "lumholtzItem",
+      "text": "This figure was collected as part of the Mexico expeditions led by Carl Lumholtz between 1890 and 1897. It now can be found in the Mexico and Central America Hall in the American Museum of Natural History."
+    }
+  },
+
+  "ui": {
+    "slider": {
+      "steps": [
+        {
+          "label": "Male Human Figure",
+          "metadata": "default",
+          "positions": "default",
+          "content": "lumholtzItem",
+          "zoom": "auto",
+          "pan": "auto",
+          "meshes": [
+            {
+              "textures": "default",
+              "alpha": 0.2
+            },{
+              "textures": "lumholtzItem"
+            }
+          ]
+        },{
+          "label": "Lumholtz Mexico Expeditions",
+          "metadata": "default",
+          "positions": "default",
+          "content": "lumholtz",
+          "zoom": "auto",
+          "pan": "auto",
+          "meshes": [
+            {
+              "textures": "default",
+              "alpha": 0.2
+            },{
+              "textures": "mexico",
+              "set": "lumholtz"
+            }
+          ]
+        },{
+          "label": "Mexico",
+          "metadata": "default",
+          "content": "mexico",
+          "positions": "default",
+          "zoom": "auto",
+          "pan": "auto",
+          "meshes": [
+            {
+              "textures": "default",
+              "alpha": 0.2
+            },{
+              "textures": "mexico"
+            }
+          ]
+        },{
+          "label": "Everything",
+          "metadata": "default",
+          "content": "default",
+          "positions": "default",
+          "zoom": "auto",
+          "pan": "auto",
+          "meshes": [
+            {
+              "textures": "default"
+            }
+          ]
+        }
+      ]
+    }
+  }
+
 }

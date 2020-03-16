@@ -33,7 +33,18 @@ def readCsv(filename, verbose=True, parseNumbers=True):
                 rows = mu.parseNumbers(rows)
             if verbose:
                 print("Read %s rows from %s" % (len(rows), filename))
+    else:
+        print("No file found at %s" % filename)
     return (fieldnames, rows)
+
+def readJSON(filename):
+    data = {}
+    if os.path.isfile(filename):
+        with open(filename, encoding="utf8") as f:
+            data = json.load(f)
+    else:
+        print("No file found at %s" % filename)
+    return data
 
 def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
     with open(filename, "w", encoding="utf8") as f:
