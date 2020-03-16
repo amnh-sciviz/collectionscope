@@ -19,17 +19,30 @@ def parseQueryString(queryStr, parseNumbers=True):
             query[key] = mu.parseNumber(query[key])
     return query
 
-def readCsv(filename, verbose=True):
+def readCsv(filename, verbose=True, parseNumbers=True):
     rows = []
     fieldnames = []
     if os.path.isfile(filename):
-        with open(filename, 'r', encoding="utf8") as f:
+        with open(filename, "r", encoding="utf8") as f:
             lines = list(f)
             reader = csv.DictReader(lines, skipinitialspace=True)
             if len(lines) > 0:
                 fieldnames = list(reader.fieldnames)
             rows = list(reader)
-            rows = mu.parseNumbers(rows)
+            if parseNumbers:
+                rows = mu.parseNumbers(rows)
             if verbose:
                 print("Read %s rows from %s" % (len(rows), filename))
     return (fieldnames, rows)
+
+def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
+    with open(filename, "w", encoding="utf8") as f:
+        jsonStr = ""
+        if pretty:
+            jsonStr = json.dumps(data, indent=2)
+        else:
+            jsonStr = json.dumps(data)
+        jsonStr = prepend + jsonStr + append
+        f.write(jsonStr)
+        if verbose:
+            print("Wrote data to %s" % filename)
