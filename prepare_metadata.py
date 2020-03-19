@@ -27,6 +27,9 @@ COLUMNS =  configMeta["cols"]
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_FILE, CONFIG_FILE])
 fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
+if "query" in configMeta:
+    items = lu.filterByQueryString(items, configMeta["query"])
+    print("%s items after filtering" % len(items))
 
 # Sort so that index corresponds to ID
 items = sorted(items, key=lambda item: item[ID_COLUMN])

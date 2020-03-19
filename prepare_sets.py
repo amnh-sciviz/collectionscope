@@ -15,10 +15,11 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json",
 a = parser.parse_args()
 
 config = io.readJSON(a.CONFIG_FILE)
+configMeta = config["metadata"]
 configSets = config["sets"]
 
-INPUT_FILE = config["metadata"]["src"]
-ID_COLUMN = config["metadata"]["id"]
+INPUT_FILE = configMeta["src"]
+ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_SET_DIR = OUTPUT_DIR + "data/sets/"
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
@@ -26,6 +27,9 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_SET_DIR, CONFIG_FILE])
 fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
+if "query" in configMeta:
+    items = lu.filterByQueryString(items, configMeta["query"])
+    print("%s items after filtering" % len(items))
 
 # Sort so that index corresponds to ID
 items = sorted(items, key=lambda item: item[ID_COLUMN])

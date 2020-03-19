@@ -4,6 +4,7 @@
   "metadata": {
     "src": "E:/Dropbox/amnh/Knight2020/data/all_normalized.csv",
     "id": "Catalog No",
+    "query": "Acquisition Year < 9999 AND Latitude < 9999 AND Longitude < 9999",
     "cols": [
       {"fromKey": "Title", "toKey": "title"},
       {"fromKey": "Catalog No", "toKey": "url", "pattern": "https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno={value}"}
