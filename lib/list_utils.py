@@ -1,3 +1,5 @@
+from pprint import pprint
+
 import lib.math_utils as mu
 
 def addIndices(arr, keyName="index", startIndex=0):
@@ -8,6 +10,7 @@ def addIndices(arr, keyName="index", startIndex=0):
 def filterByQuery(arr, ors):
     if isinstance(ors, tuple):
         ors = [[ors]]
+    # pprint(ors)
 
     results = []
 
@@ -16,7 +19,7 @@ def filterByQuery(arr, ors):
             andValid = True
             for key, comparator, value in ands:
                 itemValue = item[key]
-                if "<" in comparator or ">" in comparator:
+                if comparator not in ["CONTAINS", "EXCLUDES"]:
                     value = mu.parseNumber(value)
                     itemValue = mu.parseNumber(itemValue)
                 if comparator == "<=" and itemValue > value:
@@ -31,16 +34,16 @@ def filterByQuery(arr, ors):
                 elif comparator == ">" and itemValue <= value:
                     andValid = False
                     break
-                elif comparator == "CONTAINS" and itemValue not in value:
+                elif comparator == "CONTAINS" and value not in itemValue:
                     andValid = False
                     break
-                elif mode == "EXCLUDES" and itemValue in value:
+                elif comparator == "EXCLUDES" and value in itemValue:
                     andValid = False
                     break
-                elif mode == "!=" and itemValue == value:
+                elif comparator == "!=" and itemValue == value:
                     andValid = False
                     break
-                elif itemValue != value:
+                elif comparator == "=" and itemValue != value:
                     andValid = False
                     break
             if andValid:

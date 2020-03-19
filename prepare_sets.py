@@ -31,19 +31,27 @@ fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
 items = sorted(items, key=lambda item: item[ID_COLUMN])
 items = lu.addIndices(items)
 
+jsonsets = {}
+for keyName, options in configSets.items():
+    setItems = lu.filterByQueryString(items, options["query"])
+    if len(setItems) > 0:
+        print("%s results found for '%s'" % (len(setItems), options["query"]))
+    else:
+        print("Warning: '%s' produces no results" % options["query"])
+        continue
 
-# Write metadata file
-outjson = {
-    "rows": rows,
-    "cols": cols,
-    "patterns": patterns
-}
-io.writeJSON(OUTPUT_FILE, outjson)
+    # limit the results if specified
+    if "limit" in options and len(setItems) > options["limit"]:
+        setItems = setItems[:options["limit"]]
+
+    # Write set file
+    setOutFile = OUTPUT_SET_DIR + keyName + ".json"
+    outjson = [item["index"] for item in setItems]
+    io.writeJSON(setOutFile, outjson)
+    jsonsets[keyName] = {"src": setOutFile}
 
 # Write config file
 outjson = {
-    "metadata": {
-        "src": OUTPUT_FILE
-    }
+    "sets": jsonsets
 }
 io.writeJSON(CONFIG_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")
