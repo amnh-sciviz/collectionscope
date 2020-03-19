@@ -18,7 +18,7 @@
   },
 
   "positions": {
-    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "xLogarithm": 0, "yLogarithm": 0}
+    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"}
   },
 
   "textures": {
