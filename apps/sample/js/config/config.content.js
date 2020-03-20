@@ -1,38 +1,4 @@
-{
-  "name": "sample",
-
-  "metadata": {
-    "src": "E:/Dropbox/amnh/Knight2020/data/all_normalized.csv",
-    "id": "Catalog No",
-    "query": "Acquisition Year < 9999 AND Latitude < 9999 AND Longitude < 9999",
-    "cols": [
-      {"fromKey": "Title", "toKey": "title"},
-      {"fromKey": "Catalog No", "toKey": "url", "pattern": "https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno={value}"}
-    ]
-  },
-
-  "sets": {
-    "mexico": {"query": "Country CONTAINS Mexico"},
-    "lumholtz": {"query": "Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1905"},
-    "lumholtzItem": {"query": "Catalog No = 30 / 1739 *", "limit": 1}
-  },
-
-  "positions": {
-    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"}
-  },
-
-  "textures": {
-    "filenameKey": "Filename",
-    "imageDir": "E:/production/amnh/knight/images/{Region}/",
-    "maxWidth": 4096,
-    "minCellWidth": 1,
-    "maxCellWidth": 512,
-    "maxTextureFiles": 2,
-    "noImageValue": "no_image.jpg",
-    "defaultColor": [60, 60, 60],
-    "containsAlpha": 0
-  },
-
+_.extend(CONFIG, {
   "content": {
     "default": {
       "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from all over the world"
@@ -54,7 +20,6 @@
       "text": "This figure was collected as part of the Mexico expeditions led by Carl Lumholtz between 1890 and 1897. It now can be found in the Mexico and Central America Hall in the American Museum of Natural History."
     }
   },
-
   "ui": {
     "slider": {
       "steps": [
@@ -67,11 +32,13 @@
             {
               "textures": "default",
               "alpha": 0.2
-            },{
+            },
+            {
               "textures": "lumholtzItem"
             }
           ]
-        },{
+        },
+        {
           "label": "Lumholtz Mexico Expeditions",
           "positions": "default",
           "content": "lumholtz",
@@ -80,12 +47,14 @@
             {
               "textures": "default",
               "alpha": 0.2
-            },{
+            },
+            {
               "textures": "mexico",
               "set": "lumholtz"
             }
           ]
-        },{
+        },
+        {
           "label": "Mexico",
           "content": "mexico",
           "positions": "default",
@@ -94,11 +63,13 @@
             {
               "textures": "default",
               "alpha": 0.2
-            },{
+            },
+            {
               "textures": "mexico"
             }
           ]
-        },{
+        },
+        {
           "label": "Everything",
           "content": "default",
           "positions": "default",
@@ -112,5 +83,4 @@
       ]
     }
   }
-
-}
+});
