@@ -49,10 +49,14 @@ for keyName, options in configSets.items():
         setItems = setItems[:options["limit"]]
 
     # Write set file
-    setOutFile = OUTPUT_SET_DIR + keyName + ".json"
     outjson = [item["index"] for item in setItems]
-    io.writeJSON(setOutFile, outjson)
-    jsonsets[keyName] = {"src": setOutFile}
+    if len(setItems) > 10:
+        setOutFile = OUTPUT_SET_DIR + keyName + ".json"
+        io.writeJSON(setOutFile, outjson)
+        jsonsets[keyName] = {"src": setOutFile}
+    # if only a small amount of items, don't bother to put it in its own json file
+    else:
+        jsonsets[keyName] = {"indices": outjson}
 
 # Write config file
 outjson = {

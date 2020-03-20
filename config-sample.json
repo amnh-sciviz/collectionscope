@@ -22,25 +22,15 @@
   },
 
   "textures": {
-    "default": {
-      "assets": [
-        {"width": 512, "height": 512, "cellw": 1, "cellh": 1, "src": "img/textures/default.png"}
-      ]
-    },
-    "mexico": {
-      "set": "mexico",
-      "assets": [
-        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico1.jpg"},
-        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico2.jpg"},
-        {"width": 4096, "height": 4096, "cellw": 32, "cellh": 32, "src": "img/textures/mexico3.jpg"}
-      ]
-    },
-    "lumholtzItem": {
-      "set": "lumholtzItem",
-      "assets": [
-        {"width": 512, "height": 512, "cellw": 512, "cellh": 512, "src": "img/textures/lumholtzItem.jpg"}
-      ]
-    }
+    "filenameKey": "Filename",
+    "imageDir": "E:/production/amnh/knight/images/{Region}/",
+    "maxWidth": 4096,
+    "minCellWidth": 1,
+    "maxCellWidth": 512,
+    "maxTextureFiles": 2,
+    "noImageValue": "no_image.jpg",
+    "defaultColor": [60, 60, 60],
+    "containsAlpha": 0
   },
 
   "content": {

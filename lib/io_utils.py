@@ -1,6 +1,8 @@
+import bz2
 import csv
 import json
 import os
+import pickle
 
 import lib.math_utils as mu
 
@@ -18,6 +20,15 @@ def parseQueryString(queryStr, parseNumbers=True):
         for key in query:
             query[key] = mu.parseNumber(query[key])
     return query
+
+def readCacheFile(fn):
+    result = None
+    if os.path.isfile(fn):
+        print("Loading cache file %s..." % fn)
+        with bz2.open(fn, "rb") as f:
+            result = pickle.load(f)
+            print("Loaded cache file %s" % fn)
+    return result
 
 def readCsv(filename, verbose=True, parseNumbers=True):
     rows = []
@@ -45,6 +56,11 @@ def readJSON(filename):
     else:
         print("No file found at %s" % filename)
     return data
+
+def writeCacheFile(fn, data):
+    print("Writing cache to %s..." % fn)
+    pickle.dump(data, bz2.open(fn, 'wb'))
+    print("Wrote cache to %s." % fn)
 
 def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
     with open(filename, "w", encoding="utf8") as f:

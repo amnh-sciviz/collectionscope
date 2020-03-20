@@ -1,3 +1,4 @@
+import sys
 
 def addNormalizedValues(arr, key, nkey):
     if len(arr) < 1:
@@ -44,3 +45,11 @@ def parseNumbers(arr):
                 if key != "id":
                     arr[i][key] = parseNumber(item[key])
     return arr
+
+def printProgress(step, total, prepend=""):
+    sys.stdout.write('\r')
+    sys.stdout.write("%s%s%%" % (prepend, round(1.0*step/total*100,2)))
+    sys.stdout.flush()
+
+def roundInt(value):
+    return int(round(value))

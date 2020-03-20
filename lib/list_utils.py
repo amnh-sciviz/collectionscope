@@ -12,6 +12,9 @@ def filterByQuery(arr, ors):
         ors = [[ors]]
     # pprint(ors)
 
+    if len(ors) < 1:
+        return arr
+
     results = []
 
     for item in arr:

@@ -7,7 +7,9 @@ _.extend(CONFIG, {
       "src": "apps/sample/data/sets/lumholtz.json"
     },
     "lumholtzItem": {
-      "src": "apps/sample/data/sets/lumholtzItem.json"
+      "indices": [
+        13417
+      ]
     }
   }
 });
