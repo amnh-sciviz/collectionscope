@@ -81,7 +81,7 @@ for keyName, options in configPos.items():
     # Write position file
     posOutFile = OUTPUT_POS_DIR + keyName + ".json"
     io.writeJSON(posOutFile, values)
-    jsonPositions[keyName] = {"src": posOutFile}
+    jsonPositions[keyName] = {"src": "/" + posOutFile}
 
 # Write config file
 outjson = {

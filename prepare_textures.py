@@ -143,7 +143,7 @@ for keyName, options in sets:
             basePixels[y:y+cellWidth, x:x+cellWidth] = fileImageData[i]
         iu.savePixelsToImage(textureImageFn, basePixels)
         startIndex += cellsPerFile
-        assetFiles.append({"src": textureImageFn})
+        assetFiles.append({"src": "/" + textureImageFn})
 
     jsonsets[keyName] = {
         "width": maxWidth,

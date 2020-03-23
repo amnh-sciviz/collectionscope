@@ -60,7 +60,7 @@ io.writeJSON(OUTPUT_FILE, outjson)
 # Write config file
 outjson = {
     "metadata": {
-        "src": OUTPUT_FILE
+        "src": "/" + OUTPUT_FILE
     }
 }
 io.writeJSON(CONFIG_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")

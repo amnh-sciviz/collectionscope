@@ -16,29 +16,13 @@ var MainApp = (function() {
 
     this.loadScene();
 
-    $.when(
-      this.loadData(),
-      this.loadAssets()
+    this.collection = new Collection(_.extend({}, this.opt, {
+      'onLoadEnd': function(){ _this.onLoadEnd(); },
+      'onLoadProgress': function(){ _this.onLoadProgress(); }
+    }));
 
-    ).done(function(){
-      _this.onLoad();
-    });
-  };
-
-  MainApp.prototype.loadAssets = function(){
-    var _this = this;
-    var deferred = $.Deferred();
-    deferred.resolve();
-    this.assets = [];
-    return deferred;
-  };
-
-  MainApp.prototype.loadData = function(){
-    var _this = this;
-    var deferred = $.Deferred();
-    deferred.resolve();
-    this.data = [];
-    return deferred;
+    this.onLoadStart();
+    this.collection.load();
   };
 
   MainApp.prototype.loadScene = function(){
@@ -52,23 +36,37 @@ var MainApp = (function() {
     $el.append(renderer.domElement);
     camera.position.z = 400;
 
+    this.$el = $el;
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
   };
 
-  MainApp.prototype.onLoad = function(){
+  MainApp.prototype.onLoadEnd = function(){
     console.log("Loaded everything.");
-
-    this.collection = new Collection({
-      "data": this.data,
-      "assets": this.assets
-    });
+    this.$el.removeClass('is-loading');
 
     this.render();
   };
 
+  MainApp.prototype.onLoadProgress = function(){
+    this.totalLoaded += 1;
+    var percentFinished = this.totalLoaded / this.totalToLoad;
+    percentFinished = Math.round(percentFinished * 100) + '%';
+    this.$loadingText.text(percentFinished);
+    this.$loadingProgress.css('width', percentFinished);
+  };
+
+  MainApp.prototype.onLoadStart = function(){
+    this.totalLoaded = 0;
+    this.totalToLoad = this.collection.getTotalToLoad();
+    this.$loadingProgress = $('.loading-progress');
+    this.$loadingText = $('.loading-text');
+    this.$el.addClass('is-loading');
+  };
+
   MainApp.prototype.render = function(){
+    var _this = this;
 
     this.renderer.render( this.scene, this.camera );
     this.collection && this.collection.render();

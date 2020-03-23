@@ -53,7 +53,7 @@ for keyName, options in configSets.items():
     if len(setItems) > 10:
         setOutFile = OUTPUT_SET_DIR + keyName + ".json"
         io.writeJSON(setOutFile, outjson)
-        jsonsets[keyName] = {"src": setOutFile}
+        jsonsets[keyName] = {"src": "/" + setOutFile}
     # if only a small amount of items, don't bother to put it in its own json file
     else:
         jsonsets[keyName] = {"indices": outjson}
