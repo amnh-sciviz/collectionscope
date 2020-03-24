@@ -13,19 +13,24 @@ var Geometry = (function() {
     var maxInstancedCount = this.opt.indices.length;
     var imageW = this.opt.textureProps.width;
     var imageH = this.opt.textureProps.height;
-    var cols = parseInt(imageW / this.opt.textureProps.cellWidth);
-    var rows = parseInt(imageH / this.opt.textureProps.cellHeight);
+    var cellW = this.opt.textureProps.cellWidth;
+    var cellH = this.opt.textureProps.cellHeight;
+    var cols = parseInt(imageW / cellW);
+    var rows = parseInt(imageH / cellH);
 
     // filter and map positions
     var positionSize = parseInt(this.opt.positions.length / this.opt.itemCount);
+
     var allPositions = _.chunk(this.opt.positions, positionSize);
+    // console.log(allPositions)
     var positions = _.map(this.opt.indices, function(index, i){
       return {
-        'x': allPositions[index][0],
-        'y': allPositions[index][1],
-        'z': positionSize > 2 ? allPositions[index][2] : 0
+        'x': MathUtil.lerp(-700, 3396, allPositions[index][0]),
+        'y': MathUtil.lerp(2048, -2048, allPositions[index][1]),
+        'z': positionSize > 2 ? MathUtil.lerp(-2048, 2048, allPositions[index][2]) : 0
       }
     });
+    // console.log(positions)
 
     // load geometry
     var planeGeom = new THREE.PlaneBufferGeometry(1, 1);
@@ -89,8 +94,8 @@ var Geometry = (function() {
     for (var i=0; i<maxInstancedCount; i++) {
       var i0 = i*3;
 
-      scaleArr[i0] = imageW / cols;
-      scaleArr[i0+1] = imageH / rows;
+      scaleArr[i0] = cellW;
+      scaleArr[i0+1] = cellH;
       scaleArr[i0+2] = 1;
 
       translateArr[i0] = positions[i].x;

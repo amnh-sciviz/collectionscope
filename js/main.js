@@ -34,7 +34,8 @@ var MainApp = (function() {
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(w, h);
     $el.append(renderer.domElement);
-    camera.position.z = 400;
+    camera.position.z = 800;
+    camera.lookAt(new THREE.Vector3(0,0,0));
 
     this.$el = $el;
     this.scene = scene;

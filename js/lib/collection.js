@@ -174,6 +174,7 @@ var Collection = (function() {
 
     var sets = {};
     _.each(this.opt.sets, function(set, key){
+      // if (key !== 'lumholtz') return;
       var setPositions = _.has(_this.positions, key) ? _this.positions[key].values : _this.positions.default.values;
       var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;

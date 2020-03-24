@@ -25,10 +25,16 @@ var Set = (function() {
 
     // one mesh per texture file
     var meshes = [];
-    _.each(this.opt.textures.assets, function(texture, i){
+    var t = this.opt.textures;
+    var itemsPerAsset = parseInt((t.width / t.cellWidth) * (t.height / t.cellHeight));
+    _.each(t.assets, function(texture, i){
+      var indices = _this.opt.indices.slice();
+      if (indices.length > itemsPerAsset) {
+        indices = indices.slice(i*itemsPerAsset, Math.min(indices.length, (i+1)*itemsPerAsset));
+      }
       var mesh = new Mesh({
         'itemCount': _this.opt.metadata.length,
-        'indices': _this.opt.indices,
+        'indices': indices,
         'positions': _this.opt.positions,
         'texture': texture,
         'textureProps': _.omit(_this.opt.textures, 'assets')
