@@ -15,6 +15,10 @@ var Collection = (function() {
 
   };
 
+  Collection.prototype.getThree = function(){
+    return this.container;
+  };
+
   Collection.prototype.getTotalToLoad = function(){
     var totalToLoad = 1; // load metadata
     // load positions
@@ -23,6 +27,7 @@ var Collection = (function() {
     totalToLoad += _.keys(this.opt.sets).length;
     // load textures
     totalToLoad += _.reduce(this.opt.textures, function(memo, t){ return memo + t.assets.length; }, 0);
+    return totalToLoad;
   };
 
   Collection.prototype.load = function(){
@@ -53,11 +58,13 @@ var Collection = (function() {
 
   Collection.prototype.loadMetadata = function(){
     var _this = this;
-    this.metadata = {};
+    this.metadata = [];
     var deferred = $.Deferred();
     $.getJSON(this.opt.metadata.src, function(data){
       _this.opt.onLoadProgress();
-      _this.metadata = data;
+      _this.metadata = _.map(data.rows, function(row){
+        return _.object(data.cols, row);
+      });
       console.log('Loaded metadata.');
       deferred.resolve();
     });
@@ -102,14 +109,13 @@ var Collection = (function() {
     var deferred = $.Deferred();
     var loaded = 0;
     var totalToLoad = _.keys(this.opt.sets).length;
-    this.sets = {};
     _.each(this.opt.sets, function(set, key){
       // check if indice data is set locally
       if (!set.src) {
         loaded++;
         _this.opt.onLoadProgress();
         if (!set.indices) console.log('Warning: '+key+' does not have any valid set data');
-        else _this.sets[key] = {'values': set.indices};
+        else _this.opt.sets[key] = {'values': set.indices};
         if (loaded===totalToLoad) {
           console.log('Loaded all set data.');
           deferred.resolve();
@@ -120,7 +126,7 @@ var Collection = (function() {
       $.getJSON(set.src, function(data){
         loaded++;
         _this.opt.onLoadProgress();
-        _this.sets[key] = {'values': data};
+        _this.opt.sets[key] = {'values': data};
         if (loaded===totalToLoad) {
           console.log('Loaded all set data.');
           deferred.resolve();
@@ -157,11 +163,38 @@ var Collection = (function() {
   };
 
   Collection.prototype.onReady = function(){
+    var _this = this;
+    var container = new THREE.Group();
 
+    if (!_.has(this.opt.sets, 'default')) {
+      this.opt.sets.default = {
+        'values': _.range(_this.metadata.length)
+      };
+    }
+
+    var sets = {};
+    _.each(this.opt.sets, function(set, key){
+      var setPositions = _.has(_this.positions, key) ? _this.positions[key].values : _this.positions.default.values;
+      var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
+      var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
+      var set = new Set({
+        'metadata': _this.metadata,
+        'indices': set.values,
+        'positions': setPositions,
+        'content': setContent,
+        'textures': setTextures
+      });
+      sets[key] = set;
+      container.add(set.getThree());
+    });
+    this.sets = sets;
+    this.container = container;
   };
 
   Collection.prototype.render = function(){
-
+    _.each(this.sets, function(set, key){
+      set.render();
+    });
   };
 
   return Collection;
