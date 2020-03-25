@@ -45,6 +45,8 @@ for keyName, options in configPos.items():
     yCol = options["yCol"]
     xys = [(mu.parseNumber(item[xCol]), mu.parseNumber(item[yCol])) for item in items]
 
+    gridWidth = gridHeight = None
+
     if options["layout"] == "grid":
         gridRatioX, gridRatioY = (1, 1)
         if "gridAspectRatio" in options:
@@ -81,7 +83,11 @@ for keyName, options in configPos.items():
     # Write position file
     posOutFile = OUTPUT_POS_DIR + keyName + ".json"
     io.writeJSON(posOutFile, values)
-    jsonPositions[keyName] = {"src": "/" + posOutFile}
+    jsonPositions[keyName] = {"src": "/" + posOutFile, "layout": options["layout"]}
+
+    if gridWidth is not None:
+        jsonPositions[keyName]["gridWidth"] = gridWidth
+        jsonPositions[keyName]["gridHeight"] = gridHeight
 
 # Write config file
 outjson = {

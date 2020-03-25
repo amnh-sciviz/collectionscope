@@ -83,7 +83,7 @@ var Collection = (function() {
         loaded++;
         _this.opt.onLoadProgress();
         if (!set.values) console.log('Warning: '+key+' does not have any valid position data');
-        else _this.positions[key] = {'values': set.values};
+        else _this.positions[key] = _.clone(set);
         if (loaded===totalToLoad) {
           console.log('Loaded all position data.');
           deferred.resolve();
@@ -94,7 +94,7 @@ var Collection = (function() {
       $.getJSON(set.src, function(data){
         loaded++;
         _this.opt.onLoadProgress();
-        _this.positions[key] = {'values': data};
+        _this.positions[key] = _.extend({}, set, {'values': data});
         if (loaded===totalToLoad) {
           console.log('Loaded all position data.');
           deferred.resolve();
@@ -174,8 +174,8 @@ var Collection = (function() {
 
     var sets = {};
     _.each(this.opt.sets, function(set, key){
-      // if (key !== 'lumholtz') return;
-      var setPositions = _.has(_this.positions, key) ? _this.positions[key].values : _this.positions.default.values;
+      // if (key !== 'default') return;
+      var setPositions = _.has(_this.positions, key) ? _this.positions[key] : _this.positions.default;
       var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
       var set = new Set({
