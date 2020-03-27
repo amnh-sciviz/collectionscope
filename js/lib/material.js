@@ -11,15 +11,19 @@ var MaterialVertexShader = `
   attribute vec2 uvOffset;
   attribute vec3 translate;
   attribute vec3 translateDest;
+  attribute vec3 actualSize;
   attribute vec3 scale;
   attribute vec3 color;
   attribute vec3 colorDest;
   attribute vec3 uidColor;
+  attribute float alpha;
+  attribute float alphaDest;
 
   varying vec2 vUv;
   varying vec3 vColor;
   varying vec3 vUidColor;
   varying float vTween;
+  varying float vAlpha;
 
   #define PI 3.14159
   void main() {
@@ -29,8 +33,8 @@ var MaterialVertexShader = `
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
     vTween = tween;
 
-    mvPosition.xyz += position * scale;
-    vUv = uvOffset.xy + uv * scale.xy;
+    mvPosition.xyz += position * actualSize;
+    vUv = uvOffset.xy + uv * actualSize.xy / scale.xy;
 
     vColor = mix( color, colorDest, pct );//colorDest * pct + color * (1.0 - pct);
 
@@ -40,6 +44,7 @@ var MaterialVertexShader = `
     // vec4 projection = projectionMatrix * mvPosition;
     gl_Position = projectionMatrix * mvPosition;
 
+    vAlpha = (alphaDest-alpha) * pct + alpha;
   }
 `;
 
@@ -55,6 +60,7 @@ var MaterialFragmentShader = `
   varying vec3 vColor;
   varying vec3 vUidColor;
   varying float vTween;
+  varying float vAlpha;
 
   void main() {
     if( length( vColor ) < .1 )discard;
@@ -79,6 +85,8 @@ var MaterialFragmentShader = `
         gl_FragColor = diffuseColor * vec4(vColor, 1.0) * vTween;
         gl_FragColor.rgb = mix( gl_FragColor.rgb, fogColor, d );
     }
+
+    gl_FragColor.a = vAlpha;
   }
 `;
 
@@ -104,7 +112,8 @@ var Material = (function() {
       vertexShader: MaterialVertexShader,
       fragmentShader: MaterialFragmentShader,
       depthTest: true,
-      depthWrite: true
+      depthWrite: true,
+      transparent: true
     });
     material.uniforms.transitionPct.value = 1.0;
 

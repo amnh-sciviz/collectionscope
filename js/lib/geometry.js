@@ -3,7 +3,10 @@
 var Geometry = (function() {
 
   function Geometry(config) {
-    var defaults = {  };
+    var defaults = {
+      "fixedCellWidth": 16, // the target dimensions of each cell in THREE.js scene
+      "fixedCellHeight": 16
+    };
     this.opt = _.extend({}, defaults, config);
     this.init();
   }
@@ -13,23 +16,26 @@ var Geometry = (function() {
     var maxInstancedCount = this.opt.indices.length;
     var imageW = this.opt.textureProps.width;
     var imageH = this.opt.textureProps.height;
+    var fixedCellWidth = this.opt.fixedCellWidth;
+    var fixedCellHeight = this.opt.fixedCellHeight;
     var cellW = this.opt.textureProps.cellWidth;
     var cellH = this.opt.textureProps.cellHeight;
+    var scale = fixedCellWidth / cellW;
     var cols = parseInt(imageW / cellW);
     var rows = parseInt(imageH / cellH);
 
     // filter and map positions
     var positionSize = parseInt(this.opt.positions.values.length / this.opt.itemCount);
     var allPositions = _.chunk(this.opt.positions.values, positionSize);
-    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * cellW;
-    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * cellH;
+    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * fixedCellWidth;
+    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * fixedCellHeight;
     var canvasDepth = canvasWidth;
     if (this.opt.positions.gridWidth && this.opt.positions.gridHeight) {
-      canvasWidth = this.opt.positions.gridWidth * cellW;
-      canvasHeight = this.opt.positions.gridHeight * cellH;
+      canvasWidth = this.opt.positions.gridWidth * fixedCellWidth;
+      canvasHeight = this.opt.positions.gridHeight * fixedCellHeight;
     }
     if (this.opt.positions.gridDepth) {
-      canvasDepth = this.opt.positions.gridDepth * cellW;
+      canvasDepth = this.opt.positions.gridDepth * fixedCellWidth;
     }
     // console.log('Canvas: ', canvasWidth, canvasHeight)
     var positions = _.map(this.opt.indices, function(index, i){
@@ -58,10 +64,13 @@ var Geometry = (function() {
       {name: 'uvOffset', size: 2},
       {name: 'translate', size: 3},
       {name: 'translateDest', size: 3},
+      {name: 'actualSize', size: 3},
       {name: 'scale', size: 3},
       {name: 'color', size: 3},
       {name: 'colorDest', size: 3},
-      {name: 'uidColor', size: 3, isStatic: true}
+      {name: 'uidColor', size: 3, isStatic: true},
+      {name: 'alpha', size: 1},
+      {name: 'alphaDest', size: 1}
     ];
 
     for (var attr of attributes) {
@@ -76,10 +85,14 @@ var Geometry = (function() {
       // attributeLookup[attr.name] = buffAttr;
     }
 
-    // set tween
+    // set tween and alpha
     var tweenArr = geom.getAttribute('tween').array;
+    var alphaArr = geom.getAttribute('alpha').array;
+    var alphaDestArr = geom.getAttribute('alphaDest').array;
     for (var i=0; i<maxInstancedCount; i++) {
       tweenArr[i] = 1;
+      alphaArr[i] = 1;
+      alphaDestArr[i] = 1;
     }
 
     // set uv offset
@@ -93,6 +106,7 @@ var Geometry = (function() {
     }
 
     // set translates and colors
+    var sizeArr = geom.getAttribute('actualSize').array;
     var scaleArr = geom.getAttribute('scale').array;
     var translateArr = geom.getAttribute('translate').array;
     var translateDestArr = geom.getAttribute('translateDest').array;
@@ -103,8 +117,11 @@ var Geometry = (function() {
     for (var i=0; i<maxInstancedCount; i++) {
       var i0 = i*3;
 
-      scaleArr[i0] = cellW;
-      scaleArr[i0+1] = cellH;
+      sizeArr[i0] = cellW * scale;
+      sizeArr[i0+1] = cellH * scale;
+      sizeArr[i0+2] = 1;
+      scaleArr[i0] = scale;
+      scaleArr[i0+1] = scale;
       scaleArr[i0+2] = 1;
 
       translateArr[i0] = positions[i].x;
