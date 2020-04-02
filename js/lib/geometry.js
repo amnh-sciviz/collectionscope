@@ -24,27 +24,7 @@ var Geometry = (function() {
     var cols = parseInt(imageW / cellW);
     var rows = parseInt(imageH / cellH);
 
-    // filter and map positions
-    var positionSize = parseInt(this.opt.positions.values.length / this.opt.itemCount);
-    var allPositions = _.chunk(this.opt.positions.values, positionSize);
-    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * fixedCellWidth;
-    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * fixedCellHeight;
-    var canvasDepth = canvasWidth;
-    if (this.opt.positions.gridWidth && this.opt.positions.gridHeight) {
-      canvasWidth = this.opt.positions.gridWidth * fixedCellWidth;
-      canvasHeight = this.opt.positions.gridHeight * fixedCellHeight;
-    }
-    if (this.opt.positions.gridDepth) {
-      canvasDepth = this.opt.positions.gridDepth * fixedCellWidth;
-    }
-    // console.log('Canvas: ', canvasWidth, canvasHeight)
-    var positions = _.map(this.opt.indices, function(index, i){
-      return {
-        'x': MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]),
-        'y': MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]),
-        'z': positionSize > 2 ? MathUtil.lerp(-canvasDepth/2, canvasDepth/2, allPositions[index][2]) : 0
-      }
-    });
+    var positions = this.getPositions(this.opt.positions);
     // console.log(positions)
 
     // load geometry
@@ -60,7 +40,6 @@ var Geometry = (function() {
 
     // define the shader attributes topology
     var attributes = [
-      {name: 'tween', size: 1},
       {name: 'uvOffset', size: 2},
       {name: 'translate', size: 3},
       {name: 'translateDest', size: 3},
@@ -68,11 +47,12 @@ var Geometry = (function() {
       {name: 'scale', size: 3},
       {name: 'color', size: 3},
       {name: 'colorDest', size: 3},
-      {name: 'uidColor', size: 3, isStatic: true},
       {name: 'alpha', size: 1},
-      {name: 'alphaDest', size: 1}
+      {name: 'alphaDest', size: 1},
+      {name: 'randSeed', size: 1}
     ];
 
+    this.attributeLookup = {};
     for (var attr of attributes) {
       // allocate the buffer
       var buffer = new Float32Array(geom.maxInstancedCount * attr.size);
@@ -82,18 +62,18 @@ var Geometry = (function() {
       }
       geom.setAttribute(attr.name, buffAttr);
       // and save a reference in the attr dictionary
-      // attributeLookup[attr.name] = buffAttr;
+      this.attributeLookup[attr.name] = buffAttr;
     }
 
     // set tween and alpha
-    var tweenArr = geom.getAttribute('tween').array;
     var alphaArr = geom.getAttribute('alpha').array;
     var alphaDestArr = geom.getAttribute('alphaDest').array;
+    var randArr = geom.getAttribute('randSeed').array;
     var alpha = 1;
     for (var i=0; i<maxInstancedCount; i++) {
-      tweenArr[i] = 1;
       alphaArr[i] = alpha;
       alphaDestArr[i] = alpha;
+      randArr[i] = MathUtil.lerp(0.5, 1, Math.random()); // used for creating item-level variability when transitioning
     }
 
     // set uv offset
@@ -113,7 +93,6 @@ var Geometry = (function() {
     var translateDestArr = geom.getAttribute('translateDest').array;
     var colorArr = geom.getAttribute('color').array;
     var colorDestArr = geom.getAttribute('colorDest').array;
-    var uidColorArr = geom.getAttribute('uidColor').array;
 
     for (var i=0; i<maxInstancedCount; i++) {
       var i0 = i*3;
@@ -138,9 +117,6 @@ var Geometry = (function() {
       colorDestArr[i0] = 1;
       colorDestArr[i0+1] = 1;
       colorDestArr[i0+2] = 1;
-      uidColorArr[i0] = 1;
-      uidColorArr[i0+1] = 1;
-      uidColorArr[i0+2] = 1;
     }
 
     for (var attr of attributes) {
@@ -150,8 +126,49 @@ var Geometry = (function() {
     this.threeGeometry = geom;
   };
 
+  Geometry.prototype.getPositions = function(positionOptions) {
+    // filter and map positions
+    var positionSize = parseInt(positionOptions.values.length / this.opt.itemCount);
+    var allPositions = _.chunk(positionOptions.values, positionSize);
+    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth;
+    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight;
+    var canvasDepth = canvasWidth;
+    if (positionOptions.gridWidth && positionOptions.gridHeight) {
+      canvasWidth = positionOptions.gridWidth * this.opt.fixedCellWidth;
+      canvasHeight = positionOptions.gridHeight * this.opt.fixedCellHeight;
+    }
+    if (positionOptions.gridDepth) {
+      canvasDepth = positionOptions.gridDepth * fixedCellWidth;
+    }
+    // console.log('Canvas: ', canvasWidth, canvasHeight)
+    return _.map(this.opt.indices, function(index, i){
+      return {
+        'x': MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]),
+        'y': MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]),
+        'z': positionSize > 2 ? MathUtil.lerp(-canvasDepth/2, canvasDepth/2, allPositions[index][2]) : 0
+      }
+    });
+  };
+
   Geometry.prototype.getThree = function(){
     return this.threeGeometry;
+  };
+
+  Geometry.prototype.updatePositions = function(positionOptions){
+    var attr = this.attributeLookup['translateDest'];
+    var translateDestArr = attr.array;
+    var positions = this.getPositions(positionOptions);
+    var maxInstancedCount = this.threeGeometry.maxInstancedCount;
+
+    for (var i=0; i<maxInstancedCount; i++) {
+      var i0 = i*3;
+      translateDestArr[i0] = positions[i].x;
+      translateDestArr[i0+1] = positions[i].y;
+      translateDestArr[i0+2] = positions[i].z;
+    }
+
+    attr.needsUpdate = true;
+    renderNeeded = true;
   };
 
   return Geometry;

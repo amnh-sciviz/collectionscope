@@ -21,6 +21,7 @@ _.extend(CONFIG, {
     }
   },
   "ui": {
+    "transitionDuration": 1000,
     "slider": {
       "steps": [
         {

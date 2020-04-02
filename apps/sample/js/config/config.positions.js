@@ -5,6 +5,12 @@ _.extend(CONFIG, {
       "layout": "grid",
       "gridWidth": 951,
       "gridHeight": 238
+    },
+    "geography": {
+      "src": "/apps/sample/data/positions/geography.json",
+      "layout": "grid",
+      "gridWidth": 951,
+      "gridHeight": 238
     }
   }
 });

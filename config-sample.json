@@ -18,7 +18,8 @@
   },
 
   "positions": {
-    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"}
+    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"},
+    "geography": {"xCol": "Longitude", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"}
   },
 
   "textures": {
@@ -56,6 +57,7 @@
   },
 
   "ui": {
+    "transitionDuration": 1000,
     "slider": {
       "steps": [
         {
