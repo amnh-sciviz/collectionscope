@@ -10,10 +10,10 @@ var Controls = (function() {
 
   Controls.prototype.init = function(){
     this.orbitControls = new THREE.OrbitControls( this.opt.camera, this.opt.renderer.domElement );
-    this.orbitControls.update();
+    this.update();
   };
 
-  Controls.prototype.render = function(){
+  Controls.prototype.update = function(){
     this.orbitControls.update();
   };
 

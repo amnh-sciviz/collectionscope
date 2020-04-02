@@ -192,9 +192,9 @@ var Collection = (function() {
     this.container = container;
   };
 
-  Collection.prototype.render = function(){
+  Collection.prototype.update = function(){
     _.each(this.sets, function(set, key){
-      set.render();
+      set.update();
     });
   };
 

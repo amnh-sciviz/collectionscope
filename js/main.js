@@ -70,9 +70,13 @@ var MainApp = (function() {
   MainApp.prototype.render = function(){
     var _this = this;
 
-    this.renderer.render( this.scene, this.camera );
-    this.collection && this.collection.render();
-    this.controls && this.controls.render();
+    this.collection && this.collection.update();
+    this.controls && this.controls.update();
+
+    if (renderNeeded) {
+      this.renderer.render( this.scene, this.camera );
+      renderNeeded = false;
+    }
 
     requestAnimationFrame(function(){
       _this.render();

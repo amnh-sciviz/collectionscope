@@ -89,10 +89,11 @@ var Geometry = (function() {
     var tweenArr = geom.getAttribute('tween').array;
     var alphaArr = geom.getAttribute('alpha').array;
     var alphaDestArr = geom.getAttribute('alphaDest').array;
+    var alpha = 1;
     for (var i=0; i<maxInstancedCount; i++) {
       tweenArr[i] = 1;
-      alphaArr[i] = 1;
-      alphaDestArr[i] = 1;
+      alphaArr[i] = alpha;
+      alphaDestArr[i] = alpha;
     }
 
     // set uv offset

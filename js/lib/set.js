@@ -49,7 +49,7 @@ var Set = (function() {
     return this.container;
   };
 
-  Set.prototype.render = function(){
+  Set.prototype.update = function(){
     if (!this.isValid) return;
   };
 

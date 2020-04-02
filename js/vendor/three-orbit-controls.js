@@ -235,6 +235,7 @@ THREE.OrbitControls = function ( object, domElement ) {
 				lastPosition.copy( scope.object.position );
 				lastQuaternion.copy( scope.object.quaternion );
 				zoomChanged = false;
+				renderNeeded = true;
 
 				return true;
 
