@@ -53,6 +53,12 @@ var Set = (function() {
     if (!this.isValid) return;
   };
 
+  Set.prototype.updatePositions = function(newPositions, transitionDuration){
+    _.each(this.meshes, function(mesh){
+      mesh.updatePositions(newPositions, transitionDuration);
+    });
+  };
+
   return Set;
 
 })();

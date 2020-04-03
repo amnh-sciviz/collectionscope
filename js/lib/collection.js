@@ -12,7 +12,7 @@ var Collection = (function() {
   }
 
   Collection.prototype.init = function(){
-
+    this.currentPositionsKey = 'default';
   };
 
   Collection.prototype.getThree = function(){
@@ -54,6 +54,15 @@ var Collection = (function() {
     console.log('Loaded content.');
     deferred.resolve();
     return deferred;
+  };
+
+  Collection.prototype.loadListeners = function(){
+    var _this = this;
+
+    $(document).on('change-positions', function(e, newValue) {
+      console.log("Changing positions to "+newValue);
+      _this.updatePositions(newValue);
+    });
   };
 
   Collection.prototype.loadMetadata = function(){
@@ -175,7 +184,7 @@ var Collection = (function() {
     var sets = {};
     _.each(this.opt.sets, function(set, key){
       // if (key !== 'default') return;
-      var setPositions = _.has(_this.positions, key) ? _this.positions[key] : _this.positions.default;
+      var setPositions = _this.positions[_this.currentPositionsKey];
       var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
       var set = new Set({
@@ -190,12 +199,26 @@ var Collection = (function() {
     });
     this.sets = sets;
     this.container = container;
+
+    this.loadListeners();
   };
 
   Collection.prototype.update = function(){
     _.each(this.sets, function(set, key){
       set.update();
     });
+  };
+
+  Collection.prototype.updatePositions = function(newValue){
+    if (newValue === this.currentPositionsKey) return;
+
+    var _this = this;
+    var newPositions = this.positions[newValue];
+    this.currentPositionsKey = newValue;
+
+    _.each(this.sets, function(set){
+      set.updatePositions(newPositions, _this.opt.ui.transitionDuration);
+    })
   };
 
   return Collection;

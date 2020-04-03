@@ -46,7 +46,7 @@ var MainApp = (function() {
   MainApp.prototype.onLoadEnd = function(){
     console.log("Loaded everything.");
     this.$el.removeClass('is-loading');
-    this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer}));
+    this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
     this.scene.add(this.collection.getThree());
     this.render();
   };

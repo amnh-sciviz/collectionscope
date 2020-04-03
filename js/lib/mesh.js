@@ -24,6 +24,8 @@ var Mesh = (function() {
     var mesh = new THREE.Mesh(geometry.getThree(), material.getThree());
     mesh.frustumCulled = false;
     this.threeMesh = mesh;
+    this.geometry = geometry;
+    this.material = material;
   };
 
   Mesh.prototype.getThree = function(){
@@ -32,6 +34,10 @@ var Mesh = (function() {
 
   Mesh.prototype.render = function(){
 
+  };
+
+  Mesh.prototype.updatePositions = function(newPositions, transitionDuration){
+    this.geometry.updatePositions(newPositions, transitionDuration);
   };
 
   return Mesh;

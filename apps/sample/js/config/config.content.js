@@ -22,66 +22,88 @@ _.extend(CONFIG, {
   },
   "ui": {
     "transitionDuration": 1000,
-    "slider": {
-      "steps": [
-        {
-          "label": "Male Human Figure",
-          "positions": "default",
-          "content": "lumholtzItem",
-          "zoom": "lumholtzItem",
-          "meshes": [
-            {
-              "textures": "default",
-              "alpha": 0.2
-            },
-            {
-              "textures": "lumholtzItem"
-            }
-          ]
-        },
-        {
-          "label": "Lumholtz Mexico Expeditions",
-          "positions": "default",
-          "content": "lumholtz",
-          "zoom": "lumholtz",
-          "meshes": [
-            {
-              "textures": "default",
-              "alpha": 0.2
-            },
-            {
-              "textures": "mexico",
-              "set": "lumholtz"
-            }
-          ]
-        },
-        {
-          "label": "Mexico",
-          "content": "mexico",
-          "positions": "default",
-          "zoom": "mexico",
-          "meshes": [
-            {
-              "textures": "default",
-              "alpha": 0.2
-            },
-            {
-              "textures": "mexico"
-            }
-          ]
-        },
-        {
-          "label": "Everything",
-          "content": "default",
-          "positions": "default",
-          "zoom": "default",
-          "meshes": [
-            {
-              "textures": "default"
-            }
-          ]
-        }
-      ]
-    }
+    "menus": [
+      {
+        "id": "radio-buttons-layout",
+        "label": "Choose layout",
+        "className": "radio-buttons radio-buttons-layout",
+        "radioButtons": [
+          {
+            "label": "By Time",
+            "name": "positions",
+            "value": "default",
+            "checked": true
+          },
+          {
+            "label": "By Geography",
+            "name": "positions",
+            "value": "geography"
+          }
+        ]
+      },
+      {
+        "id": "slider-zoom",
+        "className": "slider slider-zoom",
+        "slider": [
+          {
+            "label": "Male Human Figure",
+            "positions": "default",
+            "content": "lumholtzItem",
+            "zoom": "lumholtzItem",
+            "meshes": [
+              {
+                "textures": "default",
+                "alpha": 0.2
+              },
+              {
+                "textures": "lumholtzItem"
+              }
+            ]
+          },
+          {
+            "label": "Lumholtz Mexico Expeditions",
+            "positions": "default",
+            "content": "lumholtz",
+            "zoom": "lumholtz",
+            "meshes": [
+              {
+                "textures": "default",
+                "alpha": 0.2
+              },
+              {
+                "textures": "mexico",
+                "set": "lumholtz"
+              }
+            ]
+          },
+          {
+            "label": "Mexico",
+            "content": "mexico",
+            "positions": "default",
+            "zoom": "mexico",
+            "meshes": [
+              {
+                "textures": "default",
+                "alpha": 0.2
+              },
+              {
+                "textures": "mexico"
+              }
+            ]
+          },
+          {
+            "label": "Everything",
+            "content": "default",
+            "positions": "default",
+            "zoom": "default",
+            "meshes": [
+              {
+                "textures": "default"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   }
 });

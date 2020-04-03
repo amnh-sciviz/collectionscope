@@ -45,3 +45,22 @@ body {
 .app.is-loading .loading {
   display: block;
 }
+
+.menu {
+  position: absolute;
+  z-index: 100;
+  background: rgba(0,0,0,0.9);
+  padding: 20px;
+}
+.menu h2 {
+  margin: 0 0 1rem;
+  line-height: 1;
+}
+.radio-button-form label {
+  margin-right: 10px;
+}
+
+.menu.radio-buttons-layout {
+  left: 0;
+  bottom: 0;
+}

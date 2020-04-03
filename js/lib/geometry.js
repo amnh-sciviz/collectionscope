@@ -154,21 +154,22 @@ var Geometry = (function() {
     return this.threeGeometry;
   };
 
-  Geometry.prototype.updatePositions = function(positionOptions){
-    var attr = this.attributeLookup['translateDest'];
-    var translateDestArr = attr.array;
-    var positions = this.getPositions(positionOptions);
-    var maxInstancedCount = this.threeGeometry.maxInstancedCount;
-
-    for (var i=0; i<maxInstancedCount; i++) {
-      var i0 = i*3;
-      translateDestArr[i0] = positions[i].x;
-      translateDestArr[i0+1] = positions[i].y;
-      translateDestArr[i0+2] = positions[i].z;
-    }
-
-    attr.needsUpdate = true;
-    renderNeeded = true;
+  Geometry.prototype.updatePositions = function(positionOptions, transitionDuration){
+    console.log(positionOptions, transitionDuration)
+    // var attr = this.attributeLookup['translateDest'];
+    // var translateDestArr = attr.array;
+    // var positions = this.getPositions(positionOptions);
+    // var maxInstancedCount = this.threeGeometry.maxInstancedCount;
+    //
+    // for (var i=0; i<maxInstancedCount; i++) {
+    //   var i0 = i*3;
+    //   translateDestArr[i0] = positions[i].x;
+    //   translateDestArr[i0+1] = positions[i].y;
+    //   translateDestArr[i0+2] = positions[i].z;
+    // }
+    //
+    // attr.needsUpdate = true;
+    // renderNeeded = true;
   };
 
   return Geometry;
