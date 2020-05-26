@@ -113,10 +113,34 @@ var Material = (function() {
     material.uniforms.alphaTransitionPct.value = 1.0;
 
     this.threeMaterial = material;
+
+    this.positionTransitionStart = false;
+    this.positionTransitionEnd = false;
   };
 
   Material.prototype.getThree = function(){
     return this.threeMaterial;
+  };
+
+  Material.prototype.transitionPosition = function(duration){
+    this.threeMaterial.uniforms.positionTransitionPct.value = 0.0;
+    this.positionTransitionStart = new Date().getTime();
+    this.positionTransitionEnd = this.positionTransitionStart + duration;
+  };
+
+  Material.prototype.update = function(){
+    // check if we are transitioning the position
+    if (this.positionTransitionStart !== false && this.positionTransitionEnd !== false) {
+      var now = new Date().getTime();
+      var percent = MathUtil.norm(now, this.positionTransitionStart, this.positionTransitionEnd);
+      percent = MathUtil.clamp(percent, 0, 1.0);
+      this.threeMaterial.uniforms.positionTransitionPct.value = percent;
+      if (percent >= 1.0){
+        this.positionTransitionStart = false;
+        this.positionTransitionEnd = false;
+      }
+      renderNeeded = true;
+    }
   };
 
   return Material;

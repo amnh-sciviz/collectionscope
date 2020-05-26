@@ -32,12 +32,13 @@ var Mesh = (function() {
     return this.threeMesh;
   };
 
-  Mesh.prototype.render = function(){
-
+  Mesh.prototype.update = function(){
+    this.material.update();
   };
 
   Mesh.prototype.updatePositions = function(newPositions, transitionDuration){
     this.geometry.updatePositions(newPositions, transitionDuration);
+    this.material.transitionPosition(transitionDuration);
   };
 
   return Mesh;

@@ -155,21 +155,30 @@ var Geometry = (function() {
   };
 
   Geometry.prototype.updatePositions = function(positionOptions, transitionDuration){
-    console.log(positionOptions, transitionDuration)
-    // var attr = this.attributeLookup['translateDest'];
-    // var translateDestArr = attr.array;
-    // var positions = this.getPositions(positionOptions);
-    // var maxInstancedCount = this.threeGeometry.maxInstancedCount;
-    //
-    // for (var i=0; i<maxInstancedCount; i++) {
-    //   var i0 = i*3;
-    //   translateDestArr[i0] = positions[i].x;
-    //   translateDestArr[i0+1] = positions[i].y;
-    //   translateDestArr[i0+2] = positions[i].z;
-    // }
-    //
-    // attr.needsUpdate = true;
-    // renderNeeded = true;
+    // console.log(positionOptions, transitionDuration)
+    var fromAttr = this.attributeLookup['translate'];
+    var toAttr = this.attributeLookup['translateDest'];
+
+    var translateArr = fromAttr.array;
+    var translateDestArr = toAttr.array;
+    var positions = this.getPositions(positionOptions);
+    var maxInstancedCount = this.threeGeometry.maxInstancedCount;
+
+    for (var i=0; i<maxInstancedCount; i++) {
+      var i0 = i*3;
+
+      translateArr[i0] = translateDestArr[i0];
+      translateArr[i0+1] = translateDestArr[i0+1];
+      translateArr[i0+2] = translateDestArr[i0+2];
+
+      translateDestArr[i0] = positions[i].x;
+      translateDestArr[i0+1] = positions[i].y;
+      translateDestArr[i0+2] = positions[i].z;
+    }
+
+    fromAttr.needsUpdate = true;
+    toAttr.needsUpdate = true;
+    renderNeeded = true;
   };
 
   return Geometry;

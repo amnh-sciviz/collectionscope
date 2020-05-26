@@ -51,6 +51,10 @@ var Set = (function() {
 
   Set.prototype.update = function(){
     if (!this.isValid) return;
+
+    _.each(this.meshes, function(mesh){
+      mesh.update();
+    });
   };
 
   Set.prototype.updatePositions = function(newPositions, transitionDuration){

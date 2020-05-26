@@ -60,6 +60,7 @@ var Controls = (function() {
   Controls.prototype.onRadioMenuChange = function($input){
     var name = $input.attr('name');
     var value = $input.val();
+    // console.log('Triggering event "change-'+name+'" with value "'+value+'"');
     $(document).trigger('change-'+name, [value]);
   };
 

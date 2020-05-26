@@ -21,7 +21,7 @@ _.extend(CONFIG, {
     }
   },
   "ui": {
-    "transitionDuration": 1000,
+    "transitionDuration": 2000,
     "menus": [
       {
         "id": "radio-buttons-layout",
