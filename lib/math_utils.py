@@ -1,3 +1,5 @@
+import math
+import random
 import sys
 
 def addNormalizedValues(arr, key, nkey):
@@ -50,6 +52,25 @@ def printProgress(step, total, prepend=""):
     sys.stdout.write('\r')
     sys.stdout.write("%s%s%%" % (prepend, round(1.0*step/total*100,2)))
     sys.stdout.flush()
+
+def randomPointInSphere(center, radius, seed=None):
+    if seed is not None:
+        random.seed(seed)
+    phi = random.uniform(0, 2*math.pi)
+    if seed is not None:
+        random.seed(seed+1)
+    costheta = random.uniform(-1, 1)
+    if seed is not None:
+        random.seed(seed+2)
+    u = random.random()
+    theta = math.acos(costheta)
+    r = radius * (u ** (1. / 3))
+
+    x = r * math.sin(theta) * math.cos(phi)
+    y = r * math.sin(theta) * math.sin(phi)
+    z = r * math.cos(theta)
+
+    return (center[0]+x, center[1]+y, center[2]+z)
 
 def roundInt(value):
     return int(round(value))

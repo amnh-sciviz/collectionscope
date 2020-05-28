@@ -21,7 +21,7 @@ _.extend(CONFIG, {
     }
   },
   "ui": {
-    "transitionDuration": 2000,
+    "transitionDuration": 3000,
     "menus": [
       {
         "id": "radio-buttons-layout",
@@ -29,10 +29,15 @@ _.extend(CONFIG, {
         "className": "radio-buttons radio-buttons-layout",
         "radioButtons": [
           {
-            "label": "By Time",
+            "label": "Grid",
             "name": "positions",
             "value": "default",
             "checked": true
+          },
+          {
+            "label": "By Time",
+            "name": "positions",
+            "value": "time"
           },
           {
             "label": "By Geography",

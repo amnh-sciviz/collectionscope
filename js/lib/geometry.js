@@ -130,8 +130,8 @@ var Geometry = (function() {
     // filter and map positions
     var positionSize = parseInt(positionOptions.values.length / this.opt.itemCount);
     var allPositions = _.chunk(positionOptions.values, positionSize);
-    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth;
-    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight;
+    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth * 2;
+    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight * 2;
     var canvasDepth = canvasWidth;
     if (positionOptions.gridWidth && positionOptions.gridHeight) {
       canvasWidth = positionOptions.gridWidth * this.opt.fixedCellWidth;
@@ -140,12 +140,12 @@ var Geometry = (function() {
     if (positionOptions.gridDepth) {
       canvasDepth = positionOptions.gridDepth * fixedCellWidth;
     }
-    // console.log('Canvas: ', canvasWidth, canvasHeight)
+    // console.log('Canvas: ', canvasWidth, canvasHeight, canvasDepth)
     return _.map(this.opt.indices, function(index, i){
       return {
         'x': MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]),
         'y': MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]),
-        'z': positionSize > 2 ? MathUtil.lerp(-canvasDepth/2, canvasDepth/2, allPositions[index][2]) : 0
+        'z': positionSize > 2 ? allPositions[index][2] * canvasDepth : 0
       }
     });
   };

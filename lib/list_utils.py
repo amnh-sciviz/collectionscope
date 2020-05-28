@@ -1,3 +1,4 @@
+from collections import Counter
 from pprint import pprint
 
 import lib.math_utils as mu
@@ -57,6 +58,9 @@ def filterByQuery(arr, ors):
 def filterByQueryString(arr, str):
     ors = parseQueryString(str)
     return filterByQuery(arr, ors)
+
+def groupListByValue(arr):
+    return list(zip(Counter(arr).keys(), Counter(arr).values()))
 
 def parseQueryString(str):
     if len(str) <= 0:

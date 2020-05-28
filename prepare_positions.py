@@ -38,22 +38,29 @@ if "query" in configMeta:
 # Sort so that index corresponds to ID
 items = sorted(items, key=lambda item: item[ID_COLUMN])
 itemCount = len(items)
+dimensions = 2
 
 jsonPositions = {}
 for keyName, options in configPos.items():
     xCol = options["xCol"]
-    yCol = options["yCol"]
-    xys = [(mu.parseNumber(item[xCol]), mu.parseNumber(item[yCol])) for item in items]
+    xys = []
+    if "yCol" in options:
+        yCol = options["yCol"]
+        xys = [(mu.parseNumber(item[xCol]), mu.parseNumber(item[yCol])) for item in items]
+    else:
+        xys = [(mu.parseNumber(item[xCol]), 0) for item in items]
 
     gridWidth = gridHeight = None
+    aspectRatioX, aspectRatioY = (1, 1)
+    if "aspectRatio" in options:
+        aspectRatioX, aspectRatioY = tuple(mu.parseNumber(size) for size in options["aspectRatio"].split(":"))
+    aspectRatio = 1.0 * aspectRatioX / aspectRatioY
+
+    posOutFile = OUTPUT_POS_DIR + keyName + ".json"
+    jsonPositions[keyName] = {"src": "/" + posOutFile, "layout": options["layout"]}
 
     if options["layout"] == "grid":
-        gridRatioX, gridRatioY = (1, 1)
-        if "gridAspectRatio" in options:
-            gridRatioX, gridRatioY = tuple(mu.parseNumber(size) for size in options["gridAspectRatio"].split(":"))
-
-        gridRatio = 1.0 * gridRatioX / gridRatioY
-        gridWidth = math.ceil(math.sqrt(itemCount) * gridRatio)
+        gridWidth = math.ceil(math.sqrt(itemCount) * aspectRatio)
         gridHeight = math.ceil(1.0 * itemCount / gridWidth)
 
         xys = np.array(xys)
@@ -62,32 +69,61 @@ for keyName, options in configPos.items():
         grid, gridShape = gridAssignment
 
         # flatten and normalize values between 0 and 1
-        values = np.zeros(len(grid) * 2)
+        values = np.zeros(len(grid) * dimensions)
         for i, xy in enumerate(grid):
             x, y = xy
-            values[i*2] = round(1.0 * x / gridWidth, PRECISION)
-            values[i*2+1] = round(1.0 * y / gridHeight, PRECISION)
+            if "inverseY" in options:
+                y = gridHeight - y
+            values[i*dimensions] = round(1.0 * x / gridWidth, PRECISION)
+            values[i*dimensions+1] = round(1.0 * y / gridHeight, PRECISION)
+        values = values.tolist()
+
+        jsonPositions[keyName]["gridWidth"] = gridWidth
+        jsonPositions[keyName]["gridHeight"] = gridHeight
+
+    elif options["layout"] == "spheres":
+        dimensions = 3
+        groups = lu.groupListByValue(xys)
+        groups = [{"centerX": item[0][0], "centerY": item[0][1], "count": item[1]} for item in groups]
+        groups = mu.addNormalizedValues(groups, "centerX", "nCenterX")
+        groups = mu.addNormalizedValues(groups, "centerY", "nCenterY")
+        groups = mu.addNormalizedValues(groups, "count", "nCount")
+
+        radiusMax = 0.01 * options["sphereMultiplier"]
+
+        values = np.zeros(len(xys) * dimensions)
+        itemIndex = 0
+        for i, group in enumerate(groups):
+            ncy = group["nCenterY"] if "yCol" in options else 0.5
+            if "inverseY" in options:
+                ncy = 1.0 - ncy
+            ncy = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ncy)
+            center = (group["nCenterX"], ncy, 0)
+            radius = radiusMax * group["nCount"]
+            for j in range(group["count"]):
+                x, y, z = mu.randomPointInSphere(center, radius, seed=itemIndex)
+                values[itemIndex*dimensions] = round(x, PRECISION)
+                values[itemIndex*dimensions+1] = round(y, PRECISION)
+                values[itemIndex*dimensions+2] = round(z, PRECISION)
+                itemIndex += 1
         values = values.tolist()
 
     else:
         # flatten and round
-        nxys = addNormalizedValues(xys, 0, 0)
-        nxys = addNormalizedValues(xys, 1, 1)
-        values = np.zeros(len(nxys) * 2)
+        nxys = mu.addNormalizedValues(xys, 0, 0)
+        nxys = mu.addNormalizedValues(xys, 1, 1)
+        values = np.zeros(len(nxys) * dimensions)
         for i, nxy in enumerate(nxys):
             nx, ny = nxy
-            values[i*2] = round(nx, PRECISION)
-            values[i*2+1] = round(ny, PRECISION)
+            if "inverseY" in options:
+                ny = 1.0 - ny
+            ny = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ny)
+            values[i*dimensions] = round(nx, PRECISION)
+            values[i*dimensions+1] = round(ny, PRECISION)
         values = values.tolist()
 
     # Write position file
-    posOutFile = OUTPUT_POS_DIR + keyName + ".json"
     io.writeJSON(posOutFile, values)
-    jsonPositions[keyName] = {"src": "/" + posOutFile, "layout": options["layout"]}
-
-    if gridWidth is not None:
-        jsonPositions[keyName]["gridWidth"] = gridWidth
-        jsonPositions[keyName]["gridHeight"] = gridHeight
 
 # Write config file
 outjson = {

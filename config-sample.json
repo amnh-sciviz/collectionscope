@@ -18,8 +18,9 @@
   },
 
   "positions": {
-    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"},
-    "geography": {"xCol": "Longitude", "yCol": "Latitude", "layout": "grid", "gridAspectRatio": "2:1"}
+    "default": {"xCol": "Acquisition Year", "yCol": "Latitude", "layout": "grid", "aspectRatio": "2:1", "inverseY": true},
+    "time": {"xCol": "Acquisition Year", "layout": "spheres", "sphereMultiplier": 4},
+    "geography": {"xCol": "Longitude", "yCol": "Latitude", "layout": "spheres", "sphereMultiplier": 10, "aspectRatio": "2:1", "inverseY": true}
   },
 
   "textures": {
@@ -57,7 +58,7 @@
   },
 
   "ui": {
-    "transitionDuration": 2000,
+    "transitionDuration": 3000,
     "menus": [
       {
         "id": "radio-buttons-layout",
@@ -65,10 +66,14 @@
         "className": "radio-buttons radio-buttons-layout",
         "radioButtons": [
           {
-            "label": "By Time",
+            "label": "Grid",
             "name": "positions",
             "value": "default",
             "checked": true
+          },{
+            "label": "By Time",
+            "name": "positions",
+            "value": "time"
           },{
             "label": "By Geography",
             "name": "positions",

@@ -6,11 +6,13 @@ _.extend(CONFIG, {
       "gridWidth": 951,
       "gridHeight": 238
     },
+    "time": {
+      "src": "/apps/sample/data/positions/time.json",
+      "layout": "spheres"
+    },
     "geography": {
       "src": "/apps/sample/data/positions/geography.json",
-      "layout": "grid",
-      "gridWidth": 951,
-      "gridHeight": 238
+      "layout": "spheres"
     }
   }
 });
