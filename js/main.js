@@ -23,6 +23,8 @@ var MainApp = (function() {
 
     this.onLoadStart();
     this.collection.load();
+
+    this.sound = new Sound({});
   };
 
   MainApp.prototype.loadScene = function(){
