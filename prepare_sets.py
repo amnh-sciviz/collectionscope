@@ -21,7 +21,8 @@ configSets = config["sets"]
 INPUT_FILE = configMeta["src"]
 ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
-OUTPUT_SET_DIR = OUTPUT_DIR + "data/sets/"
+OUTPUT_SET_DIR_REL = "data/sets/"
+OUTPUT_SET_DIR = OUTPUT_DIR + OUTPUT_SET_DIR_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
 
 # Make sure output dirs exist
@@ -52,8 +53,9 @@ for keyName, options in configSets.items():
     outjson = [item["index"] for item in setItems]
     if len(setItems) > 10:
         setOutFile = OUTPUT_SET_DIR + keyName + ".json"
+        setOutFileRel = OUTPUT_SET_DIR_REL + keyName + ".json"
         io.writeJSON(setOutFile, outjson)
-        jsonsets[keyName] = {"src": "/" + setOutFile}
+        jsonsets[keyName] = {"src": setOutFileRel}
     # if only a small amount of items, don't bother to put it in its own json file
     else:
         jsonsets[keyName] = {"indices": outjson}

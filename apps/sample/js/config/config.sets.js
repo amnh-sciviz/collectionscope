@@ -1,10 +1,10 @@
 _.extend(CONFIG, {
   "sets": {
     "mexico": {
-      "src": "/apps/sample/data/sets/mexico.json"
+      "src": "data/sets/mexico.json"
     },
     "lumholtz": {
-      "src": "/apps/sample/data/sets/lumholtz.json"
+      "src": "data/sets/lumholtz.json"
     },
     "lumholtzItem": {
       "indices": [

@@ -28,7 +28,8 @@ configTextures = config["textures"]
 INPUT_FILE = configMeta["src"]
 ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
-OUTPUT_TEXTURES_DIR = OUTPUT_DIR + "img/textures/"
+OUTPUT_TEXTURES_DIR_REL = "img/textures/"
+OUTPUT_TEXTURES_DIR = OUTPUT_DIR + OUTPUT_TEXTURES_DIR_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.textures.js"
 
 # Make sure output dirs exist
@@ -91,14 +92,15 @@ for keyName, options in sets:
     cacheFilename = a.CACHE_DIR + "%s_%s_%s.p.gz" % (config["name"], keyName, cellWidth)
     imageData = io.readCacheFile(cacheFilename)
 
+    colors = 3 if configTextures["containsAlpha"] < 1 else 4
+    colorMode = "RGB" if colors == 3 else "RGBA"
+    defaultColor = configTextures["defaultColor"]
+    if len(defaultColor) < 4 and colors >= 4:
+        defaultColor.append(255)
+
     # if no cache, read and process images and save cache
     if imageData is None:
         print("No cache for %s.. reading image data..." % keyName)
-        colors = 3 if configTextures["containsAlpha"] < 1 else 4
-        colorMode = "RGB" if colors == 3 else "RGBA"
-        defaultColor = configTextures["defaultColor"]
-        if len(defaultColor) < 4 and colors >= 4:
-            defaultColor.append(255)
         shape = (setCount, cellWidth, cellWidth, colors)
         imageData = np.zeros(shape, dtype=np.uint8)
         for i, item in enumerate(setItems):
@@ -131,6 +133,7 @@ for keyName, options in sets:
     assetFiles = []
     for fileIndex in range(textureFileCount):
         textureImageFn = OUTPUT_TEXTURES_DIR + "%s_%s.%s" % (keyName, fileIndex, format)
+        textureImageFnRel = OUTPUT_TEXTURES_DIR_REL + "%s_%s.%s" % (keyName, fileIndex, format)
         endIndex = startIndex + cellsPerFile
         fileImageData = imageData[startIndex:] if endIndex >= setCount else imageData[startIndex:endIndex]
         baseImg = Image.new(mode=colorMode, size=(maxWidth, maxWidth), color=tuple(bgColor))
@@ -143,7 +146,7 @@ for keyName, options in sets:
             basePixels[y:y+cellWidth, x:x+cellWidth] = fileImageData[i]
         iu.savePixelsToImage(textureImageFn, basePixels)
         startIndex += cellsPerFile
-        assetFiles.append({"src": "/" + textureImageFn})
+        assetFiles.append({"src": textureImageFnRel})
 
     jsonsets[keyName] = {
         "width": maxWidth,

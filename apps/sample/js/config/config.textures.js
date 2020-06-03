@@ -7,7 +7,7 @@ _.extend(CONFIG, {
       "cellHeight": 8,
       "assets": [
         {
-          "src": "/apps/sample/img/textures/default_0.jpg"
+          "src": "img/textures/default_0.jpg"
         }
       ]
     },
@@ -18,7 +18,7 @@ _.extend(CONFIG, {
       "cellHeight": 16,
       "assets": [
         {
-          "src": "/apps/sample/img/textures/mexico_0.jpg"
+          "src": "img/textures/mexico_0.jpg"
         }
       ]
     },
@@ -29,10 +29,10 @@ _.extend(CONFIG, {
       "cellHeight": 64,
       "assets": [
         {
-          "src": "/apps/sample/img/textures/lumholtz_0.jpg"
+          "src": "img/textures/lumholtz_0.jpg"
         },
         {
-          "src": "/apps/sample/img/textures/lumholtz_1.jpg"
+          "src": "img/textures/lumholtz_1.jpg"
         }
       ]
     },
@@ -43,7 +43,7 @@ _.extend(CONFIG, {
       "cellHeight": 512,
       "assets": [
         {
-          "src": "/apps/sample/img/textures/lumholtzItem_0.jpg"
+          "src": "img/textures/lumholtzItem_0.jpg"
         }
       ]
     }

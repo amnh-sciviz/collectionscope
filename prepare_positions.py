@@ -25,7 +25,8 @@ PRECISION = 4
 INPUT_FILE = configMeta["src"]
 ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
-OUTPUT_POS_DIR = OUTPUT_DIR + "data/positions/"
+OUTPUT_POS_DIR_REL = "data/positions/"
+OUTPUT_POS_DIR = OUTPUT_DIR + OUTPUT_POS_DIR_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.positions.js"
 
 # Make sure output dirs exist
@@ -57,7 +58,8 @@ for keyName, options in configPos.items():
     aspectRatio = 1.0 * aspectRatioX / aspectRatioY
 
     posOutFile = OUTPUT_POS_DIR + keyName + ".json"
-    jsonPositions[keyName] = {"src": "/" + posOutFile, "layout": options["layout"]}
+    posOutFileRel = OUTPUT_POS_DIR_REL + keyName + ".json"
+    jsonPositions[keyName] = {"src": posOutFileRel, "layout": options["layout"]}
 
     if options["layout"] == "grid":
         gridWidth = math.ceil(math.sqrt(itemCount) * aspectRatio)

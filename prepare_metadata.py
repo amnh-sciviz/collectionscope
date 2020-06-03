@@ -20,7 +20,8 @@ configMeta = config["metadata"]
 INPUT_FILE = configMeta["src"]
 ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
-OUTPUT_FILE = OUTPUT_DIR + "data/metadata.json"
+OUTPUT_FILE_REL = "data/metadata.json"
+OUTPUT_FILE = OUTPUT_DIR + OUTPUT_FILE_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.metadata.js"
 COLUMNS =  configMeta["cols"]
 
@@ -60,7 +61,7 @@ io.writeJSON(OUTPUT_FILE, outjson)
 # Write config file
 outjson = {
     "metadata": {
-        "src": "/" + OUTPUT_FILE
+        "src": OUTPUT_FILE_REL
     }
 }
 io.writeJSON(CONFIG_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")
