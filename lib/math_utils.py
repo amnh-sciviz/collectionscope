@@ -11,6 +11,16 @@ def addNormalizedValues(arr, key, nkey):
         arr[i][nkey] = norm(entry[key], range)
     return arr
 
+def isNumeric(value):
+    if value == "":
+        return False
+    response = True
+    try:
+        num = float(value)
+    except ValueError:
+        response = False
+    return response
+
 def lerp(ab, amount):
     a, b = ab
     return (b-a) * amount + a

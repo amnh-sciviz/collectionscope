@@ -1,14 +1,17 @@
 _.extend(CONFIG, {
   "sets": {
-    "mexico": {
-      "src": "data/sets/mexico.json"
+    "asia": {
+      "src": "data/sets/asia.json"
     },
-    "lumholtz": {
-      "src": "data/sets/lumholtz.json"
+    "china": {
+      "src": "data/sets/china.json"
     },
-    "lumholtzItem": {
+    "laufer": {
+      "src": "data/sets/laufer.json"
+    },
+    "lauferItem": {
       "indices": [
-        13417
+        119376
       ]
     }
   }

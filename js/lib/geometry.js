@@ -128,11 +128,13 @@ var Geometry = (function() {
 
   Geometry.prototype.getPositions = function(positionOptions) {
     // filter and map positions
+    var layout = positionOptions.layout;
     var positionSize = parseInt(positionOptions.values.length / this.opt.itemCount);
     var allPositions = _.chunk(positionOptions.values, positionSize);
     var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth * 2;
     var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight * 2;
     var canvasDepth = canvasWidth;
+    // check for grid options
     if (positionOptions.gridWidth && positionOptions.gridHeight) {
       canvasWidth = positionOptions.gridWidth * this.opt.fixedCellWidth;
       canvasHeight = positionOptions.gridHeight * this.opt.fixedCellHeight;
@@ -142,10 +144,32 @@ var Geometry = (function() {
     }
     // console.log('Canvas: ', canvasWidth, canvasHeight, canvasDepth)
     return _.map(this.opt.indices, function(index, i){
+      var x = MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]);
+      var y = MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]);
+      var z = positionSize > 2 ? allPositions[index][2] * canvasDepth : 0;
+
+      // random point in sphere if sphere layout
+      if (layout === 'spheres') {
+        var radius = MathUtil.lerp(1, canvasDepth/2, allPositions[index][2]);
+        var newPoint = MathUtil.randomPointInSphere([x, y, 0], radius);
+        x = newPoint[0];
+        y = newPoint[1];
+        z = newPoint[2];
+
+      // random point in cylinder if bar layout
+      } else if (layout === 'bars') {
+        var radius = MathUtil.lerp(1, canvasDepth/10, allPositions[index][2]);
+        var height = MathUtil.lerp(1, canvasDepth/2, allPositions[index][2]);
+        var newPoint = MathUtil.randomPointInCylinder([x, y, 0], radius, height);
+        x = newPoint[0];
+        y = newPoint[1];
+        z = newPoint[2];
+      }
+
       return {
-        'x': MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]),
-        'y': MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]),
-        'z': positionSize > 2 ? allPositions[index][2] * canvasDepth : 0
+        'x': x,
+        'y': y,
+        'z': z
       }
     });
   };

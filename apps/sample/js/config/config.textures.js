@@ -11,39 +11,50 @@ _.extend(CONFIG, {
         }
       ]
     },
-    "mexico": {
+    "asia": {
       "width": 4096,
       "height": 4096,
       "cellWidth": 16,
       "cellHeight": 16,
       "assets": [
         {
-          "src": "img/textures/mexico_0.jpg"
+          "src": "img/textures/asia_0.jpg"
         }
       ]
     },
-    "lumholtz": {
+    "china": {
+      "width": 4096,
+      "height": 4096,
+      "cellWidth": 32,
+      "cellHeight": 32,
+      "assets": [
+        {
+          "src": "img/textures/china_0.jpg"
+        }
+      ]
+    },
+    "laufer": {
       "width": 4096,
       "height": 4096,
       "cellWidth": 64,
       "cellHeight": 64,
       "assets": [
         {
-          "src": "img/textures/lumholtz_0.jpg"
+          "src": "img/textures/laufer_0.jpg"
         },
         {
-          "src": "img/textures/lumholtz_1.jpg"
+          "src": "img/textures/laufer_1.jpg"
         }
       ]
     },
-    "lumholtzItem": {
+    "lauferItem": {
       "width": 4096,
       "height": 4096,
       "cellWidth": 512,
       "cellHeight": 512,
       "assets": [
         {
-          "src": "img/textures/lumholtzItem_0.jpg"
+          "src": "img/textures/lauferItem_0.jpg"
         }
       ]
     }

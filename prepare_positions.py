@@ -43,13 +43,29 @@ dimensions = 2
 
 jsonPositions = {}
 for keyName, options in configPos.items():
-    xCol = options["xCol"]
-    xys = []
+
+    xys = [(0, 0) for item in items]
     if "yCol" in options:
         yCol = options["yCol"]
-        xys = [(mu.parseNumber(item[xCol]), mu.parseNumber(item[yCol])) for item in items]
-    else:
-        xys = [(mu.parseNumber(item[xCol]), 0) for item in items]
+        # check for string values
+        isStringValues = False
+        if not mu.isNumeric(items[0][yCol]):
+            isStringValues = True
+            stringValueTable = lu.stringsToValueTable([item[yCol] for item in items])
+        for i, item in enumerate(items):
+            y = mu.parseNumber(item[yCol]) if not isStringValues else stringValueTable[item[yCol]]
+            xys[i] = (xys[i][0], y)
+    if "xCol" in options:
+        xCol = options["xCol"]
+        # check for string values
+        isStringValues = False
+        if not mu.isNumeric(items[0][xCol]):
+            isStringValues = True
+            stringValueTable = lu.stringsToValueTable([item[xCol] for item in items])
+        for i, item in enumerate(items):
+            x = mu.parseNumber(item[xCol]) if not isStringValues else stringValueTable[item[xCol]]
+            xys[i] = (x, xys[i][1])
+
 
     gridWidth = gridHeight = None
     aspectRatioX, aspectRatioY = (1, 1)
@@ -83,31 +99,31 @@ for keyName, options in configPos.items():
         jsonPositions[keyName]["gridWidth"] = gridWidth
         jsonPositions[keyName]["gridHeight"] = gridHeight
 
-    elif options["layout"] == "spheres":
+    elif options["layout"] == "spheres" or options["layout"] == "bars":
         dimensions = 3
         groups = lu.groupListByValue(xys)
         groups = [{"centerX": item[0][0], "centerY": item[0][1], "count": item[1]} for item in groups]
         groups = mu.addNormalizedValues(groups, "centerX", "nCenterX")
         groups = mu.addNormalizedValues(groups, "centerY", "nCenterY")
-        groups = mu.addNormalizedValues(groups, "count", "nCount")
-
-        radiusMax = 0.01 * options["sphereMultiplier"]
+        # groups = mu.addNormalizedValues(groups, "count", "nCount")
 
         values = np.zeros(len(xys) * dimensions)
         itemIndex = 0
         for i, group in enumerate(groups):
+            nCount = 1.0 * group["count"] / itemCount
             ncy = group["nCenterY"] if "yCol" in options else 0.5
             if "inverseY" in options:
                 ncy = 1.0 - ncy
-            ncy = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ncy)
-            center = (group["nCenterX"], ncy, 0)
-            radius = radiusMax * group["nCount"]
+            if aspectRatio > 1.0 or aspectRatio < 1.0:
+                ncy = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ncy)
+            center = (group["nCenterX"], ncy, nCount)
             for j in range(group["count"]):
-                x, y, z = mu.randomPointInSphere(center, radius, seed=itemIndex)
+                x, y, z = center
                 values[itemIndex*dimensions] = round(x, PRECISION)
                 values[itemIndex*dimensions+1] = round(y, PRECISION)
                 values[itemIndex*dimensions+2] = round(z, PRECISION)
                 itemIndex += 1
+
         values = values.tolist()
 
     else:

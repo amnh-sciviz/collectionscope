@@ -80,5 +80,13 @@ def parseQueryString(str):
         ors.append(ands)
     return ors
 
+def stringsToValueTable(values):
+    uValues = unique(values)
+    uValues = sorted(uValues)
+    stringValueTable = {}
+    for i, value in enumerate(uValues):
+        stringValueTable[value] = i
+    return stringValueTable
+
 def unique(arr):
     return list(set(arr))

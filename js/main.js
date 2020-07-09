@@ -46,11 +46,12 @@ var MainApp = (function() {
   };
 
   MainApp.prototype.onLoadEnd = function(){
+    var _this = this;
     console.log("Loaded everything.");
     this.$el.removeClass('is-loading');
     this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
     this.scene.add(this.collection.getThree());
-    this.render();
+    setTimeout(function(){ _this.render(); }, 500);
   };
 
   MainApp.prototype.onLoadProgress = function(){
