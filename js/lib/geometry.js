@@ -168,7 +168,7 @@ var Geometry = (function() {
 
       return {
         'x': x,
-        'y': y,
+        'y': y, // swap z and y
         'z': z
       }
     });

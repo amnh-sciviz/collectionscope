@@ -20,9 +20,8 @@
 
   "positions": {
     "default": {"layout": "spheres"},
-    "regions": {"yCol": "Region", "layout": "spheres"},
-    "time": {"xCol": "Acquisition Year", "layout": "spheres"},
-    "timeRegions": {"xCol": "Acquisition Year", "yCol": "Region", "layout": "spheres"},
+    "regions": {"xCol": "Region", "layout": "spheres"},
+    "timeRegions": {"xCol": "Region", "yCol": "Acquisition Year", "layout": "spheres", "aspectRatio": "1:4"},
     "geography": {"xCol": "Longitude", "yCol": "Latitude", "layout": "bars", "aspectRatio": "2:1", "inverseY": true}
   },
 
@@ -76,10 +75,6 @@
             "name": "positions",
             "value": "default",
             "checked": true
-          },{
-            "label": "By time",
-            "name": "positions",
-            "value": "time"
           },{
             "label": "By region",
             "name": "positions",

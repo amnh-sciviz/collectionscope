@@ -8,10 +8,6 @@ _.extend(CONFIG, {
       "src": "data/positions/regions.json",
       "layout": "spheres"
     },
-    "time": {
-      "src": "data/positions/time.json",
-      "layout": "spheres"
-    },
     "timeRegions": {
       "src": "data/positions/timeRegions.json",
       "layout": "spheres"

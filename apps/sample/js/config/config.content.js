@@ -39,11 +39,6 @@ _.extend(CONFIG, {
             "checked": true
           },
           {
-            "label": "By time",
-            "name": "positions",
-            "value": "time"
-          },
-          {
             "label": "By region",
             "name": "positions",
             "value": "regions"

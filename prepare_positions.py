@@ -66,7 +66,6 @@ for keyName, options in configPos.items():
             x = mu.parseNumber(item[xCol]) if not isStringValues else stringValueTable[item[xCol]]
             xys[i] = (x, xys[i][1])
 
-
     gridWidth = gridHeight = None
     aspectRatioX, aspectRatioY = (1, 1)
     if "aspectRatio" in options:
@@ -111,12 +110,17 @@ for keyName, options in configPos.items():
         itemIndex = 0
         for i, group in enumerate(groups):
             nCount = 1.0 * group["count"] / itemCount
+            ncx = group["nCenterX"] if "xCol" in options else 0.5
             ncy = group["nCenterY"] if "yCol" in options else 0.5
             if "inverseY" in options:
                 ncy = 1.0 - ncy
-            if aspectRatio > 1.0 or aspectRatio < 1.0:
-                ncy = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ncy)
-            center = (group["nCenterX"], ncy, nCount)
+            if aspectRatio > 1.0:
+                nhalf = 1.0/aspectRatio*0.5
+                ncy = mu.lerp((0.5-nhalf, 0.5+nhalf), ncy)
+            elif aspectRatio < 1.0:
+                nhalf = aspectRatio*0.5
+                ncx = mu.lerp((0.5-nhalf, 0.5+nhalf), ncx)
+            center = (ncx, ncy, nCount)
             for j in range(group["count"]):
                 x, y, z = center
                 values[itemIndex*dimensions] = round(x, PRECISION)
