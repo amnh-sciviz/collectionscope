@@ -30,6 +30,13 @@ var MainApp = (function() {
     this.sound = new Sound({});
   };
 
+  MainApp.prototype.loadListeners = function(){
+    var _this = this;
+    $(window).on('resize', function(){
+      _this.onResize();
+    });
+  };
+
   MainApp.prototype.loadScene = function(){
     var $el = $(this.opt.el);
     var w = $el.width();
@@ -61,6 +68,8 @@ var MainApp = (function() {
 
     this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
     this.scene.add(this.collection.getThree());
+
+    this.loadListeners();
 
     var renderPromise = $.Deferred();
     setTimeout(function(){
@@ -109,6 +118,15 @@ var MainApp = (function() {
     this.$loadingProgress = $('.loading-progress');
     this.$loadingText = $('.loading-text');
     this.$el.addClass('is-loading');
+  };
+
+  MainApp.prototype.onResize = function(){
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(w, h);
+    renderNeeded = true;
   };
 
   MainApp.prototype.render = function(){
