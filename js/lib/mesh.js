@@ -32,8 +32,8 @@ var Mesh = (function() {
     return this.threeMesh;
   };
 
-  Mesh.prototype.update = function(){
-    this.material.update();
+  Mesh.prototype.update = function(now){
+    this.material.update(now);
   };
 
   Mesh.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){

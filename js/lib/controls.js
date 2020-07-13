@@ -72,7 +72,7 @@ var Controls = (function() {
     $(document).trigger(name, value);
   };
 
-  Controls.prototype.update = function(){
+  Controls.prototype.update = function(now){
     this.orbitControls.update();
   };
 

@@ -116,6 +116,9 @@ var Material = (function() {
 
     this.positionTransitionStart = false;
     this.positionTransitionEnd = false;
+
+    this.alphaTransitionStart = false;
+    this.alphaTransitionEnd = false;
   };
 
   Material.prototype.getThree = function(){
@@ -134,10 +137,9 @@ var Material = (function() {
     this.positionTransitionEnd = this.positionTransitionStart + duration;
   };
 
-  Material.prototype.update = function(){
+  Material.prototype.update = function(now){
     // check if we are transitioning the position
     if (this.positionTransitionStart !== false && this.positionTransitionEnd !== false) {
-      var now = new Date().getTime();
       var percent = MathUtil.norm(now, this.positionTransitionStart, this.positionTransitionEnd);
       percent = MathUtil.clamp(percent, 0, 1.0);
       percent = MathUtil.ease(percent);
@@ -151,7 +153,6 @@ var Material = (function() {
 
     // check if we are transitioning alpha
     if (this.alphaTransitionStart !== false && this.alphaTransitionEnd !== false) {
-      var now = new Date().getTime();
       var percent = MathUtil.norm(now, this.alphaTransitionStart, this.alphaTransitionEnd);
       percent = MathUtil.clamp(percent, 0, 1.0);
       percent = MathUtil.ease(percent);

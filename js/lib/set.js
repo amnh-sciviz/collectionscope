@@ -52,11 +52,11 @@ var Set = (function() {
     return this.container;
   };
 
-  Set.prototype.update = function(){
+  Set.prototype.update = function(now){
     if (!this.isValid) return;
 
     _.each(this.meshes, function(mesh){
-      mesh.update();
+      mesh.update(now);
     });
   };
 

@@ -14,6 +14,9 @@ var MainApp = (function() {
   MainApp.prototype.init = function(){
     var _this = this;
 
+    this.cameraTransitionStart = false;
+    this.cameraTransitionEnd = false;
+
     this.loadScene();
 
     this.collection = new Collection(_.extend({}, this.opt, {
@@ -36,8 +39,6 @@ var MainApp = (function() {
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(w, h);
     $el.append(renderer.domElement);
-    camera.position.z = 2000;
-    camera.lookAt(new THREE.Vector3(0,0,0));
 
     // var fogColor = 0x1a1817;
     // scene.background = new THREE.Color(fogColor);
@@ -53,6 +54,11 @@ var MainApp = (function() {
     var _this = this;
     console.log("Loaded everything.");
     this.$el.removeClass('is-loading');
+
+    // init camera positio
+    this.camera.position.copy(this.collection.getDefaultCameraPosition());
+    this.camera.lookAt(new THREE.Vector3(0,0,0));
+
     this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
     this.scene.add(this.collection.getThree());
 
@@ -75,6 +81,7 @@ var MainApp = (function() {
     $.when(transitionPromise).done(function(){
       setTimeout(function(){
         _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
+        _this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration);
       },  parseInt(_this.opt.ui.startTransitionDuration*0.5));
     });
   };
@@ -97,9 +104,11 @@ var MainApp = (function() {
 
   MainApp.prototype.render = function(){
     var _this = this;
+    var now = new Date().getTime();
 
-    this.collection && this.collection.update();
-    this.controls && this.controls.update();
+    this.update(now);
+    this.collection && this.collection.update(now);
+    this.controls && this.controls.update(now);
 
     if (renderNeeded) {
       this.renderer.render( this.scene, this.camera );
@@ -110,6 +119,34 @@ var MainApp = (function() {
       _this.render();
     });
 
+  };
+
+  MainApp.prototype.transitionCameraPosition = function(newPosition, transitionDuration) {
+    transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
+
+    this.cameraPositionFrom = this.camera.position.clone();
+    if (this.cameraPositionFrom.equals(newPosition)) return;
+    this.cameraPositionTo = newPosition;
+
+    this.cameraTransitionStart = new Date().getTime();
+    this.cameraTransitionEnd = this.cameraTransitionStart + transitionDuration;
+
+    renderNeeded = true;
+  };
+
+  MainApp.prototype.update = function(now){
+    if (this.cameraTransitionStart !== false && this.cameraTransitionEnd !== false) {
+      var percent = MathUtil.norm(now, this.cameraTransitionStart, this.cameraTransitionEnd);
+      percent = MathUtil.clamp(percent, 0, 1.0);
+      percent = MathUtil.ease(percent);
+      var newPosition = this.cameraPositionFrom.lerp(this.cameraPositionTo, percent);
+      this.camera.position.copy(newPosition);
+      if (percent >= 1.0 || this.camera.position.equals(this.cameraPositionTo)){
+        this.cameraTransitionStart = false;
+        this.cameraTransitionEnd = false;
+      }
+      renderNeeded = true;
+    }
   };
 
   return MainApp;

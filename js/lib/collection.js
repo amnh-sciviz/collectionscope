@@ -15,6 +15,17 @@ var Collection = (function() {
     this.currentPositionsKey = 'start';
   };
 
+  Collection.prototype.getDefaultCameraPosition = function(){
+    var pos = this.positions[this.currentPositionsKey];
+
+    if (!pos || !_.has(pos, 'cameraPosition')) {
+      return (new THREE.Vector3(0,0,0));
+    }
+
+    var p = pos.cameraPosition;
+    return (new THREE.Vector3(p[0], p[1], p[2]));
+  };
+
   Collection.prototype.getThree = function(){
     return this.container;
   };
@@ -208,9 +219,9 @@ var Collection = (function() {
     this.loadListeners();
   };
 
-  Collection.prototype.update = function(){
+  Collection.prototype.update = function(now){
     _.each(this.sets, function(set, key){
-      set.update();
+      set.update(now);
     });
   };
 

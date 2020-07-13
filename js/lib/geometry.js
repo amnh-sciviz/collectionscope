@@ -141,9 +141,9 @@ var Geometry = (function() {
 
     var positionSize = parseInt(positionOptions.values.length / this.opt.itemCount);
     var allPositions = _.chunk(positionOptions.values, positionSize);
-    var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth * 2;
-    var canvasHeight = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight * 2;
-    var canvasDepth = canvasWidth;
+    var canvasWidth = positionOptions.width ? positionOptions.width : Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth * 2;
+    var canvasHeight = positionOptions.height ? positionOptions.height : Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellHeight * 2;
+    var canvasDepth = positionOptions.depth ? positionOptions.depth : canvasWidth;
     // check for grid options
     if (positionOptions.gridWidth && positionOptions.gridHeight) {
       canvasWidth = positionOptions.gridWidth * this.opt.fixedCellWidth;
@@ -152,11 +152,8 @@ var Geometry = (function() {
     if (positionOptions.gridDepth) {
       canvasDepth = positionOptions.gridDepth * fixedCellWidth;
     }
-    if (layout === 'tunnel') {
-      canvasDepth = canvasWidth * 4;
-    }
 
-    // console.log('Canvas: ', positionSize, canvasWidth, canvasHeight, canvasDepth)
+    // console.log('Canvas: ', canvasWidth, canvasHeight, canvasDepth)
     return _.map(this.opt.indices, function(index, i){
       var x = MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]);
       var y = MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]);

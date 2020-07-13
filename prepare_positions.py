@@ -60,10 +60,10 @@ def parseCol(points, keyname, index, options):
 
 jsonPositions = {}
 for keyName, options in configPos.items():
+    jsonPositions[keyName] = options.copy()
 
     # completely random; no need to export position data
     if "xCol" not in options and "yCol" not in options and "zCol" not in options:
-        jsonPositions[keyName] = {"layout": options["layout"]}
         continue
 
     xyzs = [(0.5, 0.5, 0.5) for item in items]
@@ -79,7 +79,7 @@ for keyName, options in configPos.items():
 
     posOutFile = OUTPUT_POS_DIR + keyName + ".json"
     posOutFileRel = OUTPUT_POS_DIR_REL + keyName + ".json"
-    jsonPositions[keyName] = {"src": posOutFileRel, "layout": options["layout"]}
+    jsonPositions[keyName]["src"] = posOutFileRel
 
     if options["layout"] == "grid":
         dimensions = 2
@@ -142,13 +142,7 @@ for keyName, options in configPos.items():
         groups = sorted(groups, key=lambda group: group["2"])
         groupCount = len(groups)
         nUnit = 1.0 / groupCount
-        nDistance = 0.025 if "distance" not in options else options["distance"]
         nThickness = 0.1 if "thickness" not in options else options["thickness"]
-
-        if nDistance + nThickness > 1.0:
-            print("Tunnel too thick")
-            nThickness = 1.0 - nDistance
-
         count = 0
         values = np.zeros(len(xyzs) * dimensions)
         for i, group in enumerate(groups):
@@ -158,7 +152,7 @@ for keyName, options in configPos.items():
                 x, y, z = item
                 z = mu.randomUniform(minZ, maxZ, seed=count+5)
                 angle =  mu.randomUniform(0, 360, seed=count+7)
-                distance =  mu.randomUniform(nDistance, nDistance + nThickness, seed=count+9)
+                distance =  mu.randomUniform(0.5-nThickness, 0.5, seed=count+9)
                 x, y =  mu.translatePoint(x, y, distance, angle)
                 values[count*dimensions] = round(x, PRECISION)
                 values[count*dimensions+1] = round(y, PRECISION)
