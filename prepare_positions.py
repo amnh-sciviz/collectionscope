@@ -61,6 +61,11 @@ def parseCol(points, keyname, index, options):
 jsonPositions = {}
 for keyName, options in configPos.items():
 
+    # completely random; no need to export position data
+    if "xCol" not in options and "yCol" not in options and "zCol" not in options:
+        jsonPositions[keyName] = {"layout": options["layout"]}
+        continue
+
     xyzs = [(0.5, 0.5, 0.5) for item in items]
     xyzs = parseCol(xyzs, "xCol", 0, options)
     xyzs = parseCol(xyzs, "yCol", 1, options)
@@ -138,7 +143,7 @@ for keyName, options in configPos.items():
         groupCount = len(groups)
         nUnit = 1.0 / groupCount
         nDistance = 0.025 if "distance" not in options else options["distance"]
-        nThickness = 0.2 if "thickness" not in options else options["thickness"]
+        nThickness = 0.1 if "thickness" not in options else options["thickness"]
 
         if nDistance + nThickness > 1.0:
             print("Tunnel too thick")

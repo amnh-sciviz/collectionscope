@@ -100,7 +100,7 @@ var Material = (function() {
         alphaTransitionPct: {type: "f", value: 0.0},
         ///fog
         fogColor: {type: "v3", value: new THREE.Vector3()},
-        fogDistance: {type: "f", value: 100000}
+        fogDistance: {type: "f", value: 5000}
       },
       vertexShader: MaterialVertexShader,
       fragmentShader: MaterialFragmentShader,
@@ -110,7 +110,7 @@ var Material = (function() {
     });
     material.uniforms.positionTransitionPct.value = 1.0;
     material.uniforms.colorTransitionPct.value = 1.0;
-    material.uniforms.alphaTransitionPct.value = 1.0;
+    material.uniforms.alphaTransitionPct.value = 0.0;
 
     this.threeMaterial = material;
 
@@ -120,6 +120,12 @@ var Material = (function() {
 
   Material.prototype.getThree = function(){
     return this.threeMaterial;
+  };
+
+  Material.prototype.transitionAlpha = function(duration){
+    this.threeMaterial.uniforms.alphaTransitionPct.value = 0.0;
+    this.alphaTransitionStart = new Date().getTime();
+    this.alphaTransitionEnd = this.alphaTransitionStart + duration;
   };
 
   Material.prototype.transitionPosition = function(duration){
@@ -134,10 +140,25 @@ var Material = (function() {
       var now = new Date().getTime();
       var percent = MathUtil.norm(now, this.positionTransitionStart, this.positionTransitionEnd);
       percent = MathUtil.clamp(percent, 0, 1.0);
+      percent = MathUtil.ease(percent);
       this.threeMaterial.uniforms.positionTransitionPct.value = percent;
       if (percent >= 1.0){
         this.positionTransitionStart = false;
         this.positionTransitionEnd = false;
+      }
+      renderNeeded = true;
+    }
+
+    // check if we are transitioning alpha
+    if (this.alphaTransitionStart !== false && this.alphaTransitionEnd !== false) {
+      var now = new Date().getTime();
+      var percent = MathUtil.norm(now, this.alphaTransitionStart, this.alphaTransitionEnd);
+      percent = MathUtil.clamp(percent, 0, 1.0);
+      percent = MathUtil.ease(percent);
+      this.threeMaterial.uniforms.alphaTransitionPct.value = percent;
+      if (percent >= 1.0){
+        this.alphaTransitionStart = false;
+        this.alphaTransitionEnd = false;
       }
       renderNeeded = true;
     }

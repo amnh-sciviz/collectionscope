@@ -12,7 +12,7 @@ var Collection = (function() {
   }
 
   Collection.prototype.init = function(){
-    this.currentPositionsKey = 'default';
+    this.currentPositionsKey = 'start';
   };
 
   Collection.prototype.getThree = function(){
@@ -66,7 +66,6 @@ var Collection = (function() {
 
     $(document).on('filter-property', function(e, propertyName, newValue) {
       console.log('Filtering '+propertyName+' to '+newValue);
-
     });
   };
 
@@ -91,13 +90,14 @@ var Collection = (function() {
     var loaded = 0;
     var totalToLoad = _.keys(this.opt.positions).length;
     this.positions = {};
+
     _.each(this.opt.positions, function(set, key){
       // check if data is set locally
       if (!set.src) {
         loaded++;
         _this.opt.onLoadProgress();
-        if (!set.values) console.log('Warning: '+key+' does not have any valid position data');
-        else _this.positions[key] = _.clone(set);
+        if (!set.values) console.log('Warning: '+key+' does not have any valid position data; will generate them randomly');
+        _this.positions[key] = _.clone(set);
         if (loaded===totalToLoad) {
           console.log('Loaded all position data.');
           deferred.resolve();
@@ -214,15 +214,25 @@ var Collection = (function() {
     });
   };
 
-  Collection.prototype.updatePositions = function(newValue){
+  Collection.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
+    transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
+
+    var _this = this;
+    _.each(this.sets, function(set){
+      set.updateAlpha(fromAlpha, toAlpha, transitionDuration);
+    })
+  };
+
+  Collection.prototype.updatePositions = function(newValue, transitionDuration){
     if (newValue === this.currentPositionsKey) return;
+    transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
 
     var _this = this;
     var newPositions = this.positions[newValue];
     this.currentPositionsKey = newValue;
 
     _.each(this.sets, function(set){
-      set.updatePositions(newPositions, _this.opt.ui.transitionDuration);
+      set.updatePositions(newPositions, transitionDuration);
     })
   };
 

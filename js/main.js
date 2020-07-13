@@ -39,9 +39,9 @@ var MainApp = (function() {
     camera.position.z = 2000;
     camera.lookAt(new THREE.Vector3(0,0,0));
 
-    var fogColor = 0x1a1817;
-    scene.background = new THREE.Color(fogColor);
-    scene.fog = new THREE.FogExp2(fogColor, 0.1);
+    // var fogColor = 0x1a1817;
+    // scene.background = new THREE.Color(fogColor);
+    // scene.fog = new THREE.FogExp2(fogColor, 0.1);
 
     this.$el = $el;
     this.scene = scene;
@@ -55,7 +55,28 @@ var MainApp = (function() {
     this.$el.removeClass('is-loading');
     this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
     this.scene.add(this.collection.getThree());
-    setTimeout(function(){ _this.render(); }, 500);
+
+    var renderPromise = $.Deferred();
+    setTimeout(function(){
+      _this.render();
+      renderPromise.resolve();
+    }, 500);
+
+    // fade in
+    var transitionPromise = $.Deferred();
+    $.when(renderPromise).done(function(){
+      setTimeout(function(){
+        _this.collection.updateAlpha(0.0, 1.0, _this.opt.ui.startTransitionDuration);
+        transitionPromise.resolve();
+      }, 500);
+    });
+
+    // animate to default positions
+    $.when(transitionPromise).done(function(){
+      setTimeout(function(){
+        _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
+      },  parseInt(_this.opt.ui.startTransitionDuration*0.5));
+    });
   };
 
   MainApp.prototype.onLoadProgress = function(){

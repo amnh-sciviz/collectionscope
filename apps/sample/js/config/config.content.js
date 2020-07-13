@@ -13,6 +13,7 @@ _.extend(CONFIG, {
     }
   },
   "ui": {
+    "startTransitionDuration": 5000,
     "transitionDuration": 3000,
     "menus": [
       {
@@ -57,25 +58,6 @@ _.extend(CONFIG, {
             "label": "South America",
             "name": "filter-region",
             "value": 5
-          }
-        ]
-      },
-      {
-        "id": "radio-buttons-layout",
-        "type": "radioItems",
-        "label": "Choose layout",
-        "className": "radio-buttons radio-buttons-layout",
-        "radioItems": [
-          {
-            "label": "Random",
-            "name": "positions",
-            "value": "default",
-            "checked": true
-          },
-          {
-            "label": "Timeline",
-            "name": "positions",
-            "value": "timeline"
           }
         ]
       }

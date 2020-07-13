@@ -36,6 +36,11 @@ var Mesh = (function() {
     this.material.update();
   };
 
+  Mesh.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
+    this.geometry.updateAlpha(fromAlpha, toAlpha, transitionDuration);
+    this.material.transitionAlpha(transitionDuration);
+  };
+
   Mesh.prototype.updatePositions = function(newPositions, transitionDuration){
     this.geometry.updatePositions(newPositions, transitionDuration);
     this.material.transitionPosition(transitionDuration);

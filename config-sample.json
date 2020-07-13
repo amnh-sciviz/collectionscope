@@ -19,8 +19,8 @@
   },
 
   "positions": {
-    "default": {"layout": "spheres"},
-    "timeline": {"zCol": "Acquisition Year", "layout": "tunnel", "aspectRatio": "4:1"}
+    "start": {"layout": "spheres"},
+    "default": {"zCol": "Acquisition Year", "layout": "tunnel", "aspectRatio": "4:1"}
   },
 
   "textures": {
@@ -50,6 +50,7 @@
   },
 
   "ui": {
+    "startTransitionDuration": 5000,
     "transitionDuration": 3000,
     "menus": [
       {
@@ -58,23 +59,6 @@
         "label": "Filter by region",
         "className": "radio-buttons radio-buttons-region",
         "property": "region"
-      },{
-        "id": "radio-buttons-layout",
-        "type": "radioItems",
-        "label": "Choose layout",
-        "className": "radio-buttons radio-buttons-layout",
-        "radioItems": [
-          {
-            "label": "Random",
-            "name": "positions",
-            "value": "default",
-            "checked": true
-          },{
-            "label": "Timeline",
-            "name": "positions",
-            "value": "timeline"
-          }
-        ]
       }
     ]
   }

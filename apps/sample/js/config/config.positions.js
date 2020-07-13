@@ -1,11 +1,10 @@
 _.extend(CONFIG, {
   "positions": {
-    "default": {
-      "src": "data/positions/default.json",
+    "start": {
       "layout": "spheres"
     },
-    "timeline": {
-      "src": "data/positions/timeline.json",
+    "default": {
+      "src": "data/positions/default.json",
       "layout": "tunnel"
     }
   }

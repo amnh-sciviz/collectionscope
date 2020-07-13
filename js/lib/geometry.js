@@ -69,10 +69,9 @@ var Geometry = (function() {
     var alphaArr = geom.getAttribute('alpha').array;
     var alphaDestArr = geom.getAttribute('alphaDest').array;
     var randArr = geom.getAttribute('randSeed').array;
-    var alpha = 1;
     for (var i=0; i<maxInstancedCount; i++) {
-      alphaArr[i] = alpha;
-      alphaDestArr[i] = alpha;
+      alphaArr[i] = 0;
+      alphaDestArr[i] = 0;
       randArr[i] = MathUtil.lerp(0.5, 1, Math.random()); // used for creating item-level variability when transitioning
     }
 
@@ -129,6 +128,17 @@ var Geometry = (function() {
   Geometry.prototype.getPositions = function(positionOptions) {
     // filter and map positions
     var layout = positionOptions.layout;
+
+    // automatically populate values if not set
+    if (!positionOptions.values) {
+      var arrSize = this.opt.itemCount * 3;
+      var values = new Float32Array(arrSize);
+      for (var i=0; i<arrSize; i++) {
+        values[i] = 0.5;
+      }
+      positionOptions.values = values;
+    }
+
     var positionSize = parseInt(positionOptions.values.length / this.opt.itemCount);
     var allPositions = _.chunk(positionOptions.values, positionSize);
     var canvasWidth = Math.ceil(Math.sqrt(this.opt.itemCount)) * this.opt.fixedCellWidth * 2;
@@ -181,6 +191,25 @@ var Geometry = (function() {
 
   Geometry.prototype.getThree = function(){
     return this.threeGeometry;
+  };
+
+  Geometry.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
+    // console.log(fromAlpha, toAlpha, transitionDuration)
+    var fromAttr = this.attributeLookup['alpha'];
+    var toAttr = this.attributeLookup['alphaDest'];
+
+    var alphaArr = fromAttr.array;
+    var alphaDestArr = toAttr.array;
+    var maxInstancedCount = this.threeGeometry.maxInstancedCount;
+
+    for (var i=0; i<maxInstancedCount; i++) {
+      alphaArr[i] = fromAlpha;
+      alphaDestArr[i] = toAlpha;
+    }
+
+    fromAttr.needsUpdate = true;
+    toAttr.needsUpdate = true;
+    renderNeeded = true;
   };
 
   Geometry.prototype.updatePositions = function(positionOptions, transitionDuration){

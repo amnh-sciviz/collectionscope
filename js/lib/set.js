@@ -60,6 +60,12 @@ var Set = (function() {
     });
   };
 
+  Set.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
+    _.each(this.meshes, function(mesh){
+      mesh.updateAlpha(fromAlpha, toAlpha, transitionDuration);
+    });
+  };
+
   Set.prototype.updatePositions = function(newPositions, transitionDuration){
     _.each(this.meshes, function(mesh){
       mesh.updatePositions(newPositions, transitionDuration);
