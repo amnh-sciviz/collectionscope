@@ -142,7 +142,7 @@ for keyName, options in configPos.items():
         groups = sorted(groups, key=lambda group: group["2"])
         groupCount = len(groups)
         nUnit = 1.0 / groupCount
-        nThickness = 0.1 if "thickness" not in options else options["thickness"]
+        nThickness = 0.2 if "thickness" not in options else options["thickness"]
         count = 0
         values = np.zeros(len(xyzs) * dimensions)
         for i, group in enumerate(groups):

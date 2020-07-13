@@ -14,6 +14,7 @@ var MainApp = (function() {
   MainApp.prototype.init = function(){
     var _this = this;
 
+    this.clock = false;
     this.cameraTransitionStart = false;
     this.cameraTransitionEnd = false;
 
@@ -126,6 +127,9 @@ var MainApp = (function() {
     this.camera.aspect = w / h;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(w, h);
+
+    this.controls && this.controls.onResize();
+
     renderNeeded = true;
   };
 
@@ -133,9 +137,13 @@ var MainApp = (function() {
     var _this = this;
     var now = new Date().getTime();
 
+    if (this.clock === false) {
+      this.clock = new THREE.Clock();
+    }
+
     this.update(now);
     this.collection && this.collection.update(now);
-    this.controls && this.controls.update(now);
+    this.controls && this.controls.update(now, this.clock.getDelta());
 
     if (renderNeeded) {
       this.renderer.render( this.scene, this.camera );

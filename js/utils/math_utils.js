@@ -7,6 +7,10 @@
     return value;
   };
 
+  MathUtil.degToRad = function (degrees) {
+    return degrees * Math.PI / 180;
+  };
+
   MathUtil.ease = function(n){
     return (Math.sin((n+1.5)*Math.PI)+1.0) / 2.0;
   };

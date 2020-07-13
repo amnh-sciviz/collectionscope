@@ -8,19 +8,19 @@ _.extend(CONFIG, {
       "cameraPosition": [
         0,
         0,
-        -2048
+        -1024
       ]
     },
     "default": {
       "zCol": "Acquisition Year",
       "layout": "tunnel",
-      "width": 2048,
-      "height": 2048,
-      "depth": 32768,
+      "width": 512,
+      "height": 512,
+      "depth": 65536,
       "cameraPosition": [
         0,
         0,
-        -4096
+        -2048
       ],
       "src": "data/positions/default.json"
     }

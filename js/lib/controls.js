@@ -7,7 +7,8 @@ var Controls = (function() {
       "el": "#app",
       "maxVelocity": 20,
       "acceleration": 0.2,
-      "bounds": [-16384, 16384]
+      "bounds": [-32768, 32768],
+      "lookSpeed": 0.05
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -29,6 +30,13 @@ var Controls = (function() {
     this.velocity = 0;
     this.camera = this.opt.camera;
     this.loaded = false;
+
+    // for determining what the camera is looking at
+    this.pointerX = false;
+    this.pointerY = false;
+    this.lat = 0;
+    this.lon = 0;
+    this.onResize();
   };
 
   Controls.prototype.load = function(){
@@ -41,6 +49,7 @@ var Controls = (function() {
   Controls.prototype.loadListeners = function(){
     var _this = this;
     var isTouch = this.isTouch;
+    var $doc = $(document);
 
     $('input[type="radio"]').on('change', function(e) {
       _this.onRadioMenuChange($(this));
@@ -60,7 +69,7 @@ var Controls = (function() {
       });
     });
 
-    $(document).keydown(function(e) {
+    $doc.keydown(function(e) {
       switch(e.which) {
         case 38: // arrow up
         case 87: // w
@@ -85,7 +94,7 @@ var Controls = (function() {
       }
     });
 
-    $(document).keyup(function(e) {
+    $doc.keyup(function(e) {
       switch(e.which) {
         case 38: // arrow up
         case 87: // w
@@ -99,7 +108,7 @@ var Controls = (function() {
       }
     });
 
-    $(document).on('mousedown', 'canvas', function(e) {
+    $doc.on('mousedown', 'canvas', function(e) {
       if (isTouch) return;
       switch (e.which) {
         // left mouse
@@ -116,14 +125,29 @@ var Controls = (function() {
       }
     });
 
-    $(document).on('contextmenu', 'canvas', function(e) {
+    $doc.on('contextmenu', 'canvas', function(e) {
       e.preventDefault();
     });
 
-    $(document).on('mouseup', 'canvas', function(e) {
+    $doc.on('mouseup', 'canvas', function(e) {
       if (isTouch) return;
       _this.moveDirection = 0;
     });
+
+    $doc.on("mousemove", function(e){
+      if (isTouch) return;
+      _this.pointerX = e.pageX;
+      _this.pointerY = e.pageY;
+    });
+
+    if (isTouch) {
+      var el = this.$el[0];
+      var mc = new Hammer(el);
+      mc.on("panmove", function(e) {
+        _this.pointerX = e.center.x;
+        _this.pointerY = e.center.y;
+      });
+    }
   };
 
   Controls.prototype.loadMenus = function(){
@@ -172,7 +196,12 @@ var Controls = (function() {
     $(document).trigger(name, value);
   };
 
-  Controls.prototype.update = function(now){
+  Controls.prototype.onResize = function(){
+    this.viewHalfX = window.innerWidth / 2;
+    this.viewHalfY = window.innerHeight / 2;
+  };
+
+  Controls.prototype.update = function(now, delta){
     if (!this.loaded) return;
 
     var moveDirection = this.moveDirection;
@@ -201,6 +230,28 @@ var Controls = (function() {
       this.camera.position.setZ(newZ);
       renderNeeded = true;
     }
+
+    // move camera direction based on pointer
+    if (this.pointerX === false || this.pointerY === false || delta <= 0) return;
+
+    var x = this.pointerX - this.viewHalfX;
+    var y = this.pointerY - this.viewHalfY;
+    var prevLat = this.lat;
+    var prevLon = this.lon;
+    var actualLookSpeed = delta * this.opt.lookSpeed;
+    this.lon -= x * actualLookSpeed;
+    this.lat -= y * actualLookSpeed;
+    this.lat = Math.max( -85, Math.min( 85, this.lat ) );
+    if (prevLat === this.lat && prevLon === this.lon) return;
+
+    var phi = MathUtil.degToRad(90 - this.lat);
+    var theta = MathUtil.degToRad(this.lon);
+
+    var position = this.camera.position;
+    var targetPosition = new THREE.Vector3();
+    targetPosition.setFromSphericalCoords(1, phi, theta).add(position);
+    this.camera.lookAt(targetPosition);
+    renderNeeded = true;
   };
 
   return Controls;
