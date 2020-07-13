@@ -51,6 +51,9 @@ body {
   z-index: 100;
   background: rgba(0,0,0,0.9);
   padding: 20px;
+  opacity: 0;
+  animation: fadeIn ease 2s;
+  animation-fill-mode: forwards;
 }
 .menu h2 {
   margin: 0 0 1rem;
@@ -63,4 +66,28 @@ body {
 .menu.radio-buttons {
   left: 0;
   bottom: 0;
+}
+
+.camera-nav {
+  position: absolute;
+  top: 0;
+  left: 0;
+  z-index: 100;
+  padding: 20px;
+  opacity: 0;
+  display: flex;
+  flex-direction: column;
+}
+.loaded .camera-nav {
+  animation: fadeIn ease 2s;
+  animation-fill-mode: forwards;
+}
+.camera-nav button {
+  font-size: 2rem;
+  margin-bottom: 6px;
+}
+
+@keyframes fadeIn {
+  0% {opacity:0;}
+  100% {opacity:1;}
 }

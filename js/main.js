@@ -78,11 +78,20 @@ var MainApp = (function() {
     });
 
     // animate to default positions
+    var cameraTransitionPromise = $.Deferred();
     $.when(transitionPromise).done(function(){
       setTimeout(function(){
         _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
-        _this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration);
+        _this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration*2);
+        cameraTransitionPromise.resolve();
       },  parseInt(_this.opt.ui.startTransitionDuration*0.5));
+    });
+
+    $.when(cameraTransitionPromise).done(function(){
+      setTimeout(function(){
+        _this.$el.addClass('loaded');
+        _this.controls.load();
+      }, _this.opt.ui.startTransitionDuration);
     });
   };
 
