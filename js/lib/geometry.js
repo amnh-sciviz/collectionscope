@@ -142,11 +142,16 @@ var Geometry = (function() {
     if (positionOptions.gridDepth) {
       canvasDepth = positionOptions.gridDepth * fixedCellWidth;
     }
-    // console.log('Canvas: ', canvasWidth, canvasHeight, canvasDepth)
+    if (layout === 'tunnel') {
+      canvasDepth = canvasWidth * 4;
+    }
+
+    // console.log('Canvas: ', positionSize, canvasWidth, canvasHeight, canvasDepth)
     return _.map(this.opt.indices, function(index, i){
       var x = MathUtil.lerp(-canvasWidth/2, canvasWidth/2, allPositions[index][0]);
       var y = MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]);
-      var z = positionSize > 2 ? allPositions[index][2] * canvasDepth : 0;
+      var z = positionSize > 2 ? MathUtil.lerp(canvasDepth/2, -canvasDepth/2, allPositions[index][2]): 0;
+      // var z = positionSize > 2 ? allPositions[index][2] * canvasDepth : 0;
 
       // random point in sphere if sphere layout
       if (layout === 'spheres') {

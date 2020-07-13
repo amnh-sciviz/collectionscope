@@ -63,6 +63,11 @@ var Collection = (function() {
       console.log("Changing positions to "+newValue);
       _this.updatePositions(newValue);
     });
+
+    $(document).on('filter-property', function(e, propertyName, newValue) {
+      console.log('Filtering '+propertyName+' to '+newValue);
+
+    });
   };
 
   Collection.prototype.loadMetadata = function(){

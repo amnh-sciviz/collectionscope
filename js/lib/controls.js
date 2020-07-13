@@ -30,7 +30,7 @@ var Controls = (function() {
     var _this = this;
 
     _.each(this.opt.menus, function(menu){
-      if (_.has(menu, 'radioButtons')) _this.loadRadioMenu(menu);
+      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu);
       else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu);
     });
   };
@@ -42,10 +42,10 @@ var Controls = (function() {
         html += '<h2>'+options.label+'</h2>';
       }
       html += '<form class="radio-button-form">';
-      _.each(options.radioButtons, function(button, i){
-        var id = button.name + (i+1);
-        var checked = button.checked ? 'checked' : '';
-        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+button.name+'" value="'+button.value+'" '+checked+' /> '+button.label+'</label>';
+      _.each(options.radioItems, function(item, i){
+        var id = item.name + (i+1);
+        var checked = item.checked ? 'checked' : '';
+        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" '+checked+' /> '+item.label+'</label>';
       });
       html += '</form>';
     html += '</div>';
@@ -59,9 +59,17 @@ var Controls = (function() {
 
   Controls.prototype.onRadioMenuChange = function($input){
     var name = $input.attr('name');
-    var value = $input.val();
+    var value = [$input.val()];
+
+    if (name.indexOf('filter-') === 0) {
+      var parts = name.split('-', 2);
+      name = 'filter-property';
+      value.unshift(parts[1]);
+    } else {
+      name = 'change-'+name;
+    }
     // console.log('Triggering event "change-'+name+'" with value "'+value+'"');
-    $(document).trigger('change-'+name, [value]);
+    $(document).trigger(name, value);
   };
 
   Controls.prototype.update = function(){

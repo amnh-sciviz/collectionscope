@@ -21,7 +21,10 @@ var Set = (function() {
 
     // check if we have everything we need
     this.isValid = this.opt.content && this.opt.metadata && this.opt.positions && this.opt.textures;
-    if (!this.isValid) return;
+    if (!this.isValid) {
+      console.log('Invalid set');
+      return;
+    }
 
     // one mesh per texture file
     var meshes = [];

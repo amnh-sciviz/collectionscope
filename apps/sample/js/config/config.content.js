@@ -3,14 +3,6 @@ _.extend(CONFIG, {
     "default": {
       "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from all over the world"
     },
-    "asia": {
-      "set": "asia",
-      "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from Asia"
-    },
-    "china": {
-      "set": "china",
-      "text": "In its 150 year history, the American Museum of Natural History collected {count} cultural artifacts from China"
-    },
     "laufer": {
       "set": "laufer",
       "image": "https://lbry-web-007.amnh.org/digital/files/thumbnails/cd198760f782344a393abae73444b7d8.jpg",
@@ -18,20 +10,62 @@ _.extend(CONFIG, {
       "imageCaptionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29130",
       "title": "Laufer China Expedition",
       "html": "<p>Berthold Laufer led an expedition to China between 1901 and 1904. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>"
-    },
-    "lauferItem": {
-      "set": "lauferItem",
-      "text": "This engraved incense burner was collected as part of the Laufer China Expedition expedition led by Berthold Laufer between 1901 and 1904. It now can be found in the Gardner D. Stout Hall of Asian Peoples in the American Museum of Natural History."
     }
   },
   "ui": {
     "transitionDuration": 3000,
     "menus": [
       {
+        "id": "radio-buttons-region",
+        "type": "radioItems",
+        "label": "Filter by region",
+        "className": "radio-buttons radio-buttons-region",
+        "property": "region",
+        "radioItems": [
+          {
+            "label": "All",
+            "name": "filter-region",
+            "value": -1,
+            "checked": true
+          },
+          {
+            "label": "Africa",
+            "name": "filter-region",
+            "value": 0
+          },
+          {
+            "label": "Asia",
+            "name": "filter-region",
+            "value": 1
+          },
+          {
+            "label": "Mexico And Central America",
+            "name": "filter-region",
+            "value": 2
+          },
+          {
+            "label": "North America",
+            "name": "filter-region",
+            "value": 3
+          },
+          {
+            "label": "Pacific",
+            "name": "filter-region",
+            "value": 4
+          },
+          {
+            "label": "South America",
+            "name": "filter-region",
+            "value": 5
+          }
+        ]
+      },
+      {
         "id": "radio-buttons-layout",
+        "type": "radioItems",
         "label": "Choose layout",
         "className": "radio-buttons radio-buttons-layout",
-        "radioButtons": [
+        "radioItems": [
           {
             "label": "Random",
             "name": "positions",
@@ -39,19 +73,9 @@ _.extend(CONFIG, {
             "checked": true
           },
           {
-            "label": "By region",
+            "label": "Timeline",
             "name": "positions",
-            "value": "regions"
-          },
-          {
-            "label": "By time and region",
-            "name": "positions",
-            "value": "timeRegions"
-          },
-          {
-            "label": "By geography",
-            "name": "positions",
-            "value": "geography"
+            "value": "timeline"
           }
         ]
       }

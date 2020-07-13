@@ -9,6 +9,7 @@ import rasterfairy
 import sys
 
 import lib.io_utils as io
+import lib.item_utils as tu
 import lib.list_utils as lu
 import lib.math_utils as mu
 
@@ -18,12 +19,9 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json",
 a = parser.parse_args()
 
 config = io.readJSON(a.CONFIG_FILE)
-configMeta = config["metadata"]
 configPos = config["positions"]
 
 PRECISION = 4
-INPUT_FILE = configMeta["src"]
-ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_POS_DIR_REL = "data/positions/"
 OUTPUT_POS_DIR = OUTPUT_DIR + OUTPUT_POS_DIR_REL
@@ -31,40 +29,42 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.positions.js"
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_POS_DIR, CONFIG_FILE])
-fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
-if "query" in configMeta:
-    items = lu.filterByQueryString(items, configMeta["query"])
-    print("%s items after filtering" % len(items))
 
-# Sort so that index corresponds to ID
-items = sorted(items, key=lambda item: item[ID_COLUMN])
+items = tu.getItems(config)
 itemCount = len(items)
-dimensions = 2
+dimensions = 3
+
+if len(items) < 1:
+    print("No items found")
+    sys.exit()
+
+def parseCol(points, keyname, index, options):
+    global items
+
+    if keyname in options:
+        col = options[keyname]
+        isRandom = (col == "random")
+        # check for string values
+        isStringValues = False
+        if not isRandom and not mu.isNumeric(items[0][col]):
+            isStringValues = True
+            stringValueTable = lu.stringsToValueTable([item[col] for item in items])
+        for i, item in enumerate(items):
+            if isRandom:
+                value = mu.randomUniform(seed=i*index+3)
+            else:
+                value = mu.parseNumber(item[col]) if not isStringValues else stringValueTable[item[col]]
+            points[i] = lu.updateTuple(points[i], index, value)
+
+    return points
 
 jsonPositions = {}
 for keyName, options in configPos.items():
 
-    xys = [(0, 0) for item in items]
-    if "yCol" in options:
-        yCol = options["yCol"]
-        # check for string values
-        isStringValues = False
-        if not mu.isNumeric(items[0][yCol]):
-            isStringValues = True
-            stringValueTable = lu.stringsToValueTable([item[yCol] for item in items])
-        for i, item in enumerate(items):
-            y = mu.parseNumber(item[yCol]) if not isStringValues else stringValueTable[item[yCol]]
-            xys[i] = (xys[i][0], y)
-    if "xCol" in options:
-        xCol = options["xCol"]
-        # check for string values
-        isStringValues = False
-        if not mu.isNumeric(items[0][xCol]):
-            isStringValues = True
-            stringValueTable = lu.stringsToValueTable([item[xCol] for item in items])
-        for i, item in enumerate(items):
-            x = mu.parseNumber(item[xCol]) if not isStringValues else stringValueTable[item[xCol]]
-            xys[i] = (x, xys[i][1])
+    xyzs = [(0.5, 0.5, 0.5) for item in items]
+    xyzs = parseCol(xyzs, "xCol", 0, options)
+    xyzs = parseCol(xyzs, "yCol", 1, options)
+    xyzs = parseCol(xyzs, "zCol", 2, options)
 
     gridWidth = gridHeight = None
     aspectRatioX, aspectRatioY = (1, 1)
@@ -77,10 +77,12 @@ for keyName, options in configPos.items():
     jsonPositions[keyName] = {"src": posOutFileRel, "layout": options["layout"]}
 
     if options["layout"] == "grid":
+        dimensions = 2
         gridWidth = math.ceil(math.sqrt(itemCount) * aspectRatio)
         gridHeight = math.ceil(1.0 * itemCount / gridWidth)
 
-        xys = np.array(xys)
+        xyzs = np.array(xyzs)
+        xys = xyzs[:, :-1]
         print("Determining grid assignment for (%s x %s) for grid size: %s x %s..." % (xCol, yCol, gridWidth, gridHeight))
         gridAssignment = rasterfairy.transformPointCloud2D(xys, target=(gridWidth, gridHeight))
         grid, gridShape = gridAssignment
@@ -100,13 +102,13 @@ for keyName, options in configPos.items():
 
     elif options["layout"] == "spheres" or options["layout"] == "bars":
         dimensions = 3
-        groups = lu.groupListByValue(xys)
+        groups = lu.groupListByValue(xyzs)
         groups = [{"centerX": item[0][0], "centerY": item[0][1], "count": item[1]} for item in groups]
         groups = mu.addNormalizedValues(groups, "centerX", "nCenterX")
         groups = mu.addNormalizedValues(groups, "centerY", "nCenterY")
         # groups = mu.addNormalizedValues(groups, "count", "nCount")
 
-        values = np.zeros(len(xys) * dimensions)
+        values = np.zeros(len(xyzs) * dimensions)
         itemIndex = 0
         for i, group in enumerate(groups):
             nCount = 1.0 * group["count"] / itemCount
@@ -130,18 +132,49 @@ for keyName, options in configPos.items():
 
         values = values.tolist()
 
+    elif options["layout"] == "tunnel":
+        groups = lu.groupList(xyzs, 2) # group by z col
+        groups = sorted(groups, key=lambda group: group["2"])
+        groupCount = len(groups)
+        nUnit = 1.0 / groupCount
+        nDistance = 0.025 if "distance" not in options else options["distance"]
+        nThickness = 0.2 if "thickness" not in options else options["thickness"]
+
+        if nDistance + nThickness > 1.0:
+            print("Tunnel too thick")
+            nThickness = 1.0 - nDistance
+
+        count = 0
+        values = np.zeros(len(xyzs) * dimensions)
+        for i, group in enumerate(groups):
+            minZ = i * nUnit
+            maxZ = (i+1) * nUnit
+            for j, item in enumerate(group["items"]):
+                x, y, z = item
+                z = mu.randomUniform(minZ, maxZ, seed=count+5)
+                angle =  mu.randomUniform(0, 360, seed=count+7)
+                distance =  mu.randomUniform(nDistance, nDistance + nThickness, seed=count+9)
+                x, y =  mu.translatePoint(x, y, distance, angle)
+                values[count*dimensions] = round(x, PRECISION)
+                values[count*dimensions+1] = round(y, PRECISION)
+                values[count*dimensions+2] = round(z, PRECISION)
+                count += 1
+        values = values.tolist()
+
     else:
         # flatten and round
-        nxys = mu.addNormalizedValues(xys, 0, 0)
-        nxys = mu.addNormalizedValues(xys, 1, 1)
-        values = np.zeros(len(nxys) * dimensions)
-        for i, nxy in enumerate(nxys):
-            nx, ny = nxy
+        nxyzs = mu.addNormalizedValues(xyzs, 0, 0)
+        nxyzs = mu.addNormalizedValues(xyzs, 1, 1)
+        nxyzs = mu.addNormalizedValues(xyzs, 2, 2)
+        values = np.zeros(len(nxyzs) * dimensions)
+        for i, nxyz in enumerate(nxyzs):
+            nx, ny, nz = nxyz
             if "inverseY" in options:
                 ny = 1.0 - ny
             ny = mu.lerp((1.0/aspectRatio*0.5, 1.0-1.0/aspectRatio*0.5), ny)
             values[i*dimensions] = round(nx, PRECISION)
             values[i*dimensions+1] = round(ny, PRECISION)
+            values[i*dimensions+2] = round(nz, PRECISION)
         values = values.tolist()
 
     # Write position file

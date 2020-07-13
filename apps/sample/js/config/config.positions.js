@@ -4,17 +4,9 @@ _.extend(CONFIG, {
       "src": "data/positions/default.json",
       "layout": "spheres"
     },
-    "regions": {
-      "src": "data/positions/regions.json",
-      "layout": "spheres"
-    },
-    "timeRegions": {
-      "src": "data/positions/timeRegions.json",
-      "layout": "spheres"
-    },
-    "geography": {
-      "src": "data/positions/geography.json",
-      "layout": "bars"
+    "timeline": {
+      "src": "data/positions/timeline.json",
+      "layout": "tunnel"
     }
   }
 });

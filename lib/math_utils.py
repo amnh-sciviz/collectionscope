@@ -82,5 +82,17 @@ def randomPointInSphere(center, radius, seed=None):
 
     return (center[0]+x, center[1]+y, center[2]+z)
 
+def randomUniform(fromValue=0, toValue=1.0, seed=3):
+    if seed is not None:
+        random.seed(seed)
+    return random.uniform(fromValue, toValue)
+
 def roundInt(value):
     return int(round(value))
+
+# East = 0 degrees
+def translatePoint(x, y, distance, angle, radians=False):
+    rad = angle if radians else math.radians(angle)
+    x2 = x + distance * math.cos(rad)
+    y2 = y + distance * math.sin(rad)
+    return (x2, y2)

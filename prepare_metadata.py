@@ -7,6 +7,7 @@ from pprint import pprint
 import sys
 
 import lib.io_utils as io
+import lib.item_utils as tu
 import lib.list_utils as lu
 
 # input
@@ -17,8 +18,6 @@ a = parser.parse_args()
 config = io.readJSON(a.CONFIG_FILE)
 configMeta = config["metadata"]
 
-INPUT_FILE = configMeta["src"]
-ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_FILE_REL = "data/metadata.json"
 OUTPUT_FILE = OUTPUT_DIR + OUTPUT_FILE_REL
@@ -27,21 +26,20 @@ COLUMNS =  configMeta["cols"]
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_FILE, CONFIG_FILE])
-fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
-if "query" in configMeta:
-    items = lu.filterByQueryString(items, configMeta["query"])
-    print("%s items after filtering" % len(items))
 
-# Sort so that index corresponds to ID
-items = sorted(items, key=lambda item: item[ID_COLUMN])
+items = tu.getItems(config)
+sets, items = tu.addColumnsToItems(items, config)
 
-cols = [col["toKey"] for col in COLUMNS]
+# only take cols that have from key
+cols = [col["toKey"] for col in COLUMNS if "fromKey" in col]
 rows = []
 for item in items:
     row = []
     for col in COLUMNS:
-        fromKey = col["fromKey"]
-        value = item[fromKey] if fromKey in item else ""
+        if "fromKey" not in col:
+            continue
+        toKey = col["toKey"]
+        value = item[toKey]
         row.append(value)
     rows.append(row)
 
@@ -54,7 +52,8 @@ for col in COLUMNS:
 outjson = {
     "rows": rows,
     "cols": cols,
-    "patterns": patterns
+    "patterns": patterns,
+    "sets": sets
 }
 io.writeJSON(OUTPUT_FILE, outjson)
 

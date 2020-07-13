@@ -1,4 +1,6 @@
 from collections import Counter
+import itertools
+from operator import itemgetter
 from pprint import pprint
 
 import lib.math_utils as mu
@@ -59,6 +61,22 @@ def filterByQueryString(arr, str):
     ors = parseQueryString(str)
     return filterByQuery(arr, ors)
 
+def groupList(arr, groupBy, sort=False, desc=True):
+    groups = []
+    arr = sorted(arr, key=itemgetter(groupBy))
+    for key, items in itertools.groupby(arr, key=itemgetter(groupBy)):
+        group = {}
+        litems = list(items)
+        count = len(litems)
+        group[str(groupBy)] = key
+        group["items"] = litems
+        group["count"] = count
+        groups.append(group)
+    if sort:
+        reversed = desc
+        groups = sorted(groups, key=lambda k: k["count"], reverse=reversed)
+    return groups
+
 def groupListByValue(arr):
     return list(zip(Counter(arr).keys(), Counter(arr).values()))
 
@@ -90,3 +108,8 @@ def stringsToValueTable(values):
 
 def unique(arr):
     return list(set(arr))
+
+def updateTuple(tup, index, value):
+    arr = list(tup)
+    arr[index] = value
+    return tuple(arr)

@@ -32,12 +32,16 @@ var MainApp = (function() {
     var w = $el.width();
     var h = $el.height();
     var scene = new THREE.Scene();
-    var camera = new THREE.PerspectiveCamera( 75, w / h, 1, 100000 );
+    var camera = new THREE.PerspectiveCamera( 75, w / h, 1, 8000 );
     var renderer = new THREE.WebGLRenderer();
     renderer.setSize(w, h);
     $el.append(renderer.domElement);
     camera.position.z = 2000;
     camera.lookAt(new THREE.Vector3(0,0,0));
+
+    var fogColor = 0x1a1817;
+    scene.background = new THREE.Color(fogColor);
+    scene.fog = new THREE.FogExp2(fogColor, 0.1);
 
     this.$el = $el;
     this.scene = scene;

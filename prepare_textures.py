@@ -10,6 +10,7 @@ import sys
 
 import lib.image_utils as iu
 import lib.io_utils as io
+import lib.item_utils as tu
 import lib.list_utils as lu
 import lib.math_utils as mu
 
@@ -21,12 +22,9 @@ parser.add_argument('-probe', dest="PROBE", action="store_true", help="Just outp
 a = parser.parse_args()
 
 config = io.readJSON(a.CONFIG_FILE)
-configMeta = config["metadata"]
-configSets = config["sets"]
+# configSets = config["sets"]
 configTextures = config["textures"]
 
-INPUT_FILE = configMeta["src"]
-ID_COLUMN = configMeta["id"]
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_TEXTURES_DIR_REL = "img/textures/"
 OUTPUT_TEXTURES_DIR = OUTPUT_DIR + OUTPUT_TEXTURES_DIR_REL
@@ -34,17 +32,12 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.textures.js"
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_TEXTURES_DIR, CONFIG_FILE, a.CACHE_DIR])
-fieldnames, items = io.readCsv(INPUT_FILE, parseNumbers=False)
-if "query" in configMeta:
-    items = lu.filterByQueryString(items, configMeta["query"])
-    print("%s items after filtering" % len(items))
 
-# Sort so that index corresponds to ID
-items = sorted(items, key=lambda item: item[ID_COLUMN])
-items = lu.addIndices(items)
+items = tu.getItems(config)
 
 # Make texture for each set
-sets = list(configSets.items())
+# sets = list(configSets.items())
+sets = [] # just produce the default set for now
 sets = [("default", {"query": ""})] + sets # add default set
 jsonsets = {}
 for keyName, options in sets:
