@@ -14,7 +14,8 @@ _.extend(CONFIG, {
   },
   "ui": {
     "startTransitionDuration": 5000,
-    "transitionDuration": 3000,
+    "transitionDuration": 1000,
+    "minAlpha": 0.1,
     "menus": [
       {
         "id": "radio-buttons-region",
@@ -22,6 +23,7 @@ _.extend(CONFIG, {
         "label": "Filter by region",
         "className": "radio-buttons radio-buttons-region",
         "property": "region",
+        "parseType": "int",
         "radioItems": [
           {
             "label": "All",

@@ -60,7 +60,8 @@
 
   "ui": {
     "startTransitionDuration": 5000,
-    "transitionDuration": 3000,
+    "transitionDuration": 1000,
+    "minAlpha": 0.1,
 
     "menus": [
       {
@@ -68,7 +69,8 @@
         "type": "radioItems",
         "label": "Filter by region",
         "className": "radio-buttons radio-buttons-region",
-        "property": "region"
+        "property": "region",
+        "parseType": "int"
       }
     ]
   }

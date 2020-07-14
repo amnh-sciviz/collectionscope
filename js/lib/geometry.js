@@ -195,13 +195,20 @@ var Geometry = (function() {
     var fromAttr = this.attributeLookup['alpha'];
     var toAttr = this.attributeLookup['alphaDest'];
 
+    var fromIsNumber = !isNaN(fromAlpha);
+    var toIsNumber = !isNaN(toAlpha);
+
     var alphaArr = fromAttr.array;
     var alphaDestArr = toAttr.array;
     var maxInstancedCount = this.threeGeometry.maxInstancedCount;
 
     for (var i=0; i<maxInstancedCount; i++) {
-      alphaArr[i] = fromAlpha;
-      alphaDestArr[i] = toAlpha;
+      if (fromAlpha === false) alphaArr[i] = alphaDestArr[i];
+      else if (fromIsNumber) alphaArr[i] = fromAlpha;
+      else alphaArr[i] = fromAlpha[i];
+
+      if (toIsNumber) alphaDestArr[i] = toAlpha;
+      else alphaDestArr[i] = toAlpha[i];
     }
 
     fromAttr.needsUpdate = true;

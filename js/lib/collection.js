@@ -13,6 +13,31 @@ var Collection = (function() {
 
   Collection.prototype.init = function(){
     this.currentPositionsKey = 'start';
+    this.minAlpha = this.opt.ui.minAlpha;
+  };
+
+  Collection.prototype.filter = function(prop, value){
+    if (!this.metaCols || !this.metaCols.length || this.metaCols.indexOf(prop) < 0) {
+      console.log("Invalid property "+prop);
+      return;
+    }
+
+    // reset alpha
+    if (value === "" || value === -1) {
+      this.updateAlpha(false, 1.0);
+      return;
+    }
+
+    var _this = this;
+    var toAlphaValues = new Float32Array(this.metadata.length);
+    _.each(this.metadata, function(item, i){
+      if (item[prop] === value) {
+        toAlphaValues[i] = 1.0;
+      } else {
+        toAlphaValues[i] = _this.minAlpha;
+      }
+    });
+    this.updateAlpha(false, toAlphaValues);
   };
 
   Collection.prototype.getDefaultCameraPosition = function(){
@@ -77,6 +102,7 @@ var Collection = (function() {
 
     $(document).on('filter-property', function(e, propertyName, newValue) {
       console.log('Filtering '+propertyName+' to '+newValue);
+      _this.filter(propertyName, newValue);
     });
   };
 
@@ -85,6 +111,7 @@ var Collection = (function() {
     this.metadata = [];
     var deferred = $.Deferred();
     $.getJSON(this.opt.metadata.src, function(data){
+      _this.metaCols = data.cols;
       _this.opt.onLoadProgress();
       _this.metadata = _.map(data.rows, function(row){
         return _.object(data.cols, row);

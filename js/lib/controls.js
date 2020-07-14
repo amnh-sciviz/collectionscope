@@ -83,10 +83,12 @@ var Controls = (function() {
 
         case 37: // arrow left
         case 65: // a
+          _this.stepOption(-1);
           break;
 
         case 39: // arrow right
         case 68: // d
+          _this.stepOption(1);
           break;
 
         default:
@@ -153,13 +155,13 @@ var Controls = (function() {
   Controls.prototype.loadMenus = function(){
     var _this = this;
 
-    _.each(this.opt.menus, function(menu){
-      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu);
-      else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu);
+    _.each(this.opt.menus, function(menu, i){
+      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu, i);
+      else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu, i);
     });
   };
 
-  Controls.prototype.loadRadioMenu = function(options){
+  Controls.prototype.loadRadioMenu = function(options, index){
     var html = '';
     html += '<div id="'+options.id+'" class="'+options.className+' menu">';
       if (options.label) {
@@ -169,11 +171,17 @@ var Controls = (function() {
       _.each(options.radioItems, function(item, i){
         var id = item.name + (i+1);
         var checked = item.checked ? 'checked' : '';
-        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" '+checked+' /> '+item.label+'</label>';
+        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+options.parseType+'" '+checked+' /> '+item.label+'</label>';
       });
       html += '</form>';
     html += '</div>';
     var $menu = $(html);
+
+    // the first menu is the default menu
+    if (index <= 0) {
+      this.$primaryOptions = $menu.find('input[type="radio"]');
+    }
+
     this.$el.append($menu);
   };
 
@@ -183,7 +191,13 @@ var Controls = (function() {
 
   Controls.prototype.onRadioMenuChange = function($input){
     var name = $input.attr('name');
-    var value = [$input.val()];
+    var value = $input.val();
+    var parseType = $input.attr('data-type');
+
+    if (parseType==='int') value = parseInt(value);
+    else if (parseType==='float') value = parseFloat(value);
+
+    value = [value];
 
     if (name.indexOf('filter-') === 0) {
       var parts = name.split('-', 2);
@@ -199,6 +213,17 @@ var Controls = (function() {
   Controls.prototype.onResize = function(){
     this.viewHalfX = window.innerWidth / 2;
     this.viewHalfY = window.innerHeight / 2;
+  };
+
+  Controls.prototype.stepOption = function(step){
+    if (!this.$primaryOptions || !this.$primaryOptions.length) return;
+
+    var currentOptionIndex = this.$primaryOptions.index(this.$primaryOptions.filter(':checked')) + step;
+    if (currentOptionIndex < 0) currentOptionIndex = this.$primaryOptions.length-1;
+    else if (currentOptionIndex >= this.$primaryOptions.length) currentOptionIndex = 0;
+
+    this.$primaryOptions.eq(currentOptionIndex).prop('checked', true);
+    this.$primaryOptions.eq(currentOptionIndex).trigger('change');
   };
 
   Controls.prototype.update = function(now, delta){
