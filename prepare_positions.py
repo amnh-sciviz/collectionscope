@@ -21,7 +21,7 @@ a = parser.parse_args()
 config = io.readJSON(a.CONFIG_FILE)
 configPos = config["positions"]
 
-PRECISION = 4
+PRECISION = 7
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_POS_DIR_REL = "data/positions/"
 OUTPUT_POS_DIR = OUTPUT_DIR + OUTPUT_POS_DIR_REL
@@ -40,23 +40,26 @@ if len(items) < 1:
 
 def parseCol(points, keyname, index, options):
     global items
+    stringValueTable = None
 
-    if keyname in options:
-        col = options[keyname]
-        isRandom = (col == "random")
-        # check for string values
-        isStringValues = False
-        if not isRandom and not mu.isNumeric(items[0][col]):
-            isStringValues = True
-            stringValueTable = lu.stringsToValueTable([item[col] for item in items])
-        for i, item in enumerate(items):
-            if isRandom:
-                value = mu.randomUniform(seed=i*index+3)
-            else:
-                value = mu.parseNumber(item[col]) if not isStringValues else stringValueTable[item[col]]
-            points[i] = lu.updateTuple(points[i], index, value)
+    if keyname not in options:
+        return (stringValueTable, points)
 
-    return points
+    col = options[keyname]
+    isRandom = (col == "random")
+    # check for string values
+    isStringValues = False
+    if not isRandom and not mu.isNumeric(items[0][col]):
+        isStringValues = True
+        stringValueTable = lu.stringsToValueTable([item[col] for item in items])
+    for i, item in enumerate(items):
+        if isRandom:
+            value = mu.randomUniform(seed=i*index+3)
+        else:
+            value = mu.parseNumber(item[col]) if not isStringValues else stringValueTable[item[col]]
+        points[i] = lu.updateTuple(points[i], index, value)
+
+    return (stringValueTable, points)
 
 jsonPositions = {}
 for keyName, options in configPos.items():
@@ -67,9 +70,10 @@ for keyName, options in configPos.items():
         continue
 
     xyzs = [(0.5, 0.5, 0.5) for item in items]
-    xyzs = parseCol(xyzs, "xCol", 0, options)
-    xyzs = parseCol(xyzs, "yCol", 1, options)
-    xyzs = parseCol(xyzs, "zCol", 2, options)
+    stringValueTableX, xyzs = parseCol(xyzs, "xCol", 0, options)
+    stringValueTableY, xyzs = parseCol(xyzs, "yCol", 1, options)
+    stringValueTableZ, xyzs = parseCol(xyzs, "zCol", 2, options)
+    stringValueTables = [stringValueTableX, stringValueTableY, stringValueTableZ]
 
     gridWidth = gridHeight = None
     aspectRatioX, aspectRatioY = (1, 1)
@@ -138,19 +142,34 @@ for keyName, options in configPos.items():
         values = values.tolist()
 
     elif options["layout"] == "tunnel":
+        values = [xyz[2] for xyz in xyzs]
+        minValue = min(values)
+        maxValue = max(values)
+        isIntegerValues = mu.isInteger(minValue)
+        if isIntegerValues:
+            print("Treating %s as integer values" % options["zCol"])
+        else:
+            print("Treating %s as float values" % options["zCol"])
+        nUnit = None
+        if isIntegerValues:
+            maxValue += 1
+            nUnit = 1.0 / (maxValue-minValue) # only relevant for integers; treat each integer as a unit
         groups = lu.groupList(xyzs, 2) # group by z col
         groups = sorted(groups, key=lambda group: group["2"])
-        groupCount = len(groups)
-        nUnit = 1.0 / groupCount
         nThickness = 0.2 if "thickness" not in options else options["thickness"]
         count = 0
         values = np.zeros(len(xyzs) * dimensions)
         for i, group in enumerate(groups):
-            minZ = i * nUnit
-            maxZ = (i+1) * nUnit
+            minZ = maxZ = None
+            if nUnit is not None:
+                minZ = mu.norm(group["2"], (minValue, maxValue))
+                maxZ = minZ + nUnit
             for j, item in enumerate(group["items"]):
                 x, y, z = item
-                z = mu.randomUniform(minZ, maxZ, seed=count+5)
+                if minZ is not None and maxZ is not None:
+                    z = mu.randomUniform(minZ, maxZ, seed=count+5)
+                else:
+                    z = mu.norm(group["2"], (minValue, maxValue))
                 angle =  mu.randomUniform(0, 360, seed=count+7)
                 distance =  mu.randomUniform(0.5-nThickness, 0.5, seed=count+9)
                 x, y =  mu.translatePoint(x, y, distance, angle)
@@ -178,6 +197,48 @@ for keyName, options in configPos.items():
 
     # Write position file
     io.writeJSON(posOutFile, values)
+
+    # Parse labels if config is set
+    if "labels" in options:
+        pCols = ["xCol", "yCol", "zCol"]
+        colName = options["labels"]
+        if colName not in pCols:
+            print("labels must be one of: " + ", ".join(pCols))
+            continue
+        dimensionIndex = pCols.index(colName)
+        stringValueTable = stringValueTables[dimensionIndex]
+        isStringValues = stringValueTable is not None
+
+        values = [xyz[dimensionIndex] for xyz in xyzs]
+        if not mu.isInteger(values[0]):
+            print("%s is not a string or integer, parsing as integers" % colName)
+            values = [int(v) for v in values]
+
+        valueCount = len(values)
+        if valueCount < 1:
+            print("No labels found")
+            continue
+        minValue, maxValue = (min(values), max(values)+1)
+        # fill in missing integers
+        allValues = []
+        for j in range(maxValue-minValue):
+            allValues.append(minValue+j)
+        labels = []
+        step = 1.0 / (maxValue-minValue)
+        for j, value in enumerate(allValues):
+            position = [0.5, 0.5, 0.5]
+            if "defaultLabelPosition" in options:
+                position = options["defaultLabelPosition"][:]
+            posValue = mu.norm(value, (minValue, maxValue)) + step*0.5 # place label at the center of each step
+            position[dimensionIndex] = round(posValue, PRECISION)
+            text = value
+            if isStringValues:
+                text = lu.getKeyByValue(stringValueTable, value)
+            labels.append({
+                "text": str(text),
+                "position": position
+            })
+        jsonPositions[keyName]["labels"] = labels
 
 # Write config file
 outjson = {

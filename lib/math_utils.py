@@ -11,6 +11,9 @@ def addNormalizedValues(arr, key, nkey):
         arr[i][nkey] = norm(entry[key], range)
     return arr
 
+def isInteger(value):
+    return isinstance(value, int)
+
 def isNumeric(value):
     if value == "":
         return False

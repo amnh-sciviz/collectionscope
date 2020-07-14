@@ -71,6 +71,7 @@ var Collection = (function() {
 
     $.when(
       this.loadContent(),
+      this.loadLabels(),
       this.loadMetadata(),
       this.loadPositions(),
       this.loadSets(),
@@ -89,6 +90,31 @@ var Collection = (function() {
     this.ui = this.opt.ui;
     console.log('Loaded content.');
     deferred.resolve();
+    return deferred;
+  };
+
+  Collection.prototype.loadLabels = function(){
+    var deferreds = [];
+    var labelSets = {};
+
+    _.each(this.opt.positions, function(set, key){
+      if (_.has(set, 'labels')) {
+        var labelSet = new LabelSet(set);
+        deferreds.push(labelSet.load());
+        labelSets[key] = labelSet;
+      }
+    });
+    this.labelSets = labelSets;
+
+    var deferred = $.Deferred();
+    if (deferreds.length < 1) deferred.resolve();
+    else {
+      $.when.apply(null, deferreds).done(function() {
+        console.log('Loaded labels');
+        deferred.resolve();
+      });
+    }
+
     return deferred;
   };
 
@@ -241,6 +267,11 @@ var Collection = (function() {
       container.add(set.getThree());
     });
     this.sets = sets;
+
+    _.each(this.labelSets, function(labelSet, key){
+      container.add(labelSet.getThree());
+    });
+
     this.container = container;
 
     this.loadListeners();
@@ -249,6 +280,10 @@ var Collection = (function() {
   Collection.prototype.update = function(now){
     _.each(this.sets, function(set, key){
       set.update(now);
+    });
+
+    _.each(this.labelSets, function(labelSet, key){
+      labelSet.update(now);
     });
   };
 
@@ -271,7 +306,15 @@ var Collection = (function() {
 
     _.each(this.sets, function(set){
       set.updatePositions(newPositions, transitionDuration);
-    })
+    });
+
+    if (_.has(this.labelSets, newValue)) {
+      _.each(this.labelSets, function(labelSet, key){
+        if (key===newValue && labelSet.visible) return false;
+        else if (key===newValue) labelSet.show(transitionDuration);
+        else labelSet.hide(transitionDuration);
+      });
+    }
   };
 
   return Collection;

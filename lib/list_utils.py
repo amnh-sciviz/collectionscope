@@ -61,6 +61,14 @@ def filterByQueryString(arr, str):
     ors = parseQueryString(str)
     return filterByQuery(arr, ors)
 
+def getKeyByValue(d, value):
+    found = ""
+    for key, itemValue in d.items():
+        if itemValue == value:
+            found = itemValue
+            break
+    return found
+
 def groupList(arr, groupBy, sort=False, desc=True):
     groups = []
     arr = sorted(arr, key=itemgetter(groupBy))

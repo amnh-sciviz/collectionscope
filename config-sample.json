@@ -28,7 +28,9 @@
       "zCol": "Acquisition Year",
       "layout": "tunnel",
       "width": 512, "height": 512, "depth": 65536,
-      "cameraPosition": [0, 0, -2048]
+      "cameraPosition": [0, 0, -8192],
+      "labels": "zCol",
+      "defaultLabelPosition": [0.5, 0.667, 0.5]
     }
   },
 
