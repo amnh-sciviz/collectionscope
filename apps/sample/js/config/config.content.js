@@ -15,7 +15,7 @@ _.extend(CONFIG, {
   "ui": {
     "startTransitionDuration": 5000,
     "transitionDuration": 1000,
-    "minAlpha": 0.1,
+    "minAlpha": 0.0,
     "menus": [
       {
         "id": "radio-buttons-region",

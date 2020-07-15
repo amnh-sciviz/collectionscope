@@ -36,8 +36,14 @@ var MaterialVertexShader = `
     if (pPct > 1.0) pPct = 1.0;
     if (cPct > 1.0) cPct = 1.0;
     if (aPct > 1.0) aPct = 1.0;
+    vAlpha = (alphaDest-alpha) * aPct + alpha;
 
     vec3 p = mix( translate, translateDest, pPct );
+
+    // move the point far away if alpha zero
+    if (vAlpha <= 0.0) {
+      p = vec3(-999999., -999999., -999999.);
+    }
 
     vec4 mvPosition = modelViewMatrix * vec4(p, 1.0);
 
@@ -48,7 +54,7 @@ var MaterialVertexShader = `
 
     gl_Position = projectionMatrix * mvPosition;
 
-    vAlpha = (alphaDest-alpha) * aPct + alpha;
+
   }
 `;
 
@@ -66,7 +72,7 @@ var MaterialFragmentShader = `
   void main() {
     if( length( vColor ) < .1 )discard;
 
-    // gl_FragColor = vec4( 0., 0., 1., 1. );
+    // gl_FragColor = vec4( 0., 0., 1., vAlpha );
     // return;
 
     // gl_FragColor = vec4( 0., 0., 0., 1. );
