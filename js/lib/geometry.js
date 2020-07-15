@@ -82,7 +82,7 @@ var Geometry = (function() {
       var y = parseInt(i / cols) / cols;
       var x = (i % cols) / cols;
       uvOffsetArr[i0] = x;
-      uvOffsetArr[i0 + 1] = y;
+      uvOffsetArr[i0 + 1] = 1.0-y;
     }
 
     // set translates and colors

@@ -30,9 +30,12 @@ var Set = (function() {
     var meshes = [];
     var t = this.opt.textures;
     var itemsPerAsset = parseInt((t.width / t.cellWidth) * (t.height / t.cellHeight));
-    _.each(t.assets, function(texture, i){
+    _.each(t.assets, function(asset, i){
+      var texture = asset.texture;
       var indices = _this.opt.indices.slice();
       if (indices.length > itemsPerAsset) {
+        // console.log(asset.src);
+        // console.log(i*itemsPerAsset, Math.min(indices.length, (i+1)*itemsPerAsset));
         indices = indices.slice(i*itemsPerAsset, Math.min(indices.length, (i+1)*itemsPerAsset));
       }
       var mesh = new Mesh({

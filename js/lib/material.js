@@ -66,6 +66,9 @@ var MaterialFragmentShader = `
   void main() {
     if( length( vColor ) < .1 )discard;
 
+    // gl_FragColor = vec4( 0., 0., 1., 1. );
+    // return;
+
     // gl_FragColor = vec4( 0., 0., 0., 1. );
     // vec4 diffuseColor = texture2D( map, vUv) * vec4(vColor, 1.0);
     // gl_FragColor += diffuseColor;

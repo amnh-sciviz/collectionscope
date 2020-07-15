@@ -142,7 +142,7 @@ var Collection = (function() {
       _this.metadata = _.map(data.rows, function(row){
         return _.object(data.cols, row);
       });
-      console.log('Loaded metadata.');
+      console.log('Loaded metadata: '+_this.metadata.length);
       deferred.resolve();
     });
     return deferred;
@@ -232,7 +232,7 @@ var Collection = (function() {
             deferred.resolve();
           }
         });
-        assets.push(texture);
+        assets.push({src: asset.src, texture: texture});
       });
       _this.textures[key].assets = assets;
     });
@@ -252,7 +252,7 @@ var Collection = (function() {
 
     var sets = {};
     _.each(this.opt.sets, function(set, key){
-      // if (key !== 'default') return;
+      if (key !== 'default') return;
       var setPositions = _this.positions[_this.currentPositionsKey];
       var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
