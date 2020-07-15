@@ -1,0 +1,185 @@
+{
+  "name": "items.mp3",
+  "sprites": [
+    {
+      "src": "A7.mp3",
+      "start": 0,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "A7.mp3",
+      "start": 500,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "A7.mp3",
+      "start": 1000,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "A7.mp3",
+      "start": 1500,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "A7.mp3",
+      "start": 2000,
+      "dur": 500,
+      "quantity": "higher"
+    },
+    {
+      "src": "B7.mp3",
+      "start": 2500,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "B7.mp3",
+      "start": 3000,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "B7.mp3",
+      "start": 3500,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "B7.mp3",
+      "start": 4000,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "B7.mp3",
+      "start": 4500,
+      "dur": 500,
+      "quantity": "higher"
+    },
+    {
+      "src": "C7.mp3",
+      "start": 5000,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "C7.mp3",
+      "start": 5500,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "C7.mp3",
+      "start": 6000,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "C7.mp3",
+      "start": 6500,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "C7.mp3",
+      "start": 7000,
+      "dur": 500,
+      "quantity": "higher"
+    },
+    {
+      "src": "D7.mp3",
+      "start": 7500,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "D7.mp3",
+      "start": 8000,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "D7.mp3",
+      "start": 8500,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "D7.mp3",
+      "start": 9000,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "D7.mp3",
+      "start": 9500,
+      "dur": 500,
+      "quantity": "higher"
+    },
+    {
+      "src": "E7.mp3",
+      "start": 10000,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "E7.mp3",
+      "start": 10500,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "E7.mp3",
+      "start": 11000,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "E7.mp3",
+      "start": 11500,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "E7.mp3",
+      "start": 12000,
+      "dur": 500,
+      "quantity": "higher"
+    },
+    {
+      "src": "F7.mp3",
+      "start": 12500,
+      "dur": 500,
+      "quantity": "lower"
+    },
+    {
+      "src": "F7.mp3",
+      "start": 13000,
+      "dur": 500,
+      "quantity": "low"
+    },
+    {
+      "src": "F7.mp3",
+      "start": 13500,
+      "dur": 500,
+      "quantity": "medium"
+    },
+    {
+      "src": "F7.mp3",
+      "start": 14000,
+      "dur": 500,
+      "quantity": "high"
+    },
+    {
+      "src": "F7.mp3",
+      "start": 14500,
+      "dur": 500,
+      "quantity": "higher"
+    }
+  ]
+}

@@ -1,0 +1,185 @@
+{
+  "name": "yearLabels.mp3",
+  "sprites": [
+    {
+      "src": "C1.mp3",
+      "start": 0,
+      "dur": 200
+    },
+    {
+      "src": "D1.mp3",
+      "start": 200,
+      "dur": 200
+    },
+    {
+      "src": "E1.mp3",
+      "start": 400,
+      "dur": 200
+    },
+    {
+      "src": "F1.mp3",
+      "start": 600,
+      "dur": 200
+    },
+    {
+      "src": "G1.mp3",
+      "start": 800,
+      "dur": 200
+    },
+    {
+      "src": "A2.mp3",
+      "start": 1000,
+      "dur": 200
+    },
+    {
+      "src": "B2.mp3",
+      "start": 1200,
+      "dur": 200
+    },
+    {
+      "src": "C2.mp3",
+      "start": 1400,
+      "dur": 200
+    },
+    {
+      "src": "D2.mp3",
+      "start": 1600,
+      "dur": 200
+    },
+    {
+      "src": "E2.mp3",
+      "start": 1800,
+      "dur": 200
+    },
+    {
+      "src": "F2.mp3",
+      "start": 2000,
+      "dur": 200
+    },
+    {
+      "src": "G2.mp3",
+      "start": 2200,
+      "dur": 200
+    },
+    {
+      "src": "A3.mp3",
+      "start": 2400,
+      "dur": 200
+    },
+    {
+      "src": "B3.mp3",
+      "start": 2600,
+      "dur": 200
+    },
+    {
+      "src": "C3.mp3",
+      "start": 2800,
+      "dur": 200
+    },
+    {
+      "src": "D3.mp3",
+      "start": 3000,
+      "dur": 200
+    },
+    {
+      "src": "E3.mp3",
+      "start": 3200,
+      "dur": 200
+    },
+    {
+      "src": "F3.mp3",
+      "start": 3400,
+      "dur": 200
+    },
+    {
+      "src": "G3.mp3",
+      "start": 3600,
+      "dur": 200
+    },
+    {
+      "src": "A4.mp3",
+      "start": 3800,
+      "dur": 200
+    },
+    {
+      "src": "B4.mp3",
+      "start": 4000,
+      "dur": 200
+    },
+    {
+      "src": "C4.mp3",
+      "start": 4200,
+      "dur": 200
+    },
+    {
+      "src": "D4.mp3",
+      "start": 4400,
+      "dur": 200
+    },
+    {
+      "src": "E4.mp3",
+      "start": 4600,
+      "dur": 200
+    },
+    {
+      "src": "F4.mp3",
+      "start": 4800,
+      "dur": 200
+    },
+    {
+      "src": "G4.mp3",
+      "start": 5000,
+      "dur": 200
+    },
+    {
+      "src": "A5.mp3",
+      "start": 5200,
+      "dur": 200
+    },
+    {
+      "src": "B5.mp3",
+      "start": 5400,
+      "dur": 200
+    },
+    {
+      "src": "C5.mp3",
+      "start": 5600,
+      "dur": 200
+    },
+    {
+      "src": "D5.mp3",
+      "start": 5800,
+      "dur": 200
+    },
+    {
+      "src": "E5.mp3",
+      "start": 6000,
+      "dur": 200
+    },
+    {
+      "src": "F5.mp3",
+      "start": 6200,
+      "dur": 200
+    },
+    {
+      "src": "G5.mp3",
+      "start": 6400,
+      "dur": 200
+    },
+    {
+      "src": "A6.mp3",
+      "start": 6600,
+      "dur": 200
+    },
+    {
+      "src": "B6.mp3",
+      "start": 6800,
+      "dur": 200
+    },
+    {
+      "src": "C6.mp3",
+      "start": 7000,
+      "dur": 200
+    }
+  ]
+}

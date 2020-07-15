@@ -85,7 +85,7 @@ def randomPointInSphere(center, radius, seed=None):
 
     return (center[0]+x, center[1]+y, center[2]+z)
 
-def randomUniform(fromValue=0, toValue=1.0, seed=3):
+def randomUniform(fromValue=0, toValue=1.0, seed=None):
     if seed is not None:
         random.seed(seed)
     return random.uniform(fromValue, toValue)
