@@ -28,7 +28,7 @@ var MainApp = (function() {
     this.onLoadStart();
     this.collection.load();
 
-    this.sound = new Sound({});
+    this.sound = new Sound({camera: this.camera});
   };
 
   MainApp.prototype.loadListeners = function(){
@@ -76,7 +76,7 @@ var MainApp = (function() {
     setTimeout(function(){
       _this.render();
       renderPromise.resolve();
-    }, 500);
+    }, 100);
 
     // fade in
     var transitionPromise = $.Deferred();
@@ -84,24 +84,25 @@ var MainApp = (function() {
       setTimeout(function(){
         _this.collection.updateAlpha(0.0, 1.0, _this.opt.ui.startTransitionDuration);
         transitionPromise.resolve();
-      }, 500);
+      }, 100);
     });
 
     // animate to default positions
     var cameraTransitionPromise = $.Deferred();
     $.when(transitionPromise).done(function(){
       setTimeout(function(){
-        _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
+        $(document).trigger('change-positions', ['default', _this.opt.ui.startTransitionDuration]);
+        // _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
         _this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration*2);
         cameraTransitionPromise.resolve();
-      },  parseInt(_this.opt.ui.startTransitionDuration*0.5));
+      },  parseInt(_this.opt.ui.startTransitionDuration*0.25));
     });
 
     $.when(cameraTransitionPromise).done(function(){
       setTimeout(function(){
         _this.$el.addClass('loaded');
         _this.controls.load();
-      }, _this.opt.ui.startTransitionDuration);
+      }, _this.opt.ui.startTransitionDuration*0.75);
     });
   };
 

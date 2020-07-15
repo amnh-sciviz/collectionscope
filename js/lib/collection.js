@@ -121,9 +121,9 @@ var Collection = (function() {
   Collection.prototype.loadListeners = function(){
     var _this = this;
 
-    $(document).on('change-positions', function(e, newValue) {
+    $(document).on('change-positions', function(e, newValue, duration) {
       console.log("Changing positions to "+newValue);
-      _this.updatePositions(newValue);
+      _this.updatePositions(newValue, duration);
     });
 
     $(document).on('filter-property', function(e, propertyName, newValue) {

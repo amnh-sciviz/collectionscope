@@ -4,7 +4,8 @@ var Sound = (function() {
 
   function Sound(config) {
     var defaults = {
-      "audioPath": "../../audio/"
+      "audioPath": "../../audio/",
+      "camera": false
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -12,27 +13,46 @@ var Sound = (function() {
 
   Sound.prototype.init = function(){
     this.sounds = {};
+    this.camera = this.opt.camera;
     this.loadListeners();
   };
 
   Sound.prototype.loadListeners = function(){
     var _this = this;
 
-    $(document).on('change-positions', function(e, newValue) {
+    $(document).on('change-positions', function(e, newValue, duration) {
       _this.playSound("sand.mp3");
     });
   };
 
   Sound.prototype.playSound = function(filename){
     var _this = this;
+    if (!this.camera) return;
 
     if (_.has(this.sounds, filename)) {
-      this.sounds[filename].play();
+      var sound = this.sounds[filename];
+      if (sound.loaded && !sound.audio.isPlaying) {
+        sound.audio.play();
+      }
+
     } else {
       var fullPath = this.opt.audioPath + filename;
-      this.sounds[filename] = new Howl({
-        src: [fullPath],
-        autoplay: true
+      var listener = new THREE.AudioListener();
+      _this.camera.add( listener );
+
+      // create a global audio source
+      var sound = new THREE.Audio( listener );
+      _this.sounds[filename] = {
+        audio: sound,
+        loaded: false
+      };
+
+      // load a sound and set it as the Audio object's buffer
+      var audioLoader = new THREE.AudioLoader();
+      audioLoader.load(fullPath, function( buffer ) {
+        sound.setBuffer( buffer );
+        sound.play();
+        _this.sounds[filename].loaded = true;
       });
     }
   };
