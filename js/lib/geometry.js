@@ -77,7 +77,7 @@ var Geometry = (function() {
 
     // set uv offset
     var uvOffsetArr = geom.getAttribute('uvOffset').array;
-    var yt = 1.0-1.0/cols;
+    var yt = 1.0/cols;
     for (var i=0; i<maxInstancedCount; i++) {
       var i0 = i*2;
       var y = parseInt(i / cols) / cols;
