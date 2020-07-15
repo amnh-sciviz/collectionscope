@@ -253,6 +253,7 @@ var Controls = (function() {
       var newZ = this.camera.position.z + this.velocity;
       newZ = MathUtil.clamp(newZ, this.opt.bounds[0], this.opt.bounds[1]);
       this.camera.position.setZ(newZ);
+      // console.log(newZ)
       renderNeeded = true;
     }
 

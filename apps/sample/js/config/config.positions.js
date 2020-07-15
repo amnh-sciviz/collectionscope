@@ -20,7 +20,7 @@ _.extend(CONFIG, {
       "cameraPosition": [
         0,
         0,
-        -8192
+        -17080
       ],
       "labels": [
         {

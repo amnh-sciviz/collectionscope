@@ -7,7 +7,6 @@
     "yearKey": "Acquisition Year",
     "query": "Acquisition Year < 9999 AND Latitude < 9999 AND Longitude < 9999 AND Region != Europe",
     "cols": [
-      {"fromKey": "Title", "toKey": "title"},
       {"fromKey": "Catalog No", "toKey": "id"},
       {"toKey": "url", "pattern": "https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno={id}"},
       {"fromKey": "Region", "toKey": "region", "asIndex": 1}
@@ -28,7 +27,7 @@
       "zCol": "Acquisition Year",
       "layout": "tunnel",
       "width": 512, "height": 512, "depth": 65536,
-      "cameraPosition": [0, 0, -8192],
+      "cameraPosition": [0, 0, -17080],
       "labels": "zCol",
       "defaultLabelPosition": [0.5, 0.667, 0.5]
     }
