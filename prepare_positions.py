@@ -21,7 +21,7 @@ a = parser.parse_args()
 config = io.readJSON(a.CONFIG_FILE)
 configPos = config["positions"]
 
-PRECISION = 7
+PRECISION = 5
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_POS_DIR_REL = "data/positions/"
 OUTPUT_POS_DIR = OUTPUT_DIR + OUTPUT_POS_DIR_REL
