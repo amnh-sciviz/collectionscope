@@ -95,7 +95,11 @@ var SoundSet = (function() {
 
     if (sprite.start !== false) audio.offset = sprite.start;
     if (sprite.dur !== false) audio.duration = sprite.dur;
-    if (sprite.dur === false) audio.setVolume(Math.random());
+    if (sprite.dur === false) audio.setVolume(Math.random()*0.25);
+
+    // HACK: disable click temporarily
+    if (sprite.dur === false) return;
+
     audio.play(0.001);
 
     // sprite.region && console.log(sprite.region);

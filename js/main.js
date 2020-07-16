@@ -41,6 +41,10 @@ var MainApp = (function() {
     $(document).on('change-positions', function(e, newValue, duration) {
       _this.globalSound.playSoundFromFile("sand.mp3");
     });
+
+    $('.start').on('click', function(e){
+      _this.onUserStart();
+    });
   };
 
   MainApp.prototype.loadScene = function(){
@@ -76,6 +80,7 @@ var MainApp = (function() {
     this.scene.add(this.collection.getThree());
 
     this.loadListeners();
+    $('#instructions').addClass('active');
 
     var renderPromise = $.Deferred();
     setTimeout(function(){
@@ -84,31 +89,10 @@ var MainApp = (function() {
     }, 100);
 
     // fade in
-    var transitionPromise = $.Deferred();
     $.when(renderPromise).done(function(){
       setTimeout(function(){
         _this.collection.updateAlpha(0.0, 1.0, _this.opt.ui.startTransitionDuration);
-        transitionPromise.resolve();
       }, 100);
-    });
-
-    // animate to default positions
-    var cameraTransitionPromise = $.Deferred();
-    $.when(transitionPromise).done(function(){
-      setTimeout(function(){
-        $(document).trigger('change-positions', ['default', _this.opt.ui.startTransitionDuration]);
-        // _this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
-        _this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration*2);
-        cameraTransitionPromise.resolve();
-      },  parseInt(_this.opt.ui.startTransitionDuration*0.25));
-    });
-
-    $.when(cameraTransitionPromise).done(function(){
-      setTimeout(function(){
-        _this.$el.addClass('loaded');
-        _this.controls.load();
-        _this.collection.onFinishedStart();
-      }, _this.opt.ui.startTransitionDuration*0.75);
     });
   };
 
@@ -126,6 +110,22 @@ var MainApp = (function() {
     this.$loadingProgress = $('.loading-progress');
     this.$loadingText = $('.loading-text');
     this.$el.addClass('is-loading');
+  };
+
+  MainApp.prototype.onUserStart = function(){
+    var _this = this;
+
+    $('#instructions').removeClass('active');
+
+    $(document).trigger('change-positions', ['default', this.opt.ui.startTransitionDuration]);
+    // this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
+    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration*2);
+
+    setTimeout(function(){
+      _this.$el.addClass('loaded');
+      _this.controls.load();
+      _this.collection.onFinishedStart();
+    }, this.opt.ui.startTransitionDuration*0.75);
   };
 
   MainApp.prototype.onResize = function(){
