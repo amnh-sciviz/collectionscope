@@ -7,7 +7,7 @@ var SoundSet = (function() {
       'audioPath': '../../audio/',
       'camera': false,
       'dimension': 2,
-      'maxInstances': 6 // number of sounds that can be playing simulaneously
+      'maxInstances': 8 // number of sounds that can be playing simulaneously
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -29,8 +29,10 @@ var SoundSet = (function() {
     var canvasHeight = this.opt.height;
     var canvasDepth = this.opt.depth;
     this.sprites = _.map(this.opt.sprites, function(sprite, i){
-      sprite.start = sprite.start / 1000.0;
-      sprite.dur = sprite.dur / 1000.0;
+      if (_.has(sprite, 'start')) sprite.start = sprite.start / 1000.0;
+      else sprite.start = false;
+      if (_.has(sprite, 'dur')) sprite.dur = sprite.dur / 1000.0;
+      else sprite.dur = false;
       sprite.index = i;
 
       var p = sprite.position;
@@ -84,16 +86,19 @@ var SoundSet = (function() {
   };
 
   SoundSet.prototype.playSprite = function(sprite, now){
-    if (_.has(sprite, 'lastPlayedTime') && (now-sprite.lastPlayedTime) < 200) return;
+    if (_.has(sprite, 'lastPlayedTime') && (now-sprite.lastPlayedTime) < 100) return;
 
     var instance = this.getAudioInstance();
     var audio = instance.audio;
 
-    if (audio.isPlaying) audio.pause();
+    if (audio.isPlaying) audio.stop();
 
-    audio.offset = sprite.start;
-    audio.duration = sprite.dur;
+    if (sprite.start !== false) audio.offset = sprite.start;
+    if (sprite.dur !== false) audio.duration = sprite.dur;
+    if (sprite.dur === false) audio.setVolume(Math.random());
     audio.play(0.001);
+
+    // sprite.region && console.log(sprite.region);
 
     this.audioInstances[instance.index].lastPlayedTime = now;
     this.sprites[sprite.index].lastPlayedTime = now;

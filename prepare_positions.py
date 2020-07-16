@@ -221,21 +221,24 @@ for keyName, options in configPos.items():
     if "sounds" in options:
         soundSets = []
         for soundOptions in options["sounds"]:
-            dataFilename = "audio/%s.json" % soundOptions["key"]
             dimension = soundOptions["dimension"]
             dimensionIndex = ["x", "y", "z"].index(dimension)
             hasGroups = ("groupBy" in soundOptions)
             hasFilters = ("filterBy" in soundOptions)
-            spriteData = io.readJSON(dataFilename)
-            soundSet = {
-                "filename": spriteData["name"],
-                "dimension": dimensionIndex
-            }
-            spriteData = spriteData["sprites"]
-            if len(spriteData) < 1:
-                print("No sprite data in %s" % dataFilename)
-                continue
-            hasQuantities = ("quantity" in spriteData[0])
+            hasQuantities = ("quantities" in soundOptions)
+            soundSet = {"dimension": dimensionIndex}
+            spriteData = []
+            if "key" in soundOptions:
+                dataFilename = "audio/%s.json" % soundOptions["key"]
+                spriteData = io.readJSON(dataFilename)
+                soundSet["filename"] = spriteData["name"]
+                spriteData = spriteData["sprites"]
+                if len(spriteData) < 1:
+                    print("No sprite data in %s" % dataFilename)
+                    continue
+            else:
+                soundSet["filename"] = soundOptions["filename"]
+
             sprites = []
             if "labels" in soundOptions:
                 property = soundOptions["labels"]
@@ -261,47 +264,27 @@ for keyName, options in configPos.items():
                 values = [item[groupBy] for item in items]
                 minValue, maxValue, allValues = getIntegerRange(values)
                 filterValues = sorted(lu.unique([item[filterBy] for item in items]))
-                quantities = sorted(lu.unique([s["quantity"] for s in spriteData]))
-                srcs = lu.unique([s["src"] for s in spriteData])
                 groups = lu.groupList(items, groupBy)
 
-                minCount = 999999999
-                maxCount = 0
                 for j, group in enumerate(groups):
                     filterGroups = lu.groupList(group["items"], filterBy)
                     groups[j]["filterGroups"] = filterGroups
-                    counts = [g["count"] for g in filterGroups]
-                    minCount = min(minCount, min(counts))
-                    maxCount = max(maxCount, max(counts))
 
                 step = 1.0 / (maxValue-minValue)
                 for groupIndex, group in enumerate(groups):
-                    position = [0.5, 0.5, 0.5]
-                    posValue = mu.norm(int(group[groupBy]), (minValue, maxValue)) + step*mu.randomUniform(seed=groupIndex+5) # place randomly over the step
-                    position[dimensionIndex] = round(posValue, PRECISION)
 
                     for filterGroup in group["filterGroups"]:
-                        ncount = mu.norm(filterGroup["count"], (minCount, maxCount))
-                        quantityIndex = mu.roundInt(ncount * (len(quantities)-1))
-                        quantityName = quantities[quantityIndex]
-                        filterValue = filterGroup[filterBy]
-                        filterIndex = filterValues.index(filterValue)
-                        nfilter = 1.0 * filterIndex / (len(filterValues)-1)
-                        srcIndex = mu.roundInt(nfilter * (len(srcs)-1))
-                        srcName = srcs[srcIndex]
-                        sourceSprite = [s for s in spriteData if s["src"]==srcName and s["quantity"]==quantityName]
-                        if len(sourceSprite) > 0:
-                            sourceSprite = sourceSprite[0]
-                            sprite = {
-                                "position": position[:],
-                                "start": sourceSprite["start"],
-                                "dur": sourceSprite["dur"]
-                            }
-                            sprite[filterBy] = filterValue
+                        count = filterGroup["count"]
+                        rcount = mu.roundInt(1.0 * count ** (1.0/soundOptions["rootValue"]))
+                        for k in range(rcount):
+                            position = [0.5, 0.5, 0.5]
+                            posValue = mu.norm(int(group[groupBy]), (minValue, maxValue)) + step*mu.randomUniform() # place randomly over the step
+                            position[dimensionIndex] = round(posValue, PRECISION)
+                            sprite = {"position": position}
+                            sprite[filterBy] = filterGroup[filterBy]
                             sprites.append(sprite)
-                        else:
-                            print("Could not find sprite: %s, %s" % (srcName, quantityName))
 
+            print("%s sprites" % len(sprites))
             soundSet["sprites"] = sprites
             if len(sprites) > 0:
                 soundSets.append(soundSet)

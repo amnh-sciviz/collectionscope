@@ -31,7 +31,8 @@
       "labels": "zCol",
       "defaultLabelPosition": [0.5, 0.667, 0.5],
       "sounds": [
-        {"key": "yearLabels", "dimension": "z", "labels": "Acquisition Year"}
+        {"key": "yearLabels", "dimension": "z", "labels": "Acquisition Year"},
+        {"filename": "click.mp3", "dimension": "z", "groupBy": "Acquisition Year", "quantities": true, "rootValue": 2.25, "filterBy": "region"}
       ]
     }
   },
@@ -81,21 +82,10 @@
 
   "sounds": {
     "yearLabels": {
-      "src": "audio/woodblock-mp3/",
-      "filenames": ["C1.mp3", "D1.mp3", "E1.mp3", "F1.mp3", "G1.mp3", "A2.mp3", "B2.mp3", "C2.mp3", "D2.mp3", "E2.mp3", "F2.mp3", "G2.mp3", "A3.mp3", "B3.mp3", "C3.mp3", "D3.mp3", "E3.mp3", "F3.mp3", "G3.mp3", "A4.mp3", "B4.mp3", "C4.mp3", "D4.mp3", "E4.mp3", "F4.mp3", "G4.mp3", "A5.mp3", "B5.mp3", "C5.mp3", "D5.mp3", "E5.mp3", "F5.mp3", "G5.mp3", "A6.mp3", "B6.mp3", "C6.mp3"],
+      "src": "audio/xylophone-mp3/",
+      "filenames": ["C1.mp3", "D1.mp3", "E1.mp3", "F1.mp3", "G1.mp3", "A1.mp3", "B1.mp3", "C2.mp3", "D2.mp3", "E2.mp3", "F2.mp3", "G2.mp3", "A2.mp3", "B2.mp3", "C3.mp3", "D3.mp3", "E3.mp3", "F3.mp3", "G3.mp3", "A3.mp3", "B3.mp3", "C4.mp3", "D4.mp3", "E4.mp3", "F4.mp3", "G4.mp3", "A4.mp3", "B4.mp3", "C5.mp3", "D5.mp3", "E5.mp3", "F5.mp3", "G5.mp3", "A5.mp3", "B5.mp3", "C6.mp3"],
       "spriteDuration": 200,
       "db": -24
-    },
-    "items": {
-      "src": "audio/xylophone-mp3/",
-      "filenames": ["A4.mp3", "B4.mp3", "C4.mp3", "D4.mp3", "E4.mp3", "F4.mp3"],
-      "spriteDuration": 1200,
-      "db": -9,
-      "quantities": [
-        {"name": "1-low", "count": 6},
-        {"name": "2-medium", "count": 8},
-        {"name": "3-high", "count": 12}
-      ]
     }
   }
 }
