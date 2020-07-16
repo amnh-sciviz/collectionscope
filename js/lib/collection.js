@@ -12,6 +12,7 @@ var Collection = (function() {
   }
 
   Collection.prototype.init = function(){
+    this.camera = this.opt.camera;
     this.currentPositionsKey = 'start';
     this.minAlpha = this.opt.ui.minAlpha;
   };
@@ -22,8 +23,16 @@ var Collection = (function() {
       return;
     }
 
+    if (value === "" || value === -1) value = false;
+
+    _.each(this.soundSets, function(sets, key){
+      _.each(sets, function(soundSet){
+        soundSet.filter(prop, value);
+      })
+    });
+
     // reset alpha
-    if (value === "" || value === -1) {
+    if (value === false) {
       this.updateAlpha(false, 1.0);
       return;
     }
@@ -75,6 +84,7 @@ var Collection = (function() {
       this.loadMetadata(),
       this.loadPositions(),
       this.loadSets(),
+      this.loadSounds(),
       this.loadTextures()
 
     ).done(function(){
@@ -214,6 +224,36 @@ var Collection = (function() {
     return deferred;
   };
 
+  Collection.prototype.loadSounds = function(){
+    var _this = this;
+    var deferreds = [];
+    var soundSets = {};
+
+    _.each(this.opt.positions, function(set, key){
+      if (_.has(set, 'soundSets')) {
+        var sets = [];
+        _.each(set.soundSets, function(soundSetOptions){
+          var soundSet = new SoundSet(_.extend({}, {'width': set.width, 'height': set.height, 'depth': set.depth}, soundSetOptions, {'camera': _this.camera}));
+          deferreds.push(soundSet.load());
+          sets.push(soundSet);
+        });
+        soundSets[key] = sets;
+      }
+    });
+    this.soundSets = soundSets;
+
+    var deferred = $.Deferred();
+    if (deferreds.length < 1) deferred.resolve();
+    else {
+      $.when.apply(null, deferreds).done(function() {
+        console.log('Loaded sounds');
+        deferred.resolve();
+      });
+    }
+
+    return deferred;
+  },
+
   Collection.prototype.loadTextures = function(){
     var _this = this;
     var deferred = $.Deferred();
@@ -238,6 +278,14 @@ var Collection = (function() {
     });
     deferred.resolve();
     return deferred;
+  };
+
+  Collection.prototype.onFinishedStart = function(){
+    _.each(this.soundSets, function(sets, key){
+      _.each(sets, function(soundSet){
+        soundSet.active = true;
+      })
+    });
   };
 
   Collection.prototype.onReady = function(){
@@ -284,6 +332,14 @@ var Collection = (function() {
 
     _.each(this.labelSets, function(labelSet, key){
       labelSet.update(now);
+    });
+
+    var currentPositionsKey = this.currentPositionsKey;
+    _.each(this.soundSets, function(sets, key){
+      if (key !== currentPositionsKey) return;
+      _.each(sets, function(soundSet){
+        soundSet.update(now);
+      })
     });
   };
 

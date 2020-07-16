@@ -31,12 +31,31 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.positions.js"
 io.makeDirectories([OUTPUT_POS_DIR, CONFIG_FILE])
 
 items = tu.getItems(config)
+sets, items = tu.addColumnsToItems(items, config)
 itemCount = len(items)
 dimensions = 3
 
 if len(items) < 1:
     print("No items found")
     sys.exit()
+
+def getIntegerRange(values):
+    valueCount = len(values)
+    if valueCount < 1:
+        print("No values found")
+        return values
+
+    if not mu.isInteger(values[0]):
+        print("Value is not a string or integer, parsing as integers")
+        values = [int(v) for v in values]
+
+    minValue, maxValue = (min(values), max(values)+1)
+    # fill in missing integers
+    allValues = []
+    for j in range(maxValue-minValue):
+        allValues.append(minValue+j)
+
+    return (minValue, maxValue, allValues)
 
 def parseCol(points, keyname, index, options):
     global items
@@ -198,6 +217,97 @@ for keyName, options in configPos.items():
     # Write position file
     io.writeJSON(posOutFile, values)
 
+    # Parse sounds if config is set
+    if "sounds" in options:
+        soundSets = []
+        for soundOptions in options["sounds"]:
+            dataFilename = "audio/%s.json" % soundOptions["key"]
+            dimension = soundOptions["dimension"]
+            dimensionIndex = ["x", "y", "z"].index(dimension)
+            hasGroups = ("groupBy" in soundOptions)
+            hasFilters = ("filterBy" in soundOptions)
+            spriteData = io.readJSON(dataFilename)
+            soundSet = {
+                "filename": spriteData["name"],
+                "dimension": dimensionIndex
+            }
+            spriteData = spriteData["sprites"]
+            if len(spriteData) < 1:
+                print("No sprite data in %s" % dataFilename)
+                continue
+            hasQuantities = ("quantity" in spriteData[0])
+            sprites = []
+            if "labels" in soundOptions:
+                property = soundOptions["labels"]
+                values = [item[property] for item in items]
+                minValue, maxValue, allValues = getIntegerRange(values)
+                step = 1.0 / (maxValue-minValue)
+                for j, value in enumerate(allValues):
+                    p = 1.0 * j / (len(allValues)-1)
+                    spriteIndex = mu.roundInt(p * (len(spriteData)-1))
+                    sourceSprite = spriteData[spriteIndex]
+                    position = [0.5, 0.5, 0.5]
+                    posValue = mu.norm(value, (minValue, maxValue)) + step*0.5 # place at the center of each step
+                    position[dimensionIndex] = round(posValue, PRECISION)
+                    sprites.append({
+                        "position": position,
+                        "start": sourceSprite["start"],
+                        "dur": sourceSprite["dur"]
+                    })
+            # needs to be refactored
+            elif hasGroups and hasQuantities and hasFilters:
+                groupBy = soundOptions["groupBy"]
+                filterBy = soundOptions["filterBy"]
+                values = [item[groupBy] for item in items]
+                minValue, maxValue, allValues = getIntegerRange(values)
+                filterValues = sorted(lu.unique([item[filterBy] for item in items]))
+                quantities = sorted(lu.unique([s["quantity"] for s in spriteData]))
+                srcs = lu.unique([s["src"] for s in spriteData])
+                groups = lu.groupList(items, groupBy)
+
+                minCount = 999999999
+                maxCount = 0
+                for j, group in enumerate(groups):
+                    filterGroups = lu.groupList(group["items"], filterBy)
+                    groups[j]["filterGroups"] = filterGroups
+                    counts = [g["count"] for g in filterGroups]
+                    minCount = min(minCount, min(counts))
+                    maxCount = max(maxCount, max(counts))
+
+                step = 1.0 / (maxValue-minValue)
+                for groupIndex, group in enumerate(groups):
+                    position = [0.5, 0.5, 0.5]
+                    posValue = mu.norm(int(group[groupBy]), (minValue, maxValue)) + step*mu.randomUniform(seed=groupIndex+5) # place randomly over the step
+                    position[dimensionIndex] = round(posValue, PRECISION)
+
+                    for filterGroup in group["filterGroups"]:
+                        ncount = mu.norm(filterGroup["count"], (minCount, maxCount))
+                        quantityIndex = mu.roundInt(ncount * (len(quantities)-1))
+                        quantityName = quantities[quantityIndex]
+                        filterValue = filterGroup[filterBy]
+                        filterIndex = filterValues.index(filterValue)
+                        nfilter = 1.0 * filterIndex / (len(filterValues)-1)
+                        srcIndex = mu.roundInt(nfilter * (len(srcs)-1))
+                        srcName = srcs[srcIndex]
+                        sourceSprite = [s for s in spriteData if s["src"]==srcName and s["quantity"]==quantityName]
+                        if len(sourceSprite) > 0:
+                            sourceSprite = sourceSprite[0]
+                            sprite = {
+                                "position": position[:],
+                                "start": sourceSprite["start"],
+                                "dur": sourceSprite["dur"]
+                            }
+                            sprite[filterBy] = filterValue
+                            sprites.append(sprite)
+                        else:
+                            print("Could not find sprite: %s, %s" % (srcName, quantityName))
+
+            soundSet["sprites"] = sprites
+            if len(sprites) > 0:
+                soundSets.append(soundSet)
+        if len(soundSets) > 0:
+            jsonPositions[keyName]["soundSets"] = soundSets
+
     # Parse labels if config is set
     if "labels" in options:
         pCols = ["xCol", "yCol", "zCol"]
@@ -210,19 +320,8 @@ for keyName, options in configPos.items():
         isStringValues = stringValueTable is not None
 
         values = [xyz[dimensionIndex] for xyz in xyzs]
-        if not mu.isInteger(values[0]):
-            print("%s is not a string or integer, parsing as integers" % colName)
-            values = [int(v) for v in values]
+        minValue, maxValue, allValues = getIntegerRange(values)
 
-        valueCount = len(values)
-        if valueCount < 1:
-            print("No labels found")
-            continue
-        minValue, maxValue = (min(values), max(values)+1)
-        # fill in missing integers
-        allValues = []
-        for j in range(maxValue-minValue):
-            allValues.append(minValue+j)
         labels = []
         step = 1.0 / (maxValue-minValue)
         for j, value in enumerate(allValues):

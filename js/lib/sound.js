@@ -4,8 +4,9 @@ var Sound = (function() {
 
   function Sound(config) {
     var defaults = {
-      "audioPath": "../../audio/",
-      "camera": false
+      'audioPath': '../../audio/',
+      'camera': false,
+      'position': false
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -14,18 +15,9 @@ var Sound = (function() {
   Sound.prototype.init = function(){
     this.sounds = {};
     this.camera = this.opt.camera;
-    this.loadListeners();
   };
 
-  Sound.prototype.loadListeners = function(){
-    var _this = this;
-
-    $(document).on('change-positions', function(e, newValue, duration) {
-      _this.playSound("sand.mp3");
-    });
-  };
-
-  Sound.prototype.playSound = function(filename){
+  Sound.prototype.playSoundFromFile = function(filename){
     var _this = this;
     if (!this.camera) return;
 

@@ -18,13 +18,37 @@ def getAudio(filename, sampleWidth=2, sampleRate=48000, channels=2):
         audio = audio.set_frame_rate(sampleRate)
     return audio
 
+def getAudioClip(audio, clipStart, clipDur, clipFadeIn=10, clipFadeOut=10):
+    audioDurationMs = len(audio)
+    clipEnd = None
+    if clipDur > 0:
+        clipEnd = clipStart + clipDur
+    else:
+        clipEnd = audioDurationMs
+    # check bounds
+    clipStart = mu.lim(clipStart, (0, audioDurationMs))
+    clipEnd = mu.lim(clipEnd, (0, audioDurationMs))
+    if clipStart >= clipEnd:
+        return None
+
+    newClipDur = clipEnd - clipStart
+    clip = audio[clipStart:clipEnd]
+
+    # add a fade in/out to avoid clicking
+    fadeInDur = min(clipFadeIn, newClipDur)
+    fadeOutDur = min(clipFadeOut, newClipDur)
+    if fadeInDur > 0 or fadeOutDur > 0:
+        clip = clip.fade_in(fadeInDur).fade_out(fadeOutDur)
+
+    return clip
+
 def getBlankAudio(duration, sampleWidth=2, sampleRate=48000, channels=2):
     audio = AudioSegment.silent(duration=duration, frame_rate=sampleRate)
     audio = audio.set_channels(channels)
     audio = audio.set_sample_width(sampleWidth)
     return audio
 
-def makeSpriteFile(audioFn, dataFn, filenames, dur, quantities=None, sampleWidth=2, sampleRate=48000, channels=2):
+def makeSpriteFile(audioFn, dataFn, filenames, dur, matchDbValue=-9, quantities=None, sampleWidth=2, sampleRate=48000, channels=2):
     totalDuration = dur * len(filenames)
     if quantities is not None:
         totalDuration *= len(quantities)
@@ -34,18 +58,22 @@ def makeSpriteFile(audioFn, dataFn, filenames, dur, quantities=None, sampleWidth
 
     for i, fn in enumerate(filenames):
         audio = getAudio(fn, sampleWidth, sampleRate, channels)
-        audio = matchDb(audio, -6) # normalize audio
+        audio = matchDb(audio, matchDbValue) # normalize audio
 
         if quantities is not None:
             for j, q in enumerate(quantities):
                 sectionStart = i * len(quantities) * dur + j * dur
                 sectionBaseAudio = getBlankAudio(dur, sampleWidth, sampleRate, channels)
-                volumeRange = (0.1, 0.8)
+                volumeRange = (0.2, 0.8)
+                count = q["count"]
+                clipDur = int(1.0 * dur / q["count"])
+                audioClip = getAudioClip(audio, 0, clipDur, clipFadeIn=10, clipFadeOut=10)
                 for k in range(q["count"]):
-                    volume = mu.randomUniform(volumeRange[0], volumeRange[1])
-                    qstart = mu.roundInt(mu.randomUniform(0, dur*0.75))
+                    p = 1.0 * k / (q["count"]-1)
+                    volume = mu.lerp((volumeRange[1], volumeRange[0]), p)
+                    qstart = k * clipDur
                     dbAdjust = volumeToDb(volume)
-                    modifiedAudio = audio.apply_gain(dbAdjust)
+                    modifiedAudio = audioClip.apply_gain(dbAdjust)
                     sectionBaseAudio = sectionBaseAudio.overlay(modifiedAudio, position=qstart)
                 audioDur = len(sectionBaseAudio)
                 # clip audio if necessary

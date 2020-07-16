@@ -21,6 +21,7 @@ var MainApp = (function() {
     this.loadScene();
 
     this.collection = new Collection(_.extend({}, this.opt, {
+      'camera': _this.camera,
       'onLoadEnd': function(){ _this.onLoadEnd(); },
       'onLoadProgress': function(){ _this.onLoadProgress(); }
     }));
@@ -28,13 +29,17 @@ var MainApp = (function() {
     this.onLoadStart();
     this.collection.load();
 
-    this.sound = new Sound({camera: this.camera});
+    this.globalSound = new Sound({camera: this.camera});
   };
 
   MainApp.prototype.loadListeners = function(){
     var _this = this;
     $(window).on('resize', function(){
       _this.onResize();
+    });
+
+    $(document).on('change-positions', function(e, newValue, duration) {
+      _this.globalSound.playSoundFromFile("sand.mp3");
     });
   };
 
@@ -102,6 +107,7 @@ var MainApp = (function() {
       setTimeout(function(){
         _this.$el.addClass('loaded');
         _this.controls.load();
+        _this.collection.onFinishedStart();
       }, _this.opt.ui.startTransitionDuration*0.75);
     });
   };

@@ -2,184 +2,112 @@
   "name": "items.mp3",
   "sprites": [
     {
-      "src": "A7.mp3",
+      "src": "A4.mp3",
       "start": 0,
-      "dur": 500,
-      "quantity": "lower"
+      "dur": 1200,
+      "quantity": "1-low"
     },
     {
-      "src": "A7.mp3",
-      "start": 500,
-      "dur": 500,
-      "quantity": "low"
+      "src": "A4.mp3",
+      "start": 1200,
+      "dur": 1200,
+      "quantity": "2-medium"
     },
     {
-      "src": "A7.mp3",
-      "start": 1000,
-      "dur": 500,
-      "quantity": "medium"
+      "src": "A4.mp3",
+      "start": 2400,
+      "dur": 1200,
+      "quantity": "3-high"
     },
     {
-      "src": "A7.mp3",
-      "start": 1500,
-      "dur": 500,
-      "quantity": "high"
+      "src": "B4.mp3",
+      "start": 3600,
+      "dur": 1200,
+      "quantity": "1-low"
     },
     {
-      "src": "A7.mp3",
-      "start": 2000,
-      "dur": 500,
-      "quantity": "higher"
+      "src": "B4.mp3",
+      "start": 4800,
+      "dur": 1200,
+      "quantity": "2-medium"
     },
     {
-      "src": "B7.mp3",
-      "start": 2500,
-      "dur": 500,
-      "quantity": "lower"
-    },
-    {
-      "src": "B7.mp3",
-      "start": 3000,
-      "dur": 500,
-      "quantity": "low"
-    },
-    {
-      "src": "B7.mp3",
-      "start": 3500,
-      "dur": 500,
-      "quantity": "medium"
-    },
-    {
-      "src": "B7.mp3",
-      "start": 4000,
-      "dur": 500,
-      "quantity": "high"
-    },
-    {
-      "src": "B7.mp3",
-      "start": 4500,
-      "dur": 500,
-      "quantity": "higher"
-    },
-    {
-      "src": "C7.mp3",
-      "start": 5000,
-      "dur": 500,
-      "quantity": "lower"
-    },
-    {
-      "src": "C7.mp3",
-      "start": 5500,
-      "dur": 500,
-      "quantity": "low"
-    },
-    {
-      "src": "C7.mp3",
+      "src": "B4.mp3",
       "start": 6000,
-      "dur": 500,
-      "quantity": "medium"
+      "dur": 1200,
+      "quantity": "3-high"
     },
     {
-      "src": "C7.mp3",
-      "start": 6500,
-      "dur": 500,
-      "quantity": "high"
+      "src": "C4.mp3",
+      "start": 7200,
+      "dur": 1200,
+      "quantity": "1-low"
     },
     {
-      "src": "C7.mp3",
-      "start": 7000,
-      "dur": 500,
-      "quantity": "higher"
+      "src": "C4.mp3",
+      "start": 8400,
+      "dur": 1200,
+      "quantity": "2-medium"
     },
     {
-      "src": "D7.mp3",
-      "start": 7500,
-      "dur": 500,
-      "quantity": "lower"
+      "src": "C4.mp3",
+      "start": 9600,
+      "dur": 1200,
+      "quantity": "3-high"
     },
     {
-      "src": "D7.mp3",
-      "start": 8000,
-      "dur": 500,
-      "quantity": "low"
+      "src": "D4.mp3",
+      "start": 10800,
+      "dur": 1200,
+      "quantity": "1-low"
     },
     {
-      "src": "D7.mp3",
-      "start": 8500,
-      "dur": 500,
-      "quantity": "medium"
-    },
-    {
-      "src": "D7.mp3",
-      "start": 9000,
-      "dur": 500,
-      "quantity": "high"
-    },
-    {
-      "src": "D7.mp3",
-      "start": 9500,
-      "dur": 500,
-      "quantity": "higher"
-    },
-    {
-      "src": "E7.mp3",
-      "start": 10000,
-      "dur": 500,
-      "quantity": "lower"
-    },
-    {
-      "src": "E7.mp3",
-      "start": 10500,
-      "dur": 500,
-      "quantity": "low"
-    },
-    {
-      "src": "E7.mp3",
-      "start": 11000,
-      "dur": 500,
-      "quantity": "medium"
-    },
-    {
-      "src": "E7.mp3",
-      "start": 11500,
-      "dur": 500,
-      "quantity": "high"
-    },
-    {
-      "src": "E7.mp3",
+      "src": "D4.mp3",
       "start": 12000,
-      "dur": 500,
-      "quantity": "higher"
+      "dur": 1200,
+      "quantity": "2-medium"
     },
     {
-      "src": "F7.mp3",
-      "start": 12500,
-      "dur": 500,
-      "quantity": "lower"
+      "src": "D4.mp3",
+      "start": 13200,
+      "dur": 1200,
+      "quantity": "3-high"
     },
     {
-      "src": "F7.mp3",
-      "start": 13000,
-      "dur": 500,
-      "quantity": "low"
+      "src": "E4.mp3",
+      "start": 14400,
+      "dur": 1200,
+      "quantity": "1-low"
     },
     {
-      "src": "F7.mp3",
-      "start": 13500,
-      "dur": 500,
-      "quantity": "medium"
+      "src": "E4.mp3",
+      "start": 15600,
+      "dur": 1200,
+      "quantity": "2-medium"
     },
     {
-      "src": "F7.mp3",
-      "start": 14000,
-      "dur": 500,
-      "quantity": "high"
+      "src": "E4.mp3",
+      "start": 16800,
+      "dur": 1200,
+      "quantity": "3-high"
     },
     {
-      "src": "F7.mp3",
-      "start": 14500,
-      "dur": 500,
-      "quantity": "higher"
+      "src": "F4.mp3",
+      "start": 18000,
+      "dur": 1200,
+      "quantity": "1-low"
+    },
+    {
+      "src": "F4.mp3",
+      "start": 19200,
+      "dur": 1200,
+      "quantity": "2-medium"
+    },
+    {
+      "src": "F4.mp3",
+      "start": 20400,
+      "dur": 1200,
+      "quantity": "3-high"
     }
   ]
 }

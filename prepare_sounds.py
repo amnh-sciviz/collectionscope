@@ -24,6 +24,6 @@ configSounds = config["sounds"]
 
 for key, options in configSounds.items():
     filenames = [options["src"]+f for f in options["filenames"]]
-    basename = a.AUDIO_DIR + options["spriteFilename"]
+    basename = a.AUDIO_DIR + key
     quantities = options["quantities"] if "quantities" in options else None
-    au.makeSpriteFile(basename+".mp3", basename+".json", filenames, options["spriteDuration"], quantities)
+    au.makeSpriteFile(basename+".mp3", basename+".json", filenames, options["spriteDuration"], options["db"], quantities)
