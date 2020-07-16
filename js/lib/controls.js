@@ -165,13 +165,13 @@ var Controls = (function() {
     var html = '';
     html += '<div id="'+options.id+'" class="'+options.className+' menu">';
       if (options.label) {
-        html += '<h2>'+options.label+'</h2>';
+        html += '<h2>'+options.label+':</h2>';
       }
       html += '<form class="radio-button-form">';
       _.each(options.radioItems, function(item, i){
         var id = item.name + (i+1);
         var checked = item.checked ? 'checked' : '';
-        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+options.parseType+'" '+checked+' /> '+item.label+'</label>';
+        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+options.parseType+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
       });
       html += '</form>';
     html += '</div>';

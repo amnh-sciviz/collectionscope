@@ -47,20 +47,46 @@ body {
 }
 
 .menu {
+  box-sizing: border-box;
+  width: 100%;
   position: absolute;
   z-index: 100;
   background: rgba(0,0,0,0.9);
-  padding: 20px;
+  padding: 10px 20px 20px;
   opacity: 0;
   animation: fadeIn ease 2s;
   animation-fill-mode: forwards;
 }
 .menu h2 {
-  margin: 0 0 1rem;
+  margin: 0 0 1.5rem;
   line-height: 1;
+  font-size: 1.333rem;
+  font-weight: normal;
+  color: #ccc;
 }
 .radio-button-form label {
-  margin-right: 10px;
+  padding: 10px 25px 10px 15px;
+  position: relative;
+}
+.radio-button-form input[type="radio"],
+.radio-button-form span {
+  position: relative;
+  z-index: 1;
+}
+.checked-bg {
+  content: " ";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: #7a2323;
+  border-radius: 10px;
+  display: none;
+  z-index: 0;
+}
+input[type="radio"]:checked ~ .checked-bg {
+  display: block;
 }
 
 .menu.radio-buttons {
