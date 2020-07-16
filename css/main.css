@@ -67,6 +67,7 @@ body {
 .radio-button-form label {
   padding: 10px 25px 10px 15px;
   position: relative;
+  display: inline-block;
 }
 .radio-button-form input[type="radio"],
 .radio-button-form span {
