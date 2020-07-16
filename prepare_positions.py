@@ -226,18 +226,15 @@ for keyName, options in configPos.items():
             hasGroups = ("groupBy" in soundOptions)
             hasFilters = ("filterBy" in soundOptions)
             hasQuantities = ("quantities" in soundOptions)
-            soundSet = {"dimension": dimensionIndex}
+            soundSet = {"filename": soundOptions["filename"], "dimension": dimensionIndex, "maxInstances": soundOptions["maxInstances"]}
             spriteData = []
-            if "key" in soundOptions:
-                dataFilename = "audio/%s.json" % soundOptions["key"]
+            if "spriteFilename" in soundOptions:
+                dataFilename = "audio/" + soundOptions["spriteFilename"]
                 spriteData = io.readJSON(dataFilename)
-                soundSet["filename"] = spriteData["name"]
                 spriteData = spriteData["sprites"]
                 if len(spriteData) < 1:
                     print("No sprite data in %s" % dataFilename)
                     continue
-            else:
-                soundSet["filename"] = soundOptions["filename"]
 
             sprites = []
             if "labels" in soundOptions:

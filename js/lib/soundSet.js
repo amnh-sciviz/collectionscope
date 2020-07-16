@@ -7,7 +7,7 @@ var SoundSet = (function() {
       'audioPath': '../../audio/',
       'camera': false,
       'dimension': 2,
-      'maxInstances': 8 // number of sounds that can be playing simulaneously
+      'maxInstances': 4 // number of sounds that can be playing simulaneously
     };
     this.opt = _.extend({}, defaults, config);
     this.init();

@@ -1,9 +1,38 @@
+import array
 import math
+import numpy as np
 import os
 from pydub import AudioSegment
+from pysndfx import AudioEffectsChain
 
 import lib.io_utils as io
 import lib.math_utils as mu
+
+def applyReverb(sound, value, pad=1000, fade_in=10, fade_out=10):
+    if value <= 0:
+        return sound
+
+    # Add padding
+    if pad > 0:
+        sound += AudioSegment.silent(duration=pad, frame_rate=sound.frame_rate)
+
+    # convert pydub sound to np array
+    samples = np.array(sound.get_array_of_samples())
+    samples = samples.astype(np.int16)
+
+    chain = AudioEffectsChain()
+    chain.reverb(reverberance=value)
+
+    # apply reverb effect
+    fx = (chain)
+    y = fx(samples)
+
+    # convert it back to an array and create a new sound clip
+    newData = array.array(sound.array_type, y)
+    newSound = sound._spawn(newData)
+    dur = len(newSound)
+    newSound = newSound.fade_in(min(fade_in, dur)).fade_out(min(fade_out, dur))
+    return newSound
 
 def getAudio(filename, sampleWidth=2, sampleRate=48000, channels=2):
     audio = AudioSegment.from_file(filename)
@@ -48,7 +77,7 @@ def getBlankAudio(duration, sampleWidth=2, sampleRate=48000, channels=2):
     audio = audio.set_sample_width(sampleWidth)
     return audio
 
-def makeSpriteFile(audioFn, dataFn, filenames, dur, matchDbValue=-9, quantities=None, sampleWidth=2, sampleRate=48000, channels=2):
+def makeSpriteFile(audioFn, dataFn, filenames, dur, matchDbValue=-9, reverb=0, quantities=None, sampleWidth=2, sampleRate=48000, channels=2):
     totalDuration = dur * len(filenames)
     if quantities is not None:
         totalDuration *= len(quantities)
@@ -59,6 +88,8 @@ def makeSpriteFile(audioFn, dataFn, filenames, dur, matchDbValue=-9, quantities=
     for i, fn in enumerate(filenames):
         audio = getAudio(fn, sampleWidth, sampleRate, channels)
         audio = matchDb(audio, matchDbValue) # normalize audio
+        if reverb > 0:
+            audio = applyReverb(audio, reverb)
 
         if quantities is not None:
             for j, q in enumerate(quantities):

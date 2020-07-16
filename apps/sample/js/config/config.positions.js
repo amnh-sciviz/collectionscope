@@ -1351,9 +1351,11 @@ _.extend(CONFIG, {
       ],
       "sounds": [
         {
-          "key": "yearLabels",
+          "filename": "yearLabels.mp3",
+          "spriteFilename": "yearLabels.json",
           "dimension": "z",
-          "labels": "Acquisition Year"
+          "labels": "Acquisition Year",
+          "maxInstances": 4
         },
         {
           "filename": "click.mp3",
@@ -1361,14 +1363,16 @@ _.extend(CONFIG, {
           "groupBy": "Acquisition Year",
           "quantities": true,
           "rootValue": 2.25,
-          "filterBy": "region"
+          "filterBy": "region",
+          "maxInstances": 20
         }
       ],
       "src": "data/positions/default.json",
       "soundSets": [
         {
-          "dimension": 2,
           "filename": "yearLabels.mp3",
+          "dimension": 2,
+          "maxInstances": 4,
           "sprites": [
             {
               "position": [
@@ -1377,7 +1381,7 @@ _.extend(CONFIG, {
                 0.00303
               ],
               "start": 0,
-              "dur": 200
+              "dur": 400
             },
             {
               "position": [
@@ -1386,7 +1390,7 @@ _.extend(CONFIG, {
                 0.00909
               ],
               "start": 0,
-              "dur": 200
+              "dur": 400
             },
             {
               "position": [
@@ -1395,7 +1399,7 @@ _.extend(CONFIG, {
                 0.01515
               ],
               "start": 0,
-              "dur": 200
+              "dur": 400
             },
             {
               "position": [
@@ -1403,8 +1407,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.02121
               ],
-              "start": 200,
-              "dur": 200
+              "start": 400,
+              "dur": 400
             },
             {
               "position": [
@@ -1412,8 +1416,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.02727
               ],
-              "start": 200,
-              "dur": 200
+              "start": 400,
+              "dur": 400
             },
             {
               "position": [
@@ -1421,8 +1425,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.03333
               ],
-              "start": 200,
-              "dur": 200
+              "start": 400,
+              "dur": 400
             },
             {
               "position": [
@@ -1430,8 +1434,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.03939
               ],
-              "start": 200,
-              "dur": 200
+              "start": 400,
+              "dur": 400
             },
             {
               "position": [
@@ -1439,8 +1443,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.04545
               ],
-              "start": 200,
-              "dur": 200
+              "start": 400,
+              "dur": 400
             },
             {
               "position": [
@@ -1448,8 +1452,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.05152
               ],
-              "start": 400,
-              "dur": 200
+              "start": 800,
+              "dur": 400
             },
             {
               "position": [
@@ -1457,8 +1461,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.05758
               ],
-              "start": 400,
-              "dur": 200
+              "start": 800,
+              "dur": 400
             },
             {
               "position": [
@@ -1466,8 +1470,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.06364
               ],
-              "start": 400,
-              "dur": 200
+              "start": 800,
+              "dur": 400
             },
             {
               "position": [
@@ -1475,8 +1479,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.0697
               ],
-              "start": 400,
-              "dur": 200
+              "start": 800,
+              "dur": 400
             },
             {
               "position": [
@@ -1484,8 +1488,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.07576
               ],
-              "start": 600,
-              "dur": 200
+              "start": 1200,
+              "dur": 400
             },
             {
               "position": [
@@ -1493,8 +1497,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.08182
               ],
-              "start": 600,
-              "dur": 200
+              "start": 1200,
+              "dur": 400
             },
             {
               "position": [
@@ -1502,8 +1506,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.08788
               ],
-              "start": 600,
-              "dur": 200
+              "start": 1200,
+              "dur": 400
             },
             {
               "position": [
@@ -1511,8 +1515,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.09394
               ],
-              "start": 600,
-              "dur": 200
+              "start": 1200,
+              "dur": 400
             },
             {
               "position": [
@@ -1520,8 +1524,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.1
               ],
-              "start": 600,
-              "dur": 200
+              "start": 1200,
+              "dur": 400
             },
             {
               "position": [
@@ -1529,8 +1533,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.10606
               ],
-              "start": 800,
-              "dur": 200
+              "start": 1600,
+              "dur": 400
             },
             {
               "position": [
@@ -1538,8 +1542,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.11212
               ],
-              "start": 800,
-              "dur": 200
+              "start": 1600,
+              "dur": 400
             },
             {
               "position": [
@@ -1547,8 +1551,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.11818
               ],
-              "start": 800,
-              "dur": 200
+              "start": 1600,
+              "dur": 400
             },
             {
               "position": [
@@ -1556,8 +1560,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.12424
               ],
-              "start": 800,
-              "dur": 200
+              "start": 1600,
+              "dur": 400
             },
             {
               "position": [
@@ -1565,8 +1569,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.1303
               ],
-              "start": 800,
-              "dur": 200
+              "start": 1600,
+              "dur": 400
             },
             {
               "position": [
@@ -1574,8 +1578,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.13636
               ],
-              "start": 1000,
-              "dur": 200
+              "start": 2000,
+              "dur": 400
             },
             {
               "position": [
@@ -1583,8 +1587,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.14242
               ],
-              "start": 1000,
-              "dur": 200
+              "start": 2000,
+              "dur": 400
             },
             {
               "position": [
@@ -1592,8 +1596,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.14848
               ],
-              "start": 1000,
-              "dur": 200
+              "start": 2000,
+              "dur": 400
             },
             {
               "position": [
@@ -1601,8 +1605,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.15455
               ],
-              "start": 1000,
-              "dur": 200
+              "start": 2000,
+              "dur": 400
             },
             {
               "position": [
@@ -1610,8 +1614,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.16061
               ],
-              "start": 1200,
-              "dur": 200
+              "start": 2400,
+              "dur": 400
             },
             {
               "position": [
@@ -1619,8 +1623,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.16667
               ],
-              "start": 1200,
-              "dur": 200
+              "start": 2400,
+              "dur": 400
             },
             {
               "position": [
@@ -1628,8 +1632,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.17273
               ],
-              "start": 1200,
-              "dur": 200
+              "start": 2400,
+              "dur": 400
             },
             {
               "position": [
@@ -1637,8 +1641,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.17879
               ],
-              "start": 1200,
-              "dur": 200
+              "start": 2400,
+              "dur": 400
             },
             {
               "position": [
@@ -1646,8 +1650,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.18485
               ],
-              "start": 1200,
-              "dur": 200
+              "start": 2400,
+              "dur": 400
             },
             {
               "position": [
@@ -1655,8 +1659,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.19091
               ],
-              "start": 1400,
-              "dur": 200
+              "start": 2800,
+              "dur": 400
             },
             {
               "position": [
@@ -1664,8 +1668,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.19697
               ],
-              "start": 1400,
-              "dur": 200
+              "start": 2800,
+              "dur": 400
             },
             {
               "position": [
@@ -1673,8 +1677,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.20303
               ],
-              "start": 1400,
-              "dur": 200
+              "start": 2800,
+              "dur": 400
             },
             {
               "position": [
@@ -1682,8 +1686,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.20909
               ],
-              "start": 1400,
-              "dur": 200
+              "start": 2800,
+              "dur": 400
             },
             {
               "position": [
@@ -1691,8 +1695,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.21515
               ],
-              "start": 1400,
-              "dur": 200
+              "start": 2800,
+              "dur": 400
             },
             {
               "position": [
@@ -1700,8 +1704,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.22121
               ],
-              "start": 1600,
-              "dur": 200
+              "start": 3200,
+              "dur": 400
             },
             {
               "position": [
@@ -1709,8 +1713,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.22727
               ],
-              "start": 1600,
-              "dur": 200
+              "start": 3200,
+              "dur": 400
             },
             {
               "position": [
@@ -1718,8 +1722,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.23333
               ],
-              "start": 1600,
-              "dur": 200
+              "start": 3200,
+              "dur": 400
             },
             {
               "position": [
@@ -1727,8 +1731,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.23939
               ],
-              "start": 1600,
-              "dur": 200
+              "start": 3200,
+              "dur": 400
             },
             {
               "position": [
@@ -1736,8 +1740,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.24545
               ],
-              "start": 1800,
-              "dur": 200
+              "start": 3600,
+              "dur": 400
             },
             {
               "position": [
@@ -1745,8 +1749,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.25152
               ],
-              "start": 1800,
-              "dur": 200
+              "start": 3600,
+              "dur": 400
             },
             {
               "position": [
@@ -1754,8 +1758,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.25758
               ],
-              "start": 1800,
-              "dur": 200
+              "start": 3600,
+              "dur": 400
             },
             {
               "position": [
@@ -1763,8 +1767,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.26364
               ],
-              "start": 1800,
-              "dur": 200
+              "start": 3600,
+              "dur": 400
             },
             {
               "position": [
@@ -1772,8 +1776,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.2697
               ],
-              "start": 1800,
-              "dur": 200
+              "start": 3600,
+              "dur": 400
             },
             {
               "position": [
@@ -1781,8 +1785,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.27576
               ],
-              "start": 2000,
-              "dur": 200
+              "start": 4000,
+              "dur": 400
             },
             {
               "position": [
@@ -1790,8 +1794,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.28182
               ],
-              "start": 2000,
-              "dur": 200
+              "start": 4000,
+              "dur": 400
             },
             {
               "position": [
@@ -1799,8 +1803,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.28788
               ],
-              "start": 2000,
-              "dur": 200
+              "start": 4000,
+              "dur": 400
             },
             {
               "position": [
@@ -1808,8 +1812,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.29394
               ],
-              "start": 2000,
-              "dur": 200
+              "start": 4000,
+              "dur": 400
             },
             {
               "position": [
@@ -1817,8 +1821,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.3
               ],
-              "start": 2000,
-              "dur": 200
+              "start": 4000,
+              "dur": 400
             },
             {
               "position": [
@@ -1826,8 +1830,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.30606
               ],
-              "start": 2200,
-              "dur": 200
+              "start": 4400,
+              "dur": 400
             },
             {
               "position": [
@@ -1835,8 +1839,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.31212
               ],
-              "start": 2200,
-              "dur": 200
+              "start": 4400,
+              "dur": 400
             },
             {
               "position": [
@@ -1844,8 +1848,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.31818
               ],
-              "start": 2200,
-              "dur": 200
+              "start": 4400,
+              "dur": 400
             },
             {
               "position": [
@@ -1853,8 +1857,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.32424
               ],
-              "start": 2200,
-              "dur": 200
+              "start": 4400,
+              "dur": 400
             },
             {
               "position": [
@@ -1862,8 +1866,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.3303
               ],
-              "start": 2400,
-              "dur": 200
+              "start": 4800,
+              "dur": 400
             },
             {
               "position": [
@@ -1871,8 +1875,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.33636
               ],
-              "start": 2400,
-              "dur": 200
+              "start": 4800,
+              "dur": 400
             },
             {
               "position": [
@@ -1880,8 +1884,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.34242
               ],
-              "start": 2400,
-              "dur": 200
+              "start": 4800,
+              "dur": 400
             },
             {
               "position": [
@@ -1889,8 +1893,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.34848
               ],
-              "start": 2400,
-              "dur": 200
+              "start": 4800,
+              "dur": 400
             },
             {
               "position": [
@@ -1898,8 +1902,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.35455
               ],
-              "start": 2400,
-              "dur": 200
+              "start": 4800,
+              "dur": 400
             },
             {
               "position": [
@@ -1907,8 +1911,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.36061
               ],
-              "start": 2600,
-              "dur": 200
+              "start": 5200,
+              "dur": 400
             },
             {
               "position": [
@@ -1916,8 +1920,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.36667
               ],
-              "start": 2600,
-              "dur": 200
+              "start": 5200,
+              "dur": 400
             },
             {
               "position": [
@@ -1925,8 +1929,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.37273
               ],
-              "start": 2600,
-              "dur": 200
+              "start": 5200,
+              "dur": 400
             },
             {
               "position": [
@@ -1934,8 +1938,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.37879
               ],
-              "start": 2600,
-              "dur": 200
+              "start": 5200,
+              "dur": 400
             },
             {
               "position": [
@@ -1943,8 +1947,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.38485
               ],
-              "start": 2600,
-              "dur": 200
+              "start": 5200,
+              "dur": 400
             },
             {
               "position": [
@@ -1952,8 +1956,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.39091
               ],
-              "start": 2800,
-              "dur": 200
+              "start": 5600,
+              "dur": 400
             },
             {
               "position": [
@@ -1961,8 +1965,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.39697
               ],
-              "start": 2800,
-              "dur": 200
+              "start": 5600,
+              "dur": 400
             },
             {
               "position": [
@@ -1970,8 +1974,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.40303
               ],
-              "start": 2800,
-              "dur": 200
+              "start": 5600,
+              "dur": 400
             },
             {
               "position": [
@@ -1979,8 +1983,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.40909
               ],
-              "start": 2800,
-              "dur": 200
+              "start": 5600,
+              "dur": 400
             },
             {
               "position": [
@@ -1988,8 +1992,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.41515
               ],
-              "start": 3000,
-              "dur": 200
+              "start": 6000,
+              "dur": 400
             },
             {
               "position": [
@@ -1997,8 +2001,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.42121
               ],
-              "start": 3000,
-              "dur": 200
+              "start": 6000,
+              "dur": 400
             },
             {
               "position": [
@@ -2006,8 +2010,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.42727
               ],
-              "start": 3000,
-              "dur": 200
+              "start": 6000,
+              "dur": 400
             },
             {
               "position": [
@@ -2015,8 +2019,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.43333
               ],
-              "start": 3000,
-              "dur": 200
+              "start": 6000,
+              "dur": 400
             },
             {
               "position": [
@@ -2024,8 +2028,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.43939
               ],
-              "start": 3000,
-              "dur": 200
+              "start": 6000,
+              "dur": 400
             },
             {
               "position": [
@@ -2033,8 +2037,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.44545
               ],
-              "start": 3200,
-              "dur": 200
+              "start": 6400,
+              "dur": 400
             },
             {
               "position": [
@@ -2042,8 +2046,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.45152
               ],
-              "start": 3200,
-              "dur": 200
+              "start": 6400,
+              "dur": 400
             },
             {
               "position": [
@@ -2051,8 +2055,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.45758
               ],
-              "start": 3200,
-              "dur": 200
+              "start": 6400,
+              "dur": 400
             },
             {
               "position": [
@@ -2060,8 +2064,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.46364
               ],
-              "start": 3200,
-              "dur": 200
+              "start": 6400,
+              "dur": 400
             },
             {
               "position": [
@@ -2069,8 +2073,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.4697
               ],
-              "start": 3200,
-              "dur": 200
+              "start": 6400,
+              "dur": 400
             },
             {
               "position": [
@@ -2078,8 +2082,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.47576
               ],
-              "start": 3400,
-              "dur": 200
+              "start": 6800,
+              "dur": 400
             },
             {
               "position": [
@@ -2087,8 +2091,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.48182
               ],
-              "start": 3400,
-              "dur": 200
+              "start": 6800,
+              "dur": 400
             },
             {
               "position": [
@@ -2096,8 +2100,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.48788
               ],
-              "start": 3400,
-              "dur": 200
+              "start": 6800,
+              "dur": 400
             },
             {
               "position": [
@@ -2105,8 +2109,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.49394
               ],
-              "start": 3400,
-              "dur": 200
+              "start": 6800,
+              "dur": 400
             },
             {
               "position": [
@@ -2114,8 +2118,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.5
               ],
-              "start": 3600,
-              "dur": 200
+              "start": 7200,
+              "dur": 400
             },
             {
               "position": [
@@ -2123,8 +2127,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.50606
               ],
-              "start": 3600,
-              "dur": 200
+              "start": 7200,
+              "dur": 400
             },
             {
               "position": [
@@ -2132,8 +2136,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.51212
               ],
-              "start": 3600,
-              "dur": 200
+              "start": 7200,
+              "dur": 400
             },
             {
               "position": [
@@ -2141,8 +2145,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.51818
               ],
-              "start": 3600,
-              "dur": 200
+              "start": 7200,
+              "dur": 400
             },
             {
               "position": [
@@ -2150,8 +2154,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.52424
               ],
-              "start": 3600,
-              "dur": 200
+              "start": 7200,
+              "dur": 400
             },
             {
               "position": [
@@ -2159,8 +2163,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.5303
               ],
-              "start": 3800,
-              "dur": 200
+              "start": 7600,
+              "dur": 400
             },
             {
               "position": [
@@ -2168,8 +2172,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.53636
               ],
-              "start": 3800,
-              "dur": 200
+              "start": 7600,
+              "dur": 400
             },
             {
               "position": [
@@ -2177,8 +2181,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.54242
               ],
-              "start": 3800,
-              "dur": 200
+              "start": 7600,
+              "dur": 400
             },
             {
               "position": [
@@ -2186,8 +2190,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.54848
               ],
-              "start": 3800,
-              "dur": 200
+              "start": 7600,
+              "dur": 400
             },
             {
               "position": [
@@ -2195,8 +2199,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.55455
               ],
-              "start": 3800,
-              "dur": 200
+              "start": 7600,
+              "dur": 400
             },
             {
               "position": [
@@ -2204,8 +2208,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.56061
               ],
-              "start": 4000,
-              "dur": 200
+              "start": 8000,
+              "dur": 400
             },
             {
               "position": [
@@ -2213,8 +2217,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.56667
               ],
-              "start": 4000,
-              "dur": 200
+              "start": 8000,
+              "dur": 400
             },
             {
               "position": [
@@ -2222,8 +2226,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.57273
               ],
-              "start": 4000,
-              "dur": 200
+              "start": 8000,
+              "dur": 400
             },
             {
               "position": [
@@ -2231,8 +2235,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.57879
               ],
-              "start": 4000,
-              "dur": 200
+              "start": 8000,
+              "dur": 400
             },
             {
               "position": [
@@ -2240,8 +2244,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.58485
               ],
-              "start": 4000,
-              "dur": 200
+              "start": 8000,
+              "dur": 400
             },
             {
               "position": [
@@ -2249,8 +2253,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.59091
               ],
-              "start": 4200,
-              "dur": 200
+              "start": 8400,
+              "dur": 400
             },
             {
               "position": [
@@ -2258,8 +2262,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.59697
               ],
-              "start": 4200,
-              "dur": 200
+              "start": 8400,
+              "dur": 400
             },
             {
               "position": [
@@ -2267,8 +2271,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.60303
               ],
-              "start": 4200,
-              "dur": 200
+              "start": 8400,
+              "dur": 400
             },
             {
               "position": [
@@ -2276,8 +2280,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.60909
               ],
-              "start": 4200,
-              "dur": 200
+              "start": 8400,
+              "dur": 400
             },
             {
               "position": [
@@ -2285,8 +2289,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.61515
               ],
-              "start": 4400,
-              "dur": 200
+              "start": 8800,
+              "dur": 400
             },
             {
               "position": [
@@ -2294,8 +2298,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.62121
               ],
-              "start": 4400,
-              "dur": 200
+              "start": 8800,
+              "dur": 400
             },
             {
               "position": [
@@ -2303,8 +2307,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.62727
               ],
-              "start": 4400,
-              "dur": 200
+              "start": 8800,
+              "dur": 400
             },
             {
               "position": [
@@ -2312,8 +2316,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.63333
               ],
-              "start": 4400,
-              "dur": 200
+              "start": 8800,
+              "dur": 400
             },
             {
               "position": [
@@ -2321,8 +2325,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.63939
               ],
-              "start": 4400,
-              "dur": 200
+              "start": 8800,
+              "dur": 400
             },
             {
               "position": [
@@ -2330,8 +2334,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.64545
               ],
-              "start": 4600,
-              "dur": 200
+              "start": 9200,
+              "dur": 400
             },
             {
               "position": [
@@ -2339,8 +2343,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.65152
               ],
-              "start": 4600,
-              "dur": 200
+              "start": 9200,
+              "dur": 400
             },
             {
               "position": [
@@ -2348,8 +2352,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.65758
               ],
-              "start": 4600,
-              "dur": 200
+              "start": 9200,
+              "dur": 400
             },
             {
               "position": [
@@ -2357,8 +2361,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.66364
               ],
-              "start": 4600,
-              "dur": 200
+              "start": 9200,
+              "dur": 400
             },
             {
               "position": [
@@ -2366,8 +2370,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.6697
               ],
-              "start": 4600,
-              "dur": 200
+              "start": 9200,
+              "dur": 400
             },
             {
               "position": [
@@ -2375,8 +2379,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.67576
               ],
-              "start": 4800,
-              "dur": 200
+              "start": 9600,
+              "dur": 400
             },
             {
               "position": [
@@ -2384,8 +2388,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.68182
               ],
-              "start": 4800,
-              "dur": 200
+              "start": 9600,
+              "dur": 400
             },
             {
               "position": [
@@ -2393,8 +2397,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.68788
               ],
-              "start": 4800,
-              "dur": 200
+              "start": 9600,
+              "dur": 400
             },
             {
               "position": [
@@ -2402,8 +2406,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.69394
               ],
-              "start": 4800,
-              "dur": 200
+              "start": 9600,
+              "dur": 400
             },
             {
               "position": [
@@ -2411,8 +2415,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.7
               ],
-              "start": 5000,
-              "dur": 200
+              "start": 10000,
+              "dur": 400
             },
             {
               "position": [
@@ -2420,8 +2424,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.70606
               ],
-              "start": 5000,
-              "dur": 200
+              "start": 10000,
+              "dur": 400
             },
             {
               "position": [
@@ -2429,8 +2433,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.71212
               ],
-              "start": 5000,
-              "dur": 200
+              "start": 10000,
+              "dur": 400
             },
             {
               "position": [
@@ -2438,8 +2442,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.71818
               ],
-              "start": 5000,
-              "dur": 200
+              "start": 10000,
+              "dur": 400
             },
             {
               "position": [
@@ -2447,8 +2451,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.72424
               ],
-              "start": 5000,
-              "dur": 200
+              "start": 10000,
+              "dur": 400
             },
             {
               "position": [
@@ -2456,8 +2460,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.7303
               ],
-              "start": 5200,
-              "dur": 200
+              "start": 10400,
+              "dur": 400
             },
             {
               "position": [
@@ -2465,8 +2469,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.73636
               ],
-              "start": 5200,
-              "dur": 200
+              "start": 10400,
+              "dur": 400
             },
             {
               "position": [
@@ -2474,8 +2478,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.74242
               ],
-              "start": 5200,
-              "dur": 200
+              "start": 10400,
+              "dur": 400
             },
             {
               "position": [
@@ -2483,8 +2487,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.74848
               ],
-              "start": 5200,
-              "dur": 200
+              "start": 10400,
+              "dur": 400
             },
             {
               "position": [
@@ -2492,8 +2496,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.75455
               ],
-              "start": 5200,
-              "dur": 200
+              "start": 10400,
+              "dur": 400
             },
             {
               "position": [
@@ -2501,8 +2505,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.76061
               ],
-              "start": 5400,
-              "dur": 200
+              "start": 10800,
+              "dur": 400
             },
             {
               "position": [
@@ -2510,8 +2514,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.76667
               ],
-              "start": 5400,
-              "dur": 200
+              "start": 10800,
+              "dur": 400
             },
             {
               "position": [
@@ -2519,8 +2523,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.77273
               ],
-              "start": 5400,
-              "dur": 200
+              "start": 10800,
+              "dur": 400
             },
             {
               "position": [
@@ -2528,8 +2532,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.77879
               ],
-              "start": 5400,
-              "dur": 200
+              "start": 10800,
+              "dur": 400
             },
             {
               "position": [
@@ -2537,8 +2541,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.78485
               ],
-              "start": 5600,
-              "dur": 200
+              "start": 11200,
+              "dur": 400
             },
             {
               "position": [
@@ -2546,8 +2550,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.79091
               ],
-              "start": 5600,
-              "dur": 200
+              "start": 11200,
+              "dur": 400
             },
             {
               "position": [
@@ -2555,8 +2559,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.79697
               ],
-              "start": 5600,
-              "dur": 200
+              "start": 11200,
+              "dur": 400
             },
             {
               "position": [
@@ -2564,8 +2568,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.80303
               ],
-              "start": 5600,
-              "dur": 200
+              "start": 11200,
+              "dur": 400
             },
             {
               "position": [
@@ -2573,8 +2577,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.80909
               ],
-              "start": 5600,
-              "dur": 200
+              "start": 11200,
+              "dur": 400
             },
             {
               "position": [
@@ -2582,8 +2586,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.81515
               ],
-              "start": 5800,
-              "dur": 200
+              "start": 11600,
+              "dur": 400
             },
             {
               "position": [
@@ -2591,8 +2595,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.82121
               ],
-              "start": 5800,
-              "dur": 200
+              "start": 11600,
+              "dur": 400
             },
             {
               "position": [
@@ -2600,8 +2604,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.82727
               ],
-              "start": 5800,
-              "dur": 200
+              "start": 11600,
+              "dur": 400
             },
             {
               "position": [
@@ -2609,8 +2613,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.83333
               ],
-              "start": 5800,
-              "dur": 200
+              "start": 11600,
+              "dur": 400
             },
             {
               "position": [
@@ -2618,8 +2622,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.83939
               ],
-              "start": 5800,
-              "dur": 200
+              "start": 11600,
+              "dur": 400
             },
             {
               "position": [
@@ -2627,8 +2631,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.84545
               ],
-              "start": 6000,
-              "dur": 200
+              "start": 12000,
+              "dur": 400
             },
             {
               "position": [
@@ -2636,8 +2640,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.85152
               ],
-              "start": 6000,
-              "dur": 200
+              "start": 12000,
+              "dur": 400
             },
             {
               "position": [
@@ -2645,8 +2649,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.85758
               ],
-              "start": 6000,
-              "dur": 200
+              "start": 12000,
+              "dur": 400
             },
             {
               "position": [
@@ -2654,8 +2658,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.86364
               ],
-              "start": 6000,
-              "dur": 200
+              "start": 12000,
+              "dur": 400
             },
             {
               "position": [
@@ -2663,8 +2667,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.8697
               ],
-              "start": 6200,
-              "dur": 200
+              "start": 12400,
+              "dur": 400
             },
             {
               "position": [
@@ -2672,8 +2676,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.87576
               ],
-              "start": 6200,
-              "dur": 200
+              "start": 12400,
+              "dur": 400
             },
             {
               "position": [
@@ -2681,8 +2685,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.88182
               ],
-              "start": 6200,
-              "dur": 200
+              "start": 12400,
+              "dur": 400
             },
             {
               "position": [
@@ -2690,8 +2694,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.88788
               ],
-              "start": 6200,
-              "dur": 200
+              "start": 12400,
+              "dur": 400
             },
             {
               "position": [
@@ -2699,8 +2703,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.89394
               ],
-              "start": 6200,
-              "dur": 200
+              "start": 12400,
+              "dur": 400
             },
             {
               "position": [
@@ -2708,8 +2712,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.9
               ],
-              "start": 6400,
-              "dur": 200
+              "start": 12800,
+              "dur": 400
             },
             {
               "position": [
@@ -2717,8 +2721,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.90606
               ],
-              "start": 6400,
-              "dur": 200
+              "start": 12800,
+              "dur": 400
             },
             {
               "position": [
@@ -2726,8 +2730,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.91212
               ],
-              "start": 6400,
-              "dur": 200
+              "start": 12800,
+              "dur": 400
             },
             {
               "position": [
@@ -2735,8 +2739,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.91818
               ],
-              "start": 6400,
-              "dur": 200
+              "start": 12800,
+              "dur": 400
             },
             {
               "position": [
@@ -2744,8 +2748,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.92424
               ],
-              "start": 6400,
-              "dur": 200
+              "start": 12800,
+              "dur": 400
             },
             {
               "position": [
@@ -2753,8 +2757,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.9303
               ],
-              "start": 6600,
-              "dur": 200
+              "start": 13200,
+              "dur": 400
             },
             {
               "position": [
@@ -2762,8 +2766,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.93636
               ],
-              "start": 6600,
-              "dur": 200
+              "start": 13200,
+              "dur": 400
             },
             {
               "position": [
@@ -2771,8 +2775,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.94242
               ],
-              "start": 6600,
-              "dur": 200
+              "start": 13200,
+              "dur": 400
             },
             {
               "position": [
@@ -2780,8 +2784,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.94848
               ],
-              "start": 6600,
-              "dur": 200
+              "start": 13200,
+              "dur": 400
             },
             {
               "position": [
@@ -2789,8 +2793,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.95455
               ],
-              "start": 6800,
-              "dur": 200
+              "start": 13600,
+              "dur": 400
             },
             {
               "position": [
@@ -2798,8 +2802,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.96061
               ],
-              "start": 6800,
-              "dur": 200
+              "start": 13600,
+              "dur": 400
             },
             {
               "position": [
@@ -2807,8 +2811,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.96667
               ],
-              "start": 6800,
-              "dur": 200
+              "start": 13600,
+              "dur": 400
             },
             {
               "position": [
@@ -2816,8 +2820,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.97273
               ],
-              "start": 6800,
-              "dur": 200
+              "start": 13600,
+              "dur": 400
             },
             {
               "position": [
@@ -2825,8 +2829,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.97879
               ],
-              "start": 6800,
-              "dur": 200
+              "start": 13600,
+              "dur": 400
             },
             {
               "position": [
@@ -2834,8 +2838,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.98485
               ],
-              "start": 7000,
-              "dur": 200
+              "start": 14000,
+              "dur": 400
             },
             {
               "position": [
@@ -2843,8 +2847,8 @@ _.extend(CONFIG, {
                 0.5,
                 0.99091
               ],
-              "start": 7000,
-              "dur": 200
+              "start": 14000,
+              "dur": 400
             },
             {
               "position": [
@@ -2852,14 +2856,15 @@ _.extend(CONFIG, {
                 0.5,
                 0.99697
               ],
-              "start": 7000,
-              "dur": 200
+              "start": 14000,
+              "dur": 400
             }
           ]
         },
         {
-          "dimension": 2,
           "filename": "click.mp3",
+          "dimension": 2,
+          "maxInstances": 20,
           "sprites": [
             {
               "position": [
