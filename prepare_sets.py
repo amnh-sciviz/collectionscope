@@ -16,7 +16,7 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json",
 a = parser.parse_args()
 
 config = io.readJSON(a.CONFIG_FILE)
-configSets = config["sets"]
+configContent = config["content"]
 
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_SET_DIR_REL = "data/sets/"
@@ -25,10 +25,17 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_SET_DIR, CONFIG_FILE])
-items = tu.getItems(config)
+sets, items = tu.getItems(config)
+
+# Remove existing data
+io.removeFiles(OUTPUT_SET_DIR + "*.json")
 
 jsonsets = {}
-for keyName, options in configSets.items():
+for keyName, options in configContent.items():
+
+    if "query" not in options:
+        continue
+
     setItems = lu.filterByQueryString(items, options["query"])
     if len(setItems) > 0:
         print("%s results found for '%s'" % (len(setItems), options["query"]))

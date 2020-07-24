@@ -22,16 +22,21 @@ OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_FILE_REL = "data/metadata.json"
 OUTPUT_FILE = OUTPUT_DIR + OUTPUT_FILE_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.metadata.js"
-COLUMNS =  configMeta["cols"]
+COLUMNS =  [col for col in configMeta["cols"] if "output" in col and col["output"]]
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_FILE, CONFIG_FILE])
 
-items = tu.getItems(config)
-sets, items = tu.addColumnsToItems(items, config)
+sets, items = tu.getItems(config)
 
 # only take cols that have from key
 cols = [col["toKey"] for col in COLUMNS if "fromKey" in col]
+
+filteredSets = {}
+for setKey, set in sets.items():
+    if setKey in cols:
+        filteredSets[setKey] = set.copy()
+
 rows = []
 for item in items:
     row = []
@@ -53,7 +58,7 @@ outjson = {
     "rows": rows,
     "cols": cols,
     "patterns": patterns,
-    "sets": sets
+    "sets": filteredSets
 }
 io.writeJSON(OUTPUT_FILE, outjson)
 

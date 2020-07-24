@@ -6,8 +6,9 @@ var Label = (function() {
     var defaults = {
       'text': 'Default text',
       'position': [0, 0, 0],
+      'color': '#ffffff',
       'size': 12,
-      'height': 2 // thickness
+      'thickness': 2
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -19,11 +20,11 @@ var Label = (function() {
       return;
     }
 
-    var textMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
-    var textGeo = new THREE.TextGeometry( this.opt.text, {
+    var textMat = new THREE.MeshBasicMaterial({ color: this.opt.color });
+    var textGeo = new THREE.TextGeometry( ''+this.opt.text, {
       font: this.opt.font,
       size: this.opt.size,
-      height: this.opt.height
+      height: this.opt.thickness
     });
     textMat.transparent = true;
     textMat.opacity = 0.0;

@@ -163,20 +163,20 @@ var Geometry = (function() {
 
       // random point in sphere if sphere layout
       if (layout === 'spheres') {
-        var radius = MathUtil.lerp(1, canvasDepth/2, allPositions[index][2]);
-        var newPoint = MathUtil.randomPointInSphere([x, y, 0], radius);
+        var radius = MathUtil.lerp(1, canvasHeight/2, allPositions[index][1]);
+        var newPoint = MathUtil.randomPointInSphere([x, z, y], radius);
         x = newPoint[0];
-        y = newPoint[1];
-        z = newPoint[2];
+        z = newPoint[1];
+        y = newPoint[2];
 
       // random point in cylinder if bar layout
       } else if (layout === 'bars') {
-        var radius = MathUtil.lerp(1, canvasDepth/10, allPositions[index][2]);
-        var height = MathUtil.lerp(1, canvasDepth/2, allPositions[index][2]);
-        var newPoint = MathUtil.randomPointInCylinder([x, y, 0], radius, height);
+        var radius = MathUtil.lerp(1, canvasHeight/10, allPositions[index][1]);
+        var height = MathUtil.lerp(1, canvasHeight, allPositions[index][1]);
+        var newPoint = MathUtil.randomPointInCylinder([x, z, y], radius, height);
         x = newPoint[0];
-        y = newPoint[1];
-        z = newPoint[2];
+        z = newPoint[1];
+        y = newPoint[2];
       }
 
       return {

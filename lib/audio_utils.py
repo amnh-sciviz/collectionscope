@@ -144,6 +144,7 @@ def makeSpriteFile(audioFn, dataFn, filenames, dur, matchDbValue=-9, reverb=0, q
         "sprites": sprites
     }
     io.writeJSON(dataFn, jsonOut, pretty=True)
+    return jsonOut
 
 def matchDb(audio, targetDb, maxMatchDb=None, useMaxDBFS=True):
     if maxMatchDb is not None:

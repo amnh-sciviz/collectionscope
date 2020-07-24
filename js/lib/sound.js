@@ -6,7 +6,8 @@ var Sound = (function() {
     var defaults = {
       'audioPath': '../../audio/',
       'camera': false,
-      'position': false
+      'position': false,
+      'listener': false
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -14,12 +15,13 @@ var Sound = (function() {
 
   Sound.prototype.init = function(){
     this.sounds = {};
-    this.camera = this.opt.camera;
+    this.listener = this.opt.listener;
+    if (!this.listener) console.log('Must pass in listener to sound');
   };
 
   Sound.prototype.playSoundFromFile = function(filename){
     var _this = this;
-    if (!this.camera) return;
+    if (!this.listener) return;
 
     if (_.has(this.sounds, filename)) {
       var sound = this.sounds[filename];
@@ -29,12 +31,10 @@ var Sound = (function() {
 
     } else {
       var fullPath = this.opt.audioPath + filename;
-      var listener = new THREE.AudioListener();
-      _this.camera.add( listener );
 
       // create a global audio source
-      var sound = new THREE.Audio( listener );
-      _this.sounds[filename] = {
+      var sound = new THREE.Audio( this.listener );
+      this.sounds[filename] = {
         audio: sound,
         loaded: false
       };

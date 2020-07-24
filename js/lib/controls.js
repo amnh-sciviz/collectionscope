@@ -7,7 +7,7 @@ var Controls = (function() {
       "el": "#app",
       "maxVelocity": 20,
       "acceleration": 0.2,
-      "bounds": [-32768, 32768],
+      "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05
     };
     this.opt = _.extend({}, defaults, config);
@@ -26,8 +26,10 @@ var Controls = (function() {
   Controls.prototype.init = function(){
     this.$el = $(this.opt.el);
     this.isTouch = isTouchDevice();
-    this.moveDirection = 0;
-    this.velocity = 0;
+    this.moveDirectionX = 0;
+    this.moveDirectionY = 0;
+    this.velocityX = 0;
+    this.velocityY = 0;
     this.camera = this.opt.camera;
     this.loaded = false;
 
@@ -61,11 +63,11 @@ var Controls = (function() {
 
       var mc = new Hammer(el);
       mc.on("press", function(e) {
-        _this.moveDirection = direction;
+        _this.moveDirectionY = direction;
       });
 
       mc.on("pressup", function(e){
-        _this.moveDirection = 0;
+        _this.moveDirectionY = 0;
       });
     });
 
@@ -73,21 +75,25 @@ var Controls = (function() {
       switch(e.which) {
         case 38: // arrow up
         case 87: // w
-          _this.moveDirection = 1;
+          _this.moveDirectionY = 1;
           break;
 
         case 40: // arrow down
         case 83: // s
-          _this.moveDirection = -1;
+          _this.moveDirectionY = -1;
           break;
 
         case 37: // arrow left
         case 65: // a
-          _this.stepOption(-1);
+          _this.moveDirectionX = -1;
           break;
 
         case 39: // arrow right
         case 68: // d
+          _this.moveDirectionX = 1;
+          break;
+
+        case 32: // spacebar
           _this.stepOption(1);
           break;
 
@@ -102,7 +108,14 @@ var Controls = (function() {
         case 87: // w
         case 40: // arrow down
         case 83: // s
-          _this.moveDirection = 0;
+          _this.moveDirectionY = 0;
+          break;
+
+        case 37: // arrow left
+        case 65: // a
+        case 39: // arrow right
+        case 68: // d
+          _this.moveDirectionX = 0;
           break;
 
         default:
@@ -115,12 +128,12 @@ var Controls = (function() {
       switch (e.which) {
         // left mouse
         case 1:
-          _this.moveDirection = 1;
+          _this.moveDirectionY = 1;
           break;
         // right mouse
         case 3:
           e.preventDefault();
-          _this.moveDirection = -1;
+          _this.moveDirectionY = -1;
           break;
         default:
           break;
@@ -133,7 +146,7 @@ var Controls = (function() {
 
     $doc.on('mouseup', 'canvas', function(e) {
       if (isTouch) return;
-      _this.moveDirection = 0;
+      _this.moveDirectionY = 0;
     });
 
     $doc.on("mousemove", function(e){
@@ -203,9 +216,8 @@ var Controls = (function() {
       var parts = name.split('-', 2);
       name = 'filter-property';
       value.unshift(parts[1]);
-    } else {
-      name = 'change-'+name;
     }
+
     // console.log('Triggering event "change-'+name+'" with value "'+value+'"');
     $(document).trigger(name, value);
   };
@@ -213,6 +225,10 @@ var Controls = (function() {
   Controls.prototype.onResize = function(){
     this.viewHalfX = window.innerWidth / 2;
     this.viewHalfY = window.innerHeight / 2;
+  };
+
+  Controls.prototype.setBounds = function(bounds){
+    this.opt.bounds = bounds;
   };
 
   Controls.prototype.stepOption = function(step){
@@ -229,33 +245,8 @@ var Controls = (function() {
   Controls.prototype.update = function(now, delta){
     if (!this.loaded) return;
 
-    var moveDirection = this.moveDirection;
-    var acceleration = false;
-
-    // accelerate
-    if (moveDirection !== 0 && Math.abs(this.velocity) < this.opt.maxVelocity) {
-      acceleration = this.opt.acceleration * moveDirection;
-      this.velocity += acceleration;
-
-    // deccelerate
-    } else if (moveDirection === 0 && Math.abs(this.velocity) > 0) {
-      var currentDirection = this.velocity / Math.abs(this.velocity);
-      moveDirection = -currentDirection; // move in the opposite direction of the current velocity
-      acceleration = this.opt.acceleration * moveDirection;
-      this.velocity += acceleration;
-
-      if (currentDirection > 0) this.velocity = Math.max(this.velocity, 0);
-      else this.velocity = Math.min(this.velocity, 0);
-    }
-
-    // move camera if velocity is non-zero
-    if (this.velocity > 0 || this.velocity < 0) {
-      var newZ = this.camera.position.z + this.velocity;
-      newZ = MathUtil.clamp(newZ, this.opt.bounds[0], this.opt.bounds[1]);
-      this.camera.position.setZ(newZ);
-      // console.log(newZ)
-      renderNeeded = true;
-    }
+    this.updateAxis('X');
+    this.updateAxis('Y');
 
     // move camera direction based on pointer
     if (this.pointerX === false || this.pointerY === false || delta <= 0) return;
@@ -278,6 +269,43 @@ var Controls = (function() {
     targetPosition.setFromSphericalCoords(1, phi, theta).add(position);
     this.camera.lookAt(targetPosition);
     renderNeeded = true;
+  };
+
+  Controls.prototype.updateAxis = function(axis){
+    var moveDirection = this['moveDirection'+axis];
+    var acceleration = false;
+
+    // accelerate
+    if (moveDirection !== 0 && Math.abs(this['velocity'+axis]) < this.opt.maxVelocity) {
+      acceleration = this.opt.acceleration * moveDirection;
+      this['velocity'+axis] += acceleration;
+
+    // deccelerate
+    } else if (moveDirection === 0 && Math.abs(this['velocity'+axis]) > 0) {
+      var currentDirection = this['velocity'+axis] / Math.abs(this['velocity'+axis]);
+      moveDirection = -currentDirection; // move in the opposite direction of the current velocity
+      acceleration = this.opt.acceleration * moveDirection;
+      this['velocity'+axis] += acceleration;
+
+      if (currentDirection > 0) this['velocity'+axis] = Math.max(this['velocity'+axis], 0);
+      else this['velocity'+axis] = Math.min(this['velocity'+axis], 0);
+    }
+
+    // move camera if velocity is non-zero
+    if (this['velocity'+axis] > 0 || this['velocity'+axis] < 0) {
+      if (axis == 'Y') {
+        var newZ = this.camera.position.z + this['velocity'+axis];
+        newZ = MathUtil.clamp(newZ, this.opt.bounds[2], this.opt.bounds[3]);
+        this.camera.position.setZ(newZ);
+        // console.log(newZ)
+      } else {
+        var newX = this.camera.position.x + this['velocity'+axis];
+        newX = MathUtil.clamp(newX, this.opt.bounds[0], this.opt.bounds[1]);
+        this.camera.position.setX(newX);
+        // console.log(newX)
+      }
+      renderNeeded = true;
+    }
   };
 
   return Controls;

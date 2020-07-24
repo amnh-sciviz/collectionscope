@@ -33,7 +33,10 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.textures.js"
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_TEXTURES_DIR, CONFIG_FILE, a.CACHE_DIR])
 
-items = tu.getItems(config)
+# Remove existing images
+io.removeFiles(OUTPUT_TEXTURES_DIR + "*.jpg")
+
+sets, items = tu.getItems(config)
 
 # Make texture for each set
 # sets = list(configSets.items())

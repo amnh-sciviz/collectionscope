@@ -12,13 +12,12 @@ import lib.item_utils as tu
 # input
 parser = argparse.ArgumentParser()
 parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
-parser.add_argument("-keys", dest="KEY_LIST", default="content,ui", help="Keys that should be included in config")
+parser.add_argument("-keys", dest="KEY_LIST", default="views,content,ui", help="Keys that should be included in config")
 a = parser.parse_args()
 
 config = io.readJSON(a.CONFIG_FILE)
 
-items = tu.getItems(config)
-sets, items = tu.addColumnsToItems(items, config)
+sets, items = tu.getItems(config)
 
 OUTPUT_FILE = "apps/{appname}/js/config/config.content.js".format(appname=config["name"])
 KEY_LIST =  [k.strip() for k in a.KEY_LIST.split(",")]
@@ -33,7 +32,7 @@ for key in KEY_LIST:
     c = config[key]
 
     if key == "ui" and "menus" in c:
-        for j, menu in enumerate(c["menus"]):
+        for menuKey, menu in c["menus"].items():
 
             # check to see if we should make a menu from a property set
             if "property" in menu and "items" not in menu and menu["property"] in sets:

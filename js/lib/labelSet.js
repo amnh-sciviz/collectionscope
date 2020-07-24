@@ -2,15 +2,18 @@
 
 var LabelSet = (function() {
 
+  LabelSet.defaultValues = {
+    'fontDir': '../../fonts/',
+    'fontFile': 'helvetiker_bold.typeface.json',
+    'font': false,
+    'labels': [],
+    'width': 16384,
+    'height': 16384,
+    'depth': 16384
+  }
+
   function LabelSet(config) {
-    var defaults = {
-      'fontDir': '../../fonts/',
-      'fontFile': 'helvetiker_bold.typeface.json',
-      'labels': [],
-      'width': 16384,
-      'height': 16384,
-      'depth': 16384
-    };
+    var defaults = LabelSet.defaultValues;
     this.opt = _.extend({}, defaults, config);
     this.init();
   }
@@ -22,6 +25,10 @@ var LabelSet = (function() {
     this.transitionStart = false;
     this.transitionEnd = false;
     this.currentAlpha = 0.0;
+
+    if (this.opt.labels.length < 1 && this.opt.values) {
+      this.parseLabelData(this.opt.values);
+    }
   };
 
   LabelSet.prototype.createLabels = function(){
@@ -55,17 +62,37 @@ var LabelSet = (function() {
     this.visible = false;
   };
 
-  LabelSet.prototype.load = function(){
+  LabelSet.prototype.load = function(deferred){
     var _this = this;
-    var deferred = $.Deferred();
-    var loader = new THREE.FontLoader();
-    loader.load(this.opt.fontDir + this.opt.fontFile, function(response) {
-      console.log('Loaded '+_this.opt.fontFile);
-      _this.font = response;
-      _this.createLabels();
+    deferred = deferred || $.Deferred();
+    // loaded font passed in
+    if (this.opt.font !== false) {
+      this.font = this.opt.font;
+      this.createLabels();
       deferred.resolve();
-    });
+    // otherwise, load the font
+    } else {
+      var loader = new THREE.FontLoader();
+      loader.load(this.opt.fontDir + this.opt.fontFile, function(response) {
+        console.log('Loaded '+_this.opt.fontFile);
+        _this.font = response;
+        _this.createLabels();
+        deferred.resolve();
+      });
+    }
     return deferred;
+  };
+
+  LabelSet.prototype.parseLabelData = function(values){
+    var labels = _.chunk(values, 4);
+    var opts = _.pick(this.opt, 'fontSize', 'thickness', 'color');
+    labels = _.map(labels, function(label){
+      return _.extend({}, opts, {
+        'position': [label[0], label[1], label[2]],
+        'text': label[3]
+      });
+    });
+    this.opt.labels = labels;
   };
 
   LabelSet.prototype.show = function(transitionDuration){

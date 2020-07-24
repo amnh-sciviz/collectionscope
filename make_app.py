@@ -25,6 +25,8 @@ commands = [
     '{python_name} prepare_sets.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
     '{python_name} prepare_positions.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
     '{python_name} prepare_textures.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
+    '{python_name} prepare_labels.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
+    '{python_name} prepare_sounds.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
     '{python_name} prepare_content.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE)
 ]
 

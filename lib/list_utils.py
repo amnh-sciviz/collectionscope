@@ -10,6 +10,9 @@ def addIndices(arr, keyName="index", startIndex=0):
         arr[i][keyName] = startIndex + i
     return arr
 
+def createLookup(arr, key):
+    return dict([(str(item[key]), item) for item in arr])
+
 def filterByQuery(arr, ors):
     if isinstance(ors, tuple):
         ors = [[ors]]
@@ -60,6 +63,9 @@ def filterByQuery(arr, ors):
 def filterByQueryString(arr, str):
     ors = parseQueryString(str)
     return filterByQuery(arr, ors)
+
+def flattenList(arr):
+    return [item for sublist in arr for item in sublist]
 
 def getKeyByValue(d, value):
     found = ""

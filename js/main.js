@@ -20,16 +20,19 @@ var MainApp = (function() {
 
     this.loadScene();
 
+    this.globalListener = new THREE.AudioListener();
+    this.camera.add(this.globalListener);
+    this.globalSound = new Sound({listener: this.globalListener});
+
     this.collection = new Collection(_.extend({}, this.opt, {
       'camera': _this.camera,
+      'listener': _this.globalListener,
       'onLoadEnd': function(){ _this.onLoadEnd(); },
       'onLoadProgress': function(){ _this.onLoadProgress(); }
     }));
 
     this.onLoadStart();
     this.collection.load();
-
-    this.globalSound = new Sound({camera: this.camera});
   };
 
   MainApp.prototype.loadListeners = function(){
@@ -38,8 +41,8 @@ var MainApp = (function() {
       _this.onResize();
     });
 
-    $(document).on('change-positions', function(e, newValue, duration) {
-      _this.globalSound.playSoundFromFile("sand.mp3");
+    $(document).on('change-view', function(e, newValue, duration) {
+      _this.onChangeView(newValue);
     });
 
     $('.start').on('click', function(e){
@@ -65,6 +68,13 @@ var MainApp = (function() {
     this.scene = scene;
     this.camera = camera;
     this.renderer = renderer;
+  };
+
+  MainApp.prototype.onChangeView = function(newViewKey){
+    this.globalSound.playSoundFromFile("sand.mp3");
+
+    var newView = this.collection.getCurrentView(newViewKey);
+    this.controls.setBounds(newView.bounds);
   };
 
   MainApp.prototype.onLoadEnd = function(){
@@ -117,9 +127,8 @@ var MainApp = (function() {
 
     $('#instructions').removeClass('active');
 
-    $(document).trigger('change-positions', ['default', this.opt.ui.startTransitionDuration]);
-    // this.collection.updatePositions('default', _this.opt.ui.startTransitionDuration);
-    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration*2);
+    $(document).trigger('change-view', ['timeline', this.opt.ui.startTransitionDuration]);
+    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition('timeline'), _this.opt.ui.startTransitionDuration*2);
 
     setTimeout(function(){
       _this.$el.addClass('loaded');

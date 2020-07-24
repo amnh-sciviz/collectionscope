@@ -6,7 +6,9 @@ var SoundSet = (function() {
     var defaults = {
       'audioPath': '../../audio/',
       'camera': false,
+      'listener': false,
       'dimension': 2,
+      'sprites': [],
       'maxInstances': 4 // number of sounds that can be playing simulaneously
     };
     this.opt = _.extend({}, defaults, config);
@@ -15,8 +17,12 @@ var SoundSet = (function() {
 
   SoundSet.prototype.init = function(){
     var _this = this;
-    this.controls = false;
     this.camera = this.opt.camera;
+    this.listener = this.opt.listener;
+    if (!this.camera) console.log('Must pass in camera to sound');
+    if (!this.listener) console.log('Must pass in listener to sound');
+
+    this.controls = false;
     this.filename = this.opt.audioPath + this.opt.filename;
     this.loaded = false;
     this.firstUpdate = true;
@@ -28,6 +34,11 @@ var SoundSet = (function() {
     var canvasWidth = this.opt.width;
     var canvasHeight = this.opt.height;
     var canvasDepth = this.opt.depth;
+
+    if (this.opt.sprites.length < 1 && this.opt.values) {
+      this.parseSpriteData(this.opt.values, this.opt.isSprite);
+    }
+
     this.sprites = _.map(this.opt.sprites, function(sprite, i){
       if (_.has(sprite, 'start')) sprite.start = sprite.start / 1000.0;
       else sprite.start = false;
@@ -43,6 +54,8 @@ var SoundSet = (function() {
 
       return sprite;
     });
+
+    // console.log(this.sprites)
   };
 
   SoundSet.prototype.filter = function(name, value){
@@ -56,17 +69,14 @@ var SoundSet = (function() {
     return instances[0];
   };
 
-  SoundSet.prototype.load = function(){
+  SoundSet.prototype.load = function(deferred){
     var _this = this;
-    var deferred = $.Deferred();
-
-    var listener = new THREE.AudioListener();
-    this.camera.add(listener);
+    deferred = deferred || $.Deferred();
 
     var audioInstances = [];
     _.times(this.opt.maxInstances, function(i){
       // create a global audio source
-      var audio = new THREE.Audio(listener);
+      var audio = new THREE.Audio(_this.listener);
       audioInstances.push({'audio': audio, 'lastPlayedTime': 0, 'index': i});
     });
 
@@ -85,6 +95,21 @@ var SoundSet = (function() {
     return deferred;
   };
 
+  SoundSet.prototype.parseSpriteData = function(values, isSprite) {
+    var chunkSize = isSprite ? 5 : 3;
+    var sprites = _.chunk(values, chunkSize);
+    sprites = _.map(sprites, function(sprite){
+      var spriteObj = {};
+      spriteObj.position = [sprite[0], sprite[1], sprite[2]];
+      if (isSprite) {
+        spriteObj.start = sprite[3];
+        spriteObj.dur = sprite[4];
+      }
+      return spriteObj;
+    });
+    this.opt.sprites = sprites;
+  };
+
   SoundSet.prototype.playSprite = function(sprite, now){
     if (_.has(sprite, 'lastPlayedTime') && (now-sprite.lastPlayedTime) < 100) return;
 
@@ -96,9 +121,6 @@ var SoundSet = (function() {
     if (sprite.start !== false) audio.offset = sprite.start;
     if (sprite.dur !== false) audio.duration = sprite.dur;
     if (sprite.dur === false) audio.setVolume(Math.random()*0.25);
-
-    // HACK: disable click temporarily
-    if (sprite.dur === false) return;
 
     audio.play(0.001);
 

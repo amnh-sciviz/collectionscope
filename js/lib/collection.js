@@ -13,7 +13,8 @@ var Collection = (function() {
 
   Collection.prototype.init = function(){
     this.camera = this.opt.camera;
-    this.currentPositionsKey = 'start';
+    this.listener = this.opt.listener;
+    this.currentViewKey = 'random';
     this.minAlpha = this.opt.ui.minAlpha;
   };
 
@@ -24,12 +25,6 @@ var Collection = (function() {
     }
 
     if (value === "" || value === -1) value = false;
-
-    _.each(this.soundSets, function(sets, key){
-      _.each(sets, function(soundSet){
-        soundSet.filter(prop, value);
-      })
-    });
 
     // reset alpha
     if (value === false) {
@@ -49,14 +44,22 @@ var Collection = (function() {
     this.updateAlpha(false, toAlphaValues);
   };
 
-  Collection.prototype.getDefaultCameraPosition = function(){
-    var pos = this.positions[this.currentPositionsKey];
+  Collection.prototype.getCurrentView = function(key){
+    key = key || this.currentViewKey;
+    var view = _.has(this.views, key) ? this.views[key] : this.views[_.first(_.keys(this.views))];
+    return view;
+  };
 
-    if (!pos || !_.has(pos, 'cameraPosition')) {
+  Collection.prototype.getDefaultCameraPosition = function(key){
+    key = key || this.currentViewKey;
+    var view = this.views[key];
+
+    if (!view || !_.has(view, 'cameraPosition')) {
+      console.log('Warning: No camera position for '+key);
       return (new THREE.Vector3(0,0,0));
     }
 
-    var p = pos.cameraPosition;
+    var p = view.cameraPosition;
     return (new THREE.Vector3(p[0], p[1], p[2]));
   };
 
@@ -72,14 +75,19 @@ var Collection = (function() {
     totalToLoad += _.keys(this.opt.sets).length;
     // load textures
     totalToLoad += _.reduce(this.opt.textures, function(memo, t){ return memo + t.assets.length; }, 0);
+    // load labels
+    totalToLoad += _.keys(this.opt.labels).length;
+    // load sounds
+    totalToLoad += _.keys(this.opt.sounds).length;
     return totalToLoad;
   };
 
   Collection.prototype.load = function(){
     var _this = this;
 
+    this.loadContent();
+
     $.when(
-      this.loadContent(),
       this.loadLabels(),
       this.loadMetadata(),
       this.loadPositions(),
@@ -95,35 +103,82 @@ var Collection = (function() {
 
   Collection.prototype.loadContent = function(){
     var _this = this;
-    var deferred = $.Deferred();
     this.content = this.opt.content;
     this.ui = this.opt.ui;
+    this.views = this.opt.views;
     console.log('Loaded content.');
-    deferred.resolve();
-    return deferred;
   };
 
   Collection.prototype.loadLabels = function(){
-    var deferreds = [];
-    var labelSets = {};
+    var _this = this;
 
-    _.each(this.opt.positions, function(set, key){
-      if (_.has(set, 'labels')) {
-        var labelSet = new LabelSet(set);
-        deferreds.push(labelSet.load());
-        labelSets[key] = labelSet;
+    var fontFiles = {
+      'default': LabelSet.defaultValues.fontDir + LabelSet.defaultValues.fontFile
+    };
+    _.each(this.opt.labels, function(set, key){
+      if (_.has(set, 'fontFile') && set.fontFile != LabelSet.defaultValues.fontFile && !_.has(fontFiles, set.fontFile)) {
+        fontFiles[set.fontFile] = LabelSet.defaultValues.fontDir + set.fontFile;
       }
     });
-    this.labelSets = labelSets;
-
-    var deferred = $.Deferred();
-    if (deferreds.length < 1) deferred.resolve();
-    else {
-      $.when.apply(null, deferreds).done(function() {
-        console.log('Loaded labels');
+    var fontPromises = [];
+    var loader = new THREE.FontLoader();
+    _.each(fontFiles, function(fontPath, key){
+      var deferred = $.Deferred();
+      loader.load(fontPath, function(response) {
+        console.log('Loaded '+fontPath);
+        fontFiles[key] = response;
         deferred.resolve();
       });
-    }
+      fontPromises.push(deferred);
+    });
+
+    var deferred = $.Deferred();
+    var views = this.views;
+    var labelSets = {};
+    $.when.apply(null, fontPromises).done(function() {
+      console.log('Loaded font files');
+
+      var labelPromises = [];
+      _.each(_this.opt.labels, function(set, key){
+        var labelPromise = $.Deferred();
+        // pass in width/height/depth of default view
+        if (_.has(set, 'defaultView') && _.has(views, set.defaultView)) {
+          set = _.extend({}, set, _.pick(views[set.defaultView], 'width', 'height', 'depth'));
+        }
+        // add the loaded font
+        set.font = _.has(set, 'fontFile') ? fontFiles[set.fontFile] : fontFiles.default;
+        // check if data is set locally
+        if (!set.src) {
+          _this.opt.onLoadProgress();
+          if (!set.labels) {
+            console.log('Warning: '+key+' does not have any valid label data');
+            labelPromise.resolve();
+            return;
+          }
+          var labelSet = new LabelSet(set);
+          labelSet.load(labelPromise);
+          labelSets[key] = labelSet;
+          return;
+        }
+        // otherwise, make a request
+        $.getJSON(set.src, function(values){
+          _this.opt.onLoadProgress();
+          var labelSet = new LabelSet(_.extend({}, set, {'values': values}));
+          labelSet.load(labelPromise);
+          labelSets[key] = labelSet;
+        });
+        labelPromises.push(labelPromise);
+      });
+
+      if (labelPromises.length < 1) labelPromises.resolve();
+      else {
+        $.when.apply(null, labelPromises).done(function() {
+          console.log('Loaded labels');
+          _this.labelSets = labelSets;
+          deferred.resolve();
+        });
+      }
+    });
 
     return deferred;
   };
@@ -131,9 +186,9 @@ var Collection = (function() {
   Collection.prototype.loadListeners = function(){
     var _this = this;
 
-    $(document).on('change-positions', function(e, newValue, duration) {
-      console.log("Changing positions to "+newValue);
-      _this.updatePositions(newValue, duration);
+    $(document).on('change-view', function(e, newValue, duration) {
+      console.log("Changing view to "+newValue);
+      _this.updateView(newValue, duration);
     });
 
     $(document).on('filter-property', function(e, propertyName, newValue) {
@@ -228,29 +283,49 @@ var Collection = (function() {
     var _this = this;
     var deferreds = [];
     var soundSets = {};
+    var views = this.views;
 
-    _.each(this.opt.positions, function(set, key){
-      if (_.has(set, 'soundSets')) {
-        var sets = [];
-        _.each(set.soundSets, function(soundSetOptions){
-          var soundSet = new SoundSet(_.extend({}, {'width': set.width, 'height': set.height, 'depth': set.depth}, soundSetOptions, {'camera': _this.camera}));
-          deferreds.push(soundSet.load());
-          sets.push(soundSet);
-        });
-        soundSets[key] = sets;
+    _.each(this.opt.sounds, function(set, key){
+      var deferred = $.Deferred();
+
+      // pass in width/height/depth of default view
+      if (_.has(set, 'defaultView') && _.has(views, set.defaultView)) {
+        set = _.extend({}, set, _.pick(views[set.defaultView], 'width', 'height', 'depth'));
       }
+
+      // check if data is set locally
+      if (!set.src) {
+        _this.opt.onLoadProgress();
+        if (!set.sprites) {
+          console.log('Warning: '+key+' does not have any valid sound data');
+          deferred.resolve();
+          return;
+        }
+        var soundSet = new SoundSet(_.extend(set, {'camera': _this.camera, 'listener': _this.listener}));
+        soundSet.load(deferred);
+        soundSets[key] = soundSet;
+        return;
+      }
+      // otherwise, make a request
+      $.getJSON(set.src, function(values){
+        _this.opt.onLoadProgress();
+        var soundSet = new SoundSet(_.extend({}, set, {'values': values, 'camera': _this.camera, 'listener': _this.listener}));
+        soundSet.load(deferred);
+        soundSets[key] = soundSet;
+      });
+
+      deferreds.push(deferred);
     });
-    this.soundSets = soundSets;
 
     var deferred = $.Deferred();
     if (deferreds.length < 1) deferred.resolve();
     else {
       $.when.apply(null, deferreds).done(function() {
         console.log('Loaded sounds');
+        _this.soundSets = soundSets;
         deferred.resolve();
       });
     }
-
     return deferred;
   },
 
@@ -281,10 +356,8 @@ var Collection = (function() {
   };
 
   Collection.prototype.onFinishedStart = function(){
-    _.each(this.soundSets, function(sets, key){
-      _.each(sets, function(soundSet){
-        soundSet.active = true;
-      })
+    _.each(this.soundSets, function(soundSet, key){
+      soundSet.active = true;
     });
   };
 
@@ -292,16 +365,18 @@ var Collection = (function() {
     var _this = this;
     var container = new THREE.Group();
 
+    // default set is everything
     if (!_.has(this.opt.sets, 'default')) {
       this.opt.sets.default = {
         'values': _.range(_this.metadata.length)
       };
     }
 
+    var currentView = this.views[this.currentViewKey];
     var sets = {};
     _.each(this.opt.sets, function(set, key){
       if (key !== 'default') return;
-      var setPositions = _this.positions[_this.currentPositionsKey];
+      var setPositions = _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]);
       var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
       var set = new Set({
@@ -334,12 +409,8 @@ var Collection = (function() {
       labelSet.update(now);
     });
 
-    var currentPositionsKey = this.currentPositionsKey;
-    _.each(this.soundSets, function(sets, key){
-      if (key !== currentPositionsKey) return;
-      _.each(sets, function(soundSet){
-        soundSet.update(now);
-      })
+    _.each(this.soundSets, function(soundSet){
+      soundSet.update(now);
     });
   };
 
@@ -352,25 +423,45 @@ var Collection = (function() {
     })
   };
 
-  Collection.prototype.updatePositions = function(newValue, transitionDuration){
-    if (newValue === this.currentPositionsKey) return;
+  Collection.prototype.updateView = function(newValue, transitionDuration){
+    if (newValue === this.currentViewKey) return;
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
 
     var _this = this;
-    var newPositions = this.positions[newValue];
-    this.currentPositionsKey = newValue;
+    var newView = this.views[newValue];
+    var newPositions = this.positions[newView.layout];
+    newPositions = _.extend({}, _.pick(newView, 'width', 'height', 'depth'), newPositions);
+    this.currentViewKey = newValue;
 
+    // update layout
     _.each(this.sets, function(set){
       set.updatePositions(newPositions, transitionDuration);
     });
 
-    if (_.has(this.labelSets, newValue)) {
-      _.each(this.labelSets, function(labelSet, key){
-        if (key===newValue && labelSet.visible) return false;
-        else if (key===newValue) labelSet.show(transitionDuration);
-        else labelSet.hide(transitionDuration);
-      });
-    }
+    // update labels
+    var viewLabels = newView.labels ? newView.labels : [];
+    _.each(this.labelSets, function(labelSet, key){
+      var valid = _.indexOf(viewLabels, key) >= 0;
+      if (valid && labelSet.visible) return false;
+      else if (valid) labelSet.show(transitionDuration);
+      else labelSet.hide(transitionDuration);
+    });
+
+    // update sounds
+    var viewSounds = newView.sounds ? newView.sounds : [];
+    _.each(this.soundSets, function(soundSet, key){
+      var valid = _.indexOf(viewLabels, key) >= 0;
+      if (valid) soundSet.active = true;
+      else soundSet.active = false;
+    });
+
+    // TODO: update menus
+
+    // TODO: update controls
+
+    // TODO: update keys
+
+    // TODO: update overlays
   };
 
   return Collection;

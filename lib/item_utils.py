@@ -21,6 +21,10 @@ def addColumnsToItems(items, config):
             fromKey = col["fromKey"]
             toKey = col["toKey"]
             value = item[fromKey] if fromKey in item else ""
+            if "type" in col and col["type"] == "int":
+                value = int(value)
+            elif "type" in col and col["type"] == "float":
+                value = float(value)
             if "asIndex" in col and col["asIndex"] and toKey in sets:
                 value = sets[toKey].index(value) if value in sets[toKey] else -1
             items[i][toKey] = value
@@ -29,17 +33,18 @@ def addColumnsToItems(items, config):
 
 def getItems(config):
     configMeta = config["metadata"]
-
     inputFile = configMeta["src"]
-    idColumn = configMeta["id"]
 
     fieldnames, items = io.readCsv(inputFile, parseNumbers=False)
     if "query" in configMeta:
         items = lu.filterByQueryString(items, configMeta["query"])
         print("%s items after filtering" % len(items))
 
+    # Add columns
+    sets, items = addColumnsToItems(items, config)
+
     # Sort so that index corresponds to ID
-    items = sorted(items, key=lambda item: item[idColumn])
+    items = sorted(items, key=lambda item: item["id"])
     items = lu.addIndices(items)
 
-    return items
+    return (sets, items)

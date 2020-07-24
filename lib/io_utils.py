@@ -1,5 +1,6 @@
 import bz2
 import csv
+import glob
 import json
 import os
 import pickle
@@ -56,6 +57,17 @@ def readJSON(filename):
     else:
         print("No file found at %s" % filename)
     return data
+
+def removeFiles(listOrString):
+    filenames = listOrString
+    if not isinstance(listOrString, list) and "*" in listOrString:
+        filenames = glob.glob(listOrString)
+    elif not isinstance(listOrString, list):
+        filenames = [listOrString]
+    print("Removing %s files" % len(filenames))
+    for fn in filenames:
+        if os.path.isfile(fn):
+            os.remove(fn)
 
 def writeCacheFile(fn, data):
     print("Writing cache to %s..." % fn)
