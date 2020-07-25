@@ -67,12 +67,12 @@ _.extend(CONFIG, {
       "sounds": [
         "yearLabels"
       ],
-      "width": 2048,
+      "width": 1024,
       "height": 512,
       "depth": 65536,
       "cameraPosition": [
         0,
-        0,
+        256,
         -17080
       ],
       "bounds": [
@@ -99,12 +99,12 @@ _.extend(CONFIG, {
       "overlays": [
         "map"
       ],
-      "width": 16384,
-      "height": 512,
-      "depth": 8192,
+      "width": 8192,
+      "height": 2048,
+      "depth": 4096,
       "cameraPosition": [
         0,
-        0,
+        256,
         -1024
       ],
       "bounds": [

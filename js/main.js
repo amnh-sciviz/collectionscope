@@ -75,6 +75,9 @@ var MainApp = (function() {
 
     var newView = this.collection.getCurrentView(newViewKey);
     this.controls.setBounds(newView.bounds);
+
+    var p = newView.cameraPosition;
+    this.transitionCameraPosition(new THREE.Vector3(p[0], p[1], p[2]));
   };
 
   MainApp.prototype.onLoadEnd = function(){

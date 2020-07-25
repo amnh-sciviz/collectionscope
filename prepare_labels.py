@@ -100,7 +100,7 @@ def getCategoryYearLabels(userOptions={}):
         z = mu.norm(year, (minYear, maxYear)) + nUnit*0.5 # center
 
         for j, category in enumerate(categorySet):
-            x = 1.0 * j / categoryCount
+            x = 1.0 - 1.0 * j / (categoryCount-1)
             labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), category]
 
     return (cfg, labels)
@@ -111,7 +111,7 @@ def getCountryLabels(userOptions={}):
 
     cfg = {}
     options = {
-        "y": 0.333
+        "y": 0.5
     }
     options.update(userOptions)
 
@@ -136,8 +136,8 @@ def getCountryLabels(userOptions={}):
         lon = firstItem[lonCol]
         lat = firstItem[latCol]
         y = options["y"]
-        x = mu.norm(lon, lonRange)
-        z = mu.norm(lat, latRange)
+        x = 1.0 - mu.norm(lon, lonRange)
+        z = 1.0 - mu.norm(lat, latRange)
         labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), label]
 
     return (cfg, labels)

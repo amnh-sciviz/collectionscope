@@ -85,12 +85,12 @@ var Controls = (function() {
 
         case 37: // arrow left
         case 65: // a
-          _this.moveDirectionX = -1;
+          _this.moveDirectionX = 1;
           break;
 
         case 39: // arrow right
         case 68: // d
-          _this.moveDirectionX = 1;
+          _this.moveDirectionX = -1;
           break;
 
         case 32: // spacebar

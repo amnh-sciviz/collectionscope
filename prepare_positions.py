@@ -128,7 +128,7 @@ def getSphereCategoryTimelineLayout(userOptions={}):
         subgroups = group["categoryGroups"]
         subgroupLookup = lu.createLookup(subgroups, categoryCol)
         for j, category in enumerate(categorySet):
-            x = 1.0 * j / categoryCount
+            x = 1.0 - 1.0 * j / (categoryCount-1)
             categoryKey = str(j)
             if categoryKey in subgroupLookup:
                 subgroup = subgroupLookup[categoryKey]
@@ -173,8 +173,8 @@ def getGeographyBarsLayout(userOptions={}):
         y = mu.lerp((0.01, 1.0), y)
         for item in group["items"]:
             itemIndex = item["index"]
-            x = mu.norm(item[lonCol], lonRange)
-            z = mu.norm(item[latCol], latRange)
+            x = 1.0 - mu.norm(item[lonCol], lonRange)
+            z = 1.0 - mu.norm(item[latCol], latRange)
             values[itemIndex*dimensions] = round(x, PRECISION)
             values[itemIndex*dimensions+1] = round(y, PRECISION)
             values[itemIndex*dimensions+2] = round(z, PRECISION)
