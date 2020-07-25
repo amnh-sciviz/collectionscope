@@ -129,6 +129,8 @@ def getCountryLabels(userOptions={}):
     lonRange = (-180.0, 180.0)
     countrySet = sets[countryCol]
     groups = lu.groupList(items, countryCol) # group by country
+    counts = [group["count"] for group in groups]
+    minCount, maxCount = (min(counts), max(counts))
     labels = []
     for group in groups:
         firstItem = group["items"][0]
@@ -138,6 +140,12 @@ def getCountryLabels(userOptions={}):
         y = options["y"]
         x = 1.0 - mu.norm(lon, lonRange)
         z = 1.0 - mu.norm(lat, latRange)
+        # HACK: offset z slightly to acommodate size of bar
+        w = mu.norm(group["count"], (minCount, maxCount))
+        w = mu.lerp((0.01, 1.0), w)
+        # assume height is half the depth; divide by 6 for radius calculation (see geometry.js)
+        radius = 0.5 / 6.0 * w + 0.005
+        z = z - radius
         labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), label]
 
     return (cfg, labels)

@@ -16,6 +16,7 @@ _.extend(CONFIG, {
       "fontSize": 8,
       "thickness": 1,
       "defaultView": "map",
+      "layout": "bars",
       "src": "data/labels/countries.json"
     }
   }

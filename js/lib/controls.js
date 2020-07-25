@@ -8,7 +8,9 @@ var Controls = (function() {
       "maxVelocity": 20,
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
-      "lookSpeed": 0.05
+      "lookSpeed": 0.05,
+      "latRange": [-85, 85],  // range of field of view in y-axis
+      "lonRange": [-60, 60] // range of field of view in x-axis
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -258,7 +260,9 @@ var Controls = (function() {
     var actualLookSpeed = delta * this.opt.lookSpeed;
     this.lon -= x * actualLookSpeed;
     this.lat -= y * actualLookSpeed;
-    this.lat = Math.max( -85, Math.min( 85, this.lat ) );
+    this.lat = MathUtil.clamp(this.lat, this.opt.latRange[0], this.opt.latRange[1]);
+    this.lon = MathUtil.clamp(this.lon, this.opt.lonRange[0], this.opt.lonRange[1]);
+
     if (prevLat === this.lat && prevLon === this.lon) return;
 
     var phi = MathUtil.degToRad(90 - this.lat);

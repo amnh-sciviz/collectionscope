@@ -83,7 +83,8 @@
     "countries": {
       "fontSize": 8,
       "thickness": 1,
-      "defaultView": "map"
+      "defaultView": "map",
+      "layout": "bars"
     }
   },
 
