@@ -52,7 +52,8 @@
       "controls": ["firstPerson"],
       "menus": ["viewOptions"],
       "labels": ["years", "categoryYears"],
-      "keys": ["years"],
+      "overlays": ["regions"],
+      "keys": ["years", "regions"],
       "sounds": ["yearLabels"],
       "width": 1024, "height": 512, "depth": 65536,
       "cameraPosition": [0, 256, -17080],
@@ -143,7 +144,8 @@
     },
 
     "overlays": {
-      "map": {}
+      "map": {},
+      "regions": {}
     }
   },
 

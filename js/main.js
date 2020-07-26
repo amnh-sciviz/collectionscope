@@ -98,7 +98,8 @@ var MainApp = (function() {
     this.camera.position.copy(this.collection.getDefaultCameraPosition());
     this.camera.lookAt(new THREE.Vector3(0,0,0));
 
-    this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el}));
+    var view = this.collection.getCurrentView();
+    this.controls = new Controls(_.extend({}, this.collection.ui, {'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el, 'bounds': view.bounds}));
     this.scene.add(this.collection.getThree());
 
     this.loadListeners();

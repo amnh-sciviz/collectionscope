@@ -163,7 +163,7 @@ var Geometry = (function() {
 
       // random point in sphere if sphere layout
       if (layout === 'spheres') {
-        var radius = MathUtil.lerp(1, canvasHeight/2, allPositions[index][1]);
+        var radius = MathUtil.lerp(canvasHeight/20, canvasHeight/2, allPositions[index][1]);
         var newPoint = MathUtil.randomPointInSphere([x, z, 0], radius);
         x = newPoint[0];
         z = newPoint[1];
@@ -171,8 +171,10 @@ var Geometry = (function() {
 
       // random point in cylinder if bar layout
       } else if (layout === 'bars') {
-        var radius = MathUtil.lerp(1, canvasHeight/6, allPositions[index][1]);
-        var height = MathUtil.lerp(1, canvasHeight, allPositions[index][1]);
+        var minRadius = Math.max(canvasHeight/120, 1);
+        var minHeight = Math.max(canvasHeight/60, 1);
+        var radius = MathUtil.lerp(minRadius, canvasHeight/6, allPositions[index][1]);
+        var height = MathUtil.lerp(minHeight, canvasHeight, allPositions[index][1]);
         var newPoint = MathUtil.randomPointInCylinder([x, z, 0], radius, height);
         x = newPoint[0];
         z = newPoint[1];
