@@ -69,6 +69,7 @@ var Label = (function() {
 
     this.material = textMat;
     this.mesh = textMesh;
+    this.mesh.visible = false;
 
     // var geometry = new THREE.SphereGeometry( 5, 32, 32 );
     // var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
@@ -83,6 +84,8 @@ var Label = (function() {
 
   Label.prototype.setAlpha = function(alpha){
     this.material.opacity = alpha;
+    if (alpha > 0.0) this.mesh.visible = true;
+    else this.mesh.visible = false;
   };
 
   return Label;

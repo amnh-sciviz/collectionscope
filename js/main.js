@@ -76,8 +76,17 @@ var MainApp = (function() {
     var newView = this.collection.getCurrentView(newViewKey);
     this.controls.setBounds(newView.bounds);
 
-    var p = newView.cameraPosition;
-    this.transitionCameraPosition(new THREE.Vector3(p[0], p[1], p[2]));
+    var currentP = this.camera.position;
+    var newP = newView.cameraPosition;
+    var newBounds = newView.bounds;
+
+    // don't change current X/Z if within new bounds
+    if (newViewKey != 'map') {
+      if (currentP.x >= newBounds[0] && currentP.x <= newBounds[1]) newP[0] = currentP.x;
+      if (currentP.z >= newBounds[2] && currentP.z <= newBounds[3]) newP[2] = currentP.z;
+    }
+
+    this.transitionCameraPosition(new THREE.Vector3(newP[0], newP[1], newP[2]));
   };
 
   MainApp.prototype.onLoadEnd = function(){
@@ -130,14 +139,14 @@ var MainApp = (function() {
 
     $('#instructions').removeClass('active');
 
-    $(document).trigger('change-view', ['timeline', this.opt.ui.startTransitionDuration]);
-    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition('timeline'), _this.opt.ui.startTransitionDuration*2);
+    // $(document).trigger('change-view', ['timeline', this.opt.ui.startTransitionDuration]);
+    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration);
 
     setTimeout(function(){
       _this.$el.addClass('loaded');
       _this.controls.load();
       _this.collection.onFinishedStart();
-    }, this.opt.ui.startTransitionDuration*0.75);
+    }, 100);
   };
 
   MainApp.prototype.onResize = function(){

@@ -2,6 +2,12 @@ _.extend(CONFIG, {
   "views": {
     "random": {
       "layout": "randomSphere",
+      "controls": [
+        "firstPerson"
+      ],
+      "menus": [
+        "viewOptions"
+      ],
       "width": 16384,
       "height": 16384,
       "depth": 16384,
@@ -146,7 +152,7 @@ _.extend(CONFIG, {
   },
   "ui": {
     "startTransitionDuration": 5000,
-    "transitionDuration": 1000,
+    "transitionDuration": 3000,
     "minAlpha": 0.0,
     "menus": {
       "viewOptions": {
@@ -158,9 +164,14 @@ _.extend(CONFIG, {
         "radioItems": [
           {
             "name": "change-view",
-            "value": "timeline",
-            "label": "Timeline",
+            "value": "random",
+            "label": "Random",
             "checked": true
+          },
+          {
+            "name": "change-view",
+            "value": "timeline",
+            "label": "Timeline"
           },
           {
             "name": "change-view",

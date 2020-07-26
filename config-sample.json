@@ -30,6 +30,8 @@
   "views": {
     "random": {
       "layout": "randomSphere",
+      "controls": ["firstPerson"],
+      "menus": ["viewOptions"],
       "width": 16384, "height": 16384, "depth": 16384,
       "cameraPosition": [0, 0, -1024],
       "bounds": [-8192, 8192, -8192, 8192]
@@ -116,7 +118,7 @@
 
   "ui": {
     "startTransitionDuration": 5000,
-    "transitionDuration": 1000,
+    "transitionDuration": 3000,
     "minAlpha": 0.0,
 
     "menus": {
@@ -127,7 +129,8 @@
         "className": "radio-buttons radio-buttons-views",
         "default": true,
         "radioItems": [
-          {"name": "change-view", "value": "timeline", "label": "Timeline", "checked": true},
+          {"name": "change-view", "value": "random", "label": "Random", "checked": true},
+          {"name": "change-view", "value": "timeline", "label": "Timeline"},
           {"name": "change-view", "value": "categoryTimeline", "label": "Regions over time"},
           {"name": "change-view", "value": "map", "label": "Map"}
         ]
