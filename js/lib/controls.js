@@ -73,6 +73,13 @@ var Controls = (function() {
       });
     });
 
+    $doc.keypress(function(e){
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault()
+        _this.stepOption(1);
+      }
+    });
+
     $doc.keydown(function(e) {
       switch(e.which) {
         case 38: // arrow up
@@ -93,10 +100,6 @@ var Controls = (function() {
         case 39: // arrow right
         case 68: // d
           _this.moveDirectionX = -1;
-          break;
-
-        case 32: // spacebar
-          _this.stepOption(1);
           break;
 
         default:
@@ -170,13 +173,13 @@ var Controls = (function() {
   Controls.prototype.loadMenus = function(){
     var _this = this;
 
-    _.each(this.opt.menus, function(menu, i){
-      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu, i);
-      else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu, i);
+    _.each(this.opt.menus, function(menu, key){
+      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu);
+      else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu);
     });
   };
 
-  Controls.prototype.loadRadioMenu = function(options, index){
+  Controls.prototype.loadRadioMenu = function(options){
     var html = '';
     html += '<div id="'+options.id+'" class="'+options.className+' menu">';
       if (options.label) {
@@ -193,7 +196,7 @@ var Controls = (function() {
     var $menu = $(html);
 
     // the first menu is the default menu
-    if (index <= 0) {
+    if (options.default) {
       this.$primaryOptions = $menu.find('input[type="radio"]');
     }
 

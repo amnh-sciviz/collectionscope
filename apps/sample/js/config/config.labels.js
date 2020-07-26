@@ -10,6 +10,8 @@ _.extend(CONFIG, {
       "fontSize": 9,
       "thickness": 1,
       "defaultView": "categoryTimeline",
+      "faceUp": true,
+      "faceEast": true,
       "src": "data/labels/categoryYears.json"
     },
     "countries": {

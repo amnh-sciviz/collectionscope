@@ -37,6 +37,7 @@ var LabelSet = (function() {
     var canvasWidth = this.opt.width;
     var canvasHeight = this.opt.height;
     var canvasDepth = this.opt.depth;
+    var faceOptions = _.pick(this.opt, 'faceUp', 'faceEast', 'faceWest');
 
     _.each(this.opt.labels, function(options){
       var p = options.position;
@@ -44,8 +45,9 @@ var LabelSet = (function() {
       var y = MathUtil.lerp(canvasHeight/2, -canvasHeight/2, p[1]);
       var z = MathUtil.lerp(-canvasDepth/2, canvasDepth/2, p[2]);
       options.position = [x, y, z];
-      var label = new Label(_.extend({}, options, {font: _this.font}));
+      var label = new Label(_.extend({}, faceOptions, options, {font: _this.font}));
       _this.container.add(label.getThree());
+      // _this.container.add(label.helper);
       labels.push(label);
     });
 

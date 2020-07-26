@@ -154,6 +154,7 @@ _.extend(CONFIG, {
         "type": "radioItems",
         "label": "Choose your layout",
         "className": "radio-buttons radio-buttons-views",
+        "default": true,
         "radioItems": [
           {
             "name": "change-view",

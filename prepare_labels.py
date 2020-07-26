@@ -70,7 +70,7 @@ def getCategoryYearLabels(userOptions={}):
     cfg = {}
     options = {
         "y": 0.667,
-        "labelEveryYearUnit": 10
+        "labelEveryYearUnit": 5
     }
     options.update(userOptions)
     yearCol = "year"
@@ -97,7 +97,7 @@ def getCategoryYearLabels(userOptions={}):
             continue
 
         y = options["y"]
-        z = mu.norm(year, (minYear, maxYear)) + nUnit*0.5 # center
+        z = mu.norm(year, (minYear, maxYear)) # beginning of year
 
         for j, category in enumerate(categorySet):
             x = 1.0 - 1.0 * j / (categoryCount-1)

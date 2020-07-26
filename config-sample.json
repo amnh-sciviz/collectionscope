@@ -78,7 +78,9 @@
     "categoryYears": {
       "fontSize": 9,
       "thickness": 1,
-      "defaultView": "categoryTimeline"
+      "defaultView": "categoryTimeline",
+      "faceUp": true,
+      "faceEast": true
     },
     "countries": {
       "fontSize": 8,
@@ -123,6 +125,7 @@
         "type": "radioItems",
         "label": "Choose your layout",
         "className": "radio-buttons radio-buttons-views",
+        "default": true,
         "radioItems": [
           {"name": "change-view", "value": "timeline", "label": "Timeline", "checked": true},
           {"name": "change-view", "value": "categoryTimeline", "label": "Regions over time"},

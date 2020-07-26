@@ -8,7 +8,10 @@ var Label = (function() {
       'position': [0, 0, 0],
       'color': '#ffffff',
       'size': 12,
-      'thickness': 2
+      'thickness': 2,
+      'faceUp': false,
+      'faceEast': false,
+      'faceWest': false
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -30,6 +33,7 @@ var Label = (function() {
     textMat.opacity = 0.0;
 
     textGeo.computeBoundingBox();
+    // textGeo.center();
     // textGeo.computeVertexNormals();
     // textGeo = new THREE.BufferGeometry().fromGeometry(textGeo);
 
@@ -38,14 +42,39 @@ var Label = (function() {
     // center the position
     var offsetX = 0.5 * (textGeo.boundingBox.max.x - textGeo.boundingBox.min.x);
     var offsetY = -(textGeo.boundingBox.max.y - textGeo.boundingBox.min.y);
+    var offsetZ = 0;
     var p = this.opt.position;
-    textMesh.position.set(p[0]+offsetX, p[1]+offsetY, p[2]);
+
+    if (this.opt.faceEast || this.opt.faceWest) {
+      offsetZ = -offsetX;
+      offsetX = 0;
+    }
+    if (this.opt.faceUp) {
+      if (this.opt.faceEast || this.opt.faceWest) {
+        offsetX = offsetY;
+      }
+      offsetY = 0;
+    }
+
+    textMesh.position.set(p[0]+offsetX, p[1]+offsetY, p[2]+offsetZ);
 
     // textMesh.rotation.x = Math.PI * 2;
     textMesh.rotation.y = Math.PI;
+    if (this.opt.faceUp) {
+      textMesh.rotation.x = Math.PI * 0.5;
+    }
+    if (this.opt.faceEast) {
+      textMesh.rotation.z = Math.PI * 0.5;
+    }
 
     this.material = textMat;
     this.mesh = textMesh;
+
+    // var geometry = new THREE.SphereGeometry( 5, 32, 32 );
+    // var material = new THREE.MeshBasicMaterial( {color: 0xffff00} );
+    // var sphere = new THREE.Mesh( geometry, material );
+    // sphere.position.set(p[0], p[1], p[2]);
+    // this.helper = sphere;
   };
 
   Label.prototype.getThree = function(){
