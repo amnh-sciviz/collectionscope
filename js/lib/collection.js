@@ -92,6 +92,7 @@ var Collection = (function() {
     var _this = this;
 
     this.loadContent();
+    this.loadKeys();
 
     $.when(
       this.loadLabels(),
@@ -114,6 +115,17 @@ var Collection = (function() {
     this.ui = this.opt.ui;
     this.views = this.opt.views;
     console.log('Loaded content.');
+  };
+
+  Collection.prototype.loadKeys = function(){
+    var _this = this;
+    var keys = {};
+    _.each(this.opt.ui.keys, function(keyOptions, keyValue){
+      var key = new Key(_.extend({}, keyOptions, {camera: _this.camera}));
+      keys[keyValue] = key;
+    });
+
+    this.keys = keys;
   };
 
   Collection.prototype.loadLabels = function(){
@@ -440,6 +452,10 @@ var Collection = (function() {
       set.update(now);
     });
 
+    _.each(this.keys, function(key, keyValue){
+      key.update(now);
+    });
+
     _.each(this.labelSets, function(labelSet, key){
       labelSet.update(now);
     });
@@ -475,6 +491,17 @@ var Collection = (function() {
     // update layout
     _.each(this.sets, function(set){
       set.updatePositions(newPositions, transitionDuration);
+    });
+
+    // update keys
+    var viewKeys = newView.keys ? newView.keys : [];
+    _.each(this.keys, function(key, keyValue){
+      var valid = _.indexOf(viewKeys, keyValue) >= 0;
+      if (valid && key.visible) return false;
+      else if (valid) {
+        key.setBounds(newView.bounds);
+        key.show();
+      } else key.hide();
     });
 
     // update labels

@@ -119,10 +119,10 @@ _.extend(CONFIG, {
         -1024
       ],
       "bounds": [
-        -8192,
-        8192,
         -4096,
-        4096
+        4096,
+        -2048,
+        2048
       ]
     }
   },
@@ -192,8 +192,704 @@ _.extend(CONFIG, {
       }
     },
     "keys": {
-      "map": {},
-      "years": {}
+      "map": {
+        "type": "map",
+        "image": "world_map_key_with_regions.png"
+      },
+      "years": {
+        "type": "timeline",
+        "items": [
+          {
+            "year": 1854,
+            "value": 159
+          },
+          {
+            "year": 1855,
+            "value": 0
+          },
+          {
+            "year": 1856,
+            "value": 0
+          },
+          {
+            "year": 1857,
+            "value": 0
+          },
+          {
+            "year": 1858,
+            "value": 0
+          },
+          {
+            "year": 1859,
+            "value": 0
+          },
+          {
+            "year": 1860,
+            "value": 0
+          },
+          {
+            "year": 1861,
+            "value": 0
+          },
+          {
+            "year": 1862,
+            "value": 0
+          },
+          {
+            "year": 1863,
+            "value": 0
+          },
+          {
+            "year": 1864,
+            "value": 0
+          },
+          {
+            "year": 1865,
+            "value": 0
+          },
+          {
+            "year": 1866,
+            "value": 0
+          },
+          {
+            "year": 1867,
+            "value": 0
+          },
+          {
+            "year": 1868,
+            "value": 0
+          },
+          {
+            "year": 1869,
+            "value": 0
+          },
+          {
+            "year": 1870,
+            "value": 0
+          },
+          {
+            "year": 1871,
+            "value": 0
+          },
+          {
+            "year": 1872,
+            "value": 0
+          },
+          {
+            "year": 1873,
+            "value": 0
+          },
+          {
+            "year": 1874,
+            "value": 0
+          },
+          {
+            "year": 1875,
+            "value": 0
+          },
+          {
+            "year": 1876,
+            "value": 0
+          },
+          {
+            "year": 1877,
+            "value": 0
+          },
+          {
+            "year": 1878,
+            "value": 0
+          },
+          {
+            "year": 1879,
+            "value": 0
+          },
+          {
+            "year": 1880,
+            "value": 2648
+          },
+          {
+            "year": 1881,
+            "value": 1
+          },
+          {
+            "year": 1882,
+            "value": 0
+          },
+          {
+            "year": 1883,
+            "value": 0
+          },
+          {
+            "year": 1884,
+            "value": 0
+          },
+          {
+            "year": 1885,
+            "value": 0
+          },
+          {
+            "year": 1886,
+            "value": 0
+          },
+          {
+            "year": 1887,
+            "value": 0
+          },
+          {
+            "year": 1888,
+            "value": 0
+          },
+          {
+            "year": 1889,
+            "value": 1
+          },
+          {
+            "year": 1890,
+            "value": 0
+          },
+          {
+            "year": 1891,
+            "value": 0
+          },
+          {
+            "year": 1892,
+            "value": 3180
+          },
+          {
+            "year": 1893,
+            "value": 2
+          },
+          {
+            "year": 1894,
+            "value": 3945
+          },
+          {
+            "year": 1895,
+            "value": 1142
+          },
+          {
+            "year": 1896,
+            "value": 3038
+          },
+          {
+            "year": 1897,
+            "value": 3478
+          },
+          {
+            "year": 1898,
+            "value": 5879
+          },
+          {
+            "year": 1899,
+            "value": 2998
+          },
+          {
+            "year": 1900,
+            "value": 4656
+          },
+          {
+            "year": 1901,
+            "value": 6542
+          },
+          {
+            "year": 1902,
+            "value": 8701
+          },
+          {
+            "year": 1903,
+            "value": 5163
+          },
+          {
+            "year": 1904,
+            "value": 3841
+          },
+          {
+            "year": 1905,
+            "value": 5904
+          },
+          {
+            "year": 1906,
+            "value": 1252
+          },
+          {
+            "year": 1907,
+            "value": 6219
+          },
+          {
+            "year": 1908,
+            "value": 2394
+          },
+          {
+            "year": 1909,
+            "value": 4703
+          },
+          {
+            "year": 1910,
+            "value": 13059
+          },
+          {
+            "year": 1911,
+            "value": 2875
+          },
+          {
+            "year": 1912,
+            "value": 2785
+          },
+          {
+            "year": 1913,
+            "value": 759
+          },
+          {
+            "year": 1914,
+            "value": 1414
+          },
+          {
+            "year": 1915,
+            "value": 5757
+          },
+          {
+            "year": 1916,
+            "value": 2039
+          },
+          {
+            "year": 1917,
+            "value": 961
+          },
+          {
+            "year": 1918,
+            "value": 1771
+          },
+          {
+            "year": 1919,
+            "value": 583
+          },
+          {
+            "year": 1920,
+            "value": 734
+          },
+          {
+            "year": 1921,
+            "value": 699
+          },
+          {
+            "year": 1922,
+            "value": 606
+          },
+          {
+            "year": 1923,
+            "value": 1764
+          },
+          {
+            "year": 1924,
+            "value": 533
+          },
+          {
+            "year": 1925,
+            "value": 426
+          },
+          {
+            "year": 1926,
+            "value": 1110
+          },
+          {
+            "year": 1927,
+            "value": 654
+          },
+          {
+            "year": 1928,
+            "value": 2046
+          },
+          {
+            "year": 1929,
+            "value": 2262
+          },
+          {
+            "year": 1930,
+            "value": 2412
+          },
+          {
+            "year": 1931,
+            "value": 2849
+          },
+          {
+            "year": 1932,
+            "value": 3183
+          },
+          {
+            "year": 1933,
+            "value": 3067
+          },
+          {
+            "year": 1934,
+            "value": 4050
+          },
+          {
+            "year": 1935,
+            "value": 383
+          },
+          {
+            "year": 1936,
+            "value": 9055
+          },
+          {
+            "year": 1937,
+            "value": 2132
+          },
+          {
+            "year": 1938,
+            "value": 753
+          },
+          {
+            "year": 1939,
+            "value": 2427
+          },
+          {
+            "year": 1940,
+            "value": 2524
+          },
+          {
+            "year": 1941,
+            "value": 262
+          },
+          {
+            "year": 1942,
+            "value": 854
+          },
+          {
+            "year": 1943,
+            "value": 2755
+          },
+          {
+            "year": 1944,
+            "value": 1391
+          },
+          {
+            "year": 1945,
+            "value": 373
+          },
+          {
+            "year": 1946,
+            "value": 2700
+          },
+          {
+            "year": 1947,
+            "value": 1542
+          },
+          {
+            "year": 1948,
+            "value": 799
+          },
+          {
+            "year": 1949,
+            "value": 927
+          },
+          {
+            "year": 1950,
+            "value": 1629
+          },
+          {
+            "year": 1951,
+            "value": 3954
+          },
+          {
+            "year": 1952,
+            "value": 1246
+          },
+          {
+            "year": 1953,
+            "value": 2134
+          },
+          {
+            "year": 1954,
+            "value": 2337
+          },
+          {
+            "year": 1955,
+            "value": 759
+          },
+          {
+            "year": 1956,
+            "value": 1248
+          },
+          {
+            "year": 1957,
+            "value": 3253
+          },
+          {
+            "year": 1958,
+            "value": 2079
+          },
+          {
+            "year": 1959,
+            "value": 1537
+          },
+          {
+            "year": 1960,
+            "value": 1147
+          },
+          {
+            "year": 1961,
+            "value": 3842
+          },
+          {
+            "year": 1962,
+            "value": 1547
+          },
+          {
+            "year": 1963,
+            "value": 3023
+          },
+          {
+            "year": 1964,
+            "value": 1854
+          },
+          {
+            "year": 1965,
+            "value": 783
+          },
+          {
+            "year": 1966,
+            "value": 669
+          },
+          {
+            "year": 1967,
+            "value": 1170
+          },
+          {
+            "year": 1968,
+            "value": 973
+          },
+          {
+            "year": 1969,
+            "value": 1496
+          },
+          {
+            "year": 1970,
+            "value": 1570
+          },
+          {
+            "year": 1971,
+            "value": 1075
+          },
+          {
+            "year": 1972,
+            "value": 557
+          },
+          {
+            "year": 1973,
+            "value": 2696
+          },
+          {
+            "year": 1974,
+            "value": 659
+          },
+          {
+            "year": 1975,
+            "value": 373
+          },
+          {
+            "year": 1976,
+            "value": 753
+          },
+          {
+            "year": 1977,
+            "value": 242
+          },
+          {
+            "year": 1978,
+            "value": 329
+          },
+          {
+            "year": 1979,
+            "value": 487
+          },
+          {
+            "year": 1980,
+            "value": 1042
+          },
+          {
+            "year": 1981,
+            "value": 2420
+          },
+          {
+            "year": 1982,
+            "value": 257
+          },
+          {
+            "year": 1983,
+            "value": 1652
+          },
+          {
+            "year": 1984,
+            "value": 3181
+          },
+          {
+            "year": 1985,
+            "value": 210
+          },
+          {
+            "year": 1986,
+            "value": 122
+          },
+          {
+            "year": 1987,
+            "value": 71
+          },
+          {
+            "year": 1988,
+            "value": 664
+          },
+          {
+            "year": 1989,
+            "value": 268
+          },
+          {
+            "year": 1990,
+            "value": 544
+          },
+          {
+            "year": 1991,
+            "value": 224
+          },
+          {
+            "year": 1992,
+            "value": 721
+          },
+          {
+            "year": 1993,
+            "value": 111
+          },
+          {
+            "year": 1994,
+            "value": 315
+          },
+          {
+            "year": 1995,
+            "value": 89
+          },
+          {
+            "year": 1996,
+            "value": 291
+          },
+          {
+            "year": 1997,
+            "value": 174
+          },
+          {
+            "year": 1998,
+            "value": 270
+          },
+          {
+            "year": 1999,
+            "value": 621
+          },
+          {
+            "year": 2000,
+            "value": 964
+          },
+          {
+            "year": 2001,
+            "value": 161
+          },
+          {
+            "year": 2002,
+            "value": 225
+          },
+          {
+            "year": 2003,
+            "value": 242
+          },
+          {
+            "year": 2004,
+            "value": 95
+          },
+          {
+            "year": 2005,
+            "value": 111
+          },
+          {
+            "year": 2006,
+            "value": 198
+          },
+          {
+            "year": 2007,
+            "value": 198
+          },
+          {
+            "year": 2008,
+            "value": 92
+          },
+          {
+            "year": 2009,
+            "value": 257
+          },
+          {
+            "year": 2010,
+            "value": 306
+          },
+          {
+            "year": 2011,
+            "value": 53
+          },
+          {
+            "year": 2012,
+            "value": 134
+          },
+          {
+            "year": 2013,
+            "value": 281
+          },
+          {
+            "year": 2014,
+            "value": 170
+          },
+          {
+            "year": 2015,
+            "value": 50
+          },
+          {
+            "year": 2016,
+            "value": 268
+          },
+          {
+            "year": 2017,
+            "value": 88
+          },
+          {
+            "year": 2018,
+            "value": 21
+          }
+        ]
+      },
+      "regions": {
+        "type": "legend",
+        "items": [
+          {
+            "text": "Africa",
+            "color": "#7aa030"
+          },
+          {
+            "text": "Asia",
+            "color": "#726aa4"
+          },
+          {
+            "text": "Mexico &amp; Central America",
+            "color": "#d37200"
+          },
+          {
+            "text": "North America",
+            "color": "#d6a900"
+          },
+          {
+            "text": "Pacific",
+            "color": "#529c99"
+          },
+          {
+            "text": "South America",
+            "color": "#b13734"
+          }
+        ]
+      }
     },
     "overlays": {
       "map": {

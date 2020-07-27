@@ -68,7 +68,7 @@
       "overlays": ["map"],
       "width": 8192, "height": 2048, "depth": 4096,
       "cameraPosition": [0, 256, -1024],
-      "bounds": [-8192, 8192, -4096, 4096]
+      "bounds": [-4096, 4096, -2048, 2048]
     }
   },
 
@@ -139,8 +139,24 @@
     },
 
     "keys": {
-      "map": {},
-      "years": {}
+      "map": {
+        "type": "map",
+        "image": "world_map_key_with_regions.png"
+      },
+      "years": {
+        "type": "timeline"
+      },
+      "regions": {
+        "type": "legend",
+        "items": [
+          {"text": "Africa", "color": "#7aa030"},
+          {"text": "Asia", "color": "#726aa4"},
+          {"text": "Mexico &amp; Central America", "color": "#d37200"},
+          {"text": "North America", "color": "#d6a900"},
+          {"text": "Pacific", "color": "#529c99"},
+          {"text": "South America", "color": "#b13734"}
+        ]
+      }
     },
 
     "overlays": {

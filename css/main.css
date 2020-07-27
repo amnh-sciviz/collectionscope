@@ -3,6 +3,13 @@ body {
   color: white;
   font: 18px sans-serif;
 }
+.visuallyHidden {
+  position: absolute !important;
+  height: 1px; width: 1px;
+  overflow: hidden;
+  clip: rect(1px 1px 1px 1px); /* IE6, IE7 */
+  clip: rect(1px, 1px, 1px, 1px);
+}
 .app {
   position: absolute;
   top: 0;
@@ -48,26 +55,28 @@ body {
 
 .menu {
   box-sizing: border-box;
-  width: 100%;
+  width: auto;
   position: absolute;
   z-index: 100;
-  background: rgba(0,0,0,0.9);
-  padding: 10px 20px 20px;
+  background: rgba(20, 46, 87,0.9);
+  padding: 10px;
   opacity: 0;
   animation: fadeIn ease 2s;
   animation-fill-mode: forwards;
+  border: 2px solid #666;
 }
 .menu h2 {
-  margin: 0 0 1.5rem;
+  margin: 0 0 0.8rem;
   line-height: 1;
-  font-size: 1.333rem;
+  font-size: 1.2rem;
   font-weight: normal;
   color: #ccc;
 }
 .radio-button-form label {
-  padding: 10px 25px 10px 15px;
+  padding: 5px 10px 5px 6px;
   position: relative;
   display: inline-block;
+  font-size: 1.1rem;
 }
 .radio-button-form input[type="radio"],
 .radio-button-form span {
@@ -82,7 +91,7 @@ body {
   width: 100%;
   height: 100%;
   background: #7a2323;
-  border-radius: 10px;
+  border-radius: 5px;
   display: none;
   z-index: 0;
 }
@@ -91,8 +100,10 @@ input[type="radio"]:checked ~ .checked-bg {
 }
 
 .menu.radio-buttons {
-  left: 0;
-  bottom: 0;
+  width: 500px;
+  right: 10px;
+  bottom: 10px;
+  height: 87px;
 }
 
 .camera-nav {
@@ -159,6 +170,126 @@ input[type="radio"]:checked ~ .checked-bg {
 }
 .instructions.active {
   display: block;
+}
+
+.key {
+  position: absolute;
+  z-index: 100;
+  display: none;
+  opacity: 0;
+  transition: opacity 1s;
+  bottom: 97px;
+  right: 10px;
+  background: rgba(0,0,0,0.9);
+  padding: 5px;
+  border: 2px solid #666;
+  border-bottom: none;
+  width: 500px;
+  box-sizing: border-box;
+}
+.key.active {
+  display: block;
+  opacity: 1;
+}
+.key .marker {
+  position: absolute;
+}
+.legend.key {
+  bottom: auto;
+  top: 10px;
+  width: auto;
+  max-width: 90%;
+  height: auto;
+  border: 2px solid #666;
+}
+.legend-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+}
+.legend-list li {
+  margin: 0;
+  padding: 3px 6px;
+  white-space: nowrap;
+}
+.legend-list span {
+  display: inline-block;
+  vertical-align: middle;
+}
+.legend-list span.color {
+  width: 30px;
+  height: 30px;
+}
+.map.key {
+  height: 250px;
+  padding: 0;
+}
+.map.key img {
+  display: block;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+}
+.map.key .marker {
+  width: 20px;
+  height: 20px;
+  margin-left: -10px;
+  margin-top: -10px;
+  border: 3px solid white;
+  border-radius: 50%;
+}
+.timeline.key {
+  width: 500px;
+}
+.timeline-wrapper {
+  position: relative;
+  overflow: hidden;
+}
+.timeline-data {
+  list-style: none;
+  width: 100%;
+  height: 120px;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: flex-end;
+}
+.timeline-data li {
+  background: #888;
+  flex-grow: 1;
+}
+.timeline-wrapper .domain {
+  position: absolute;
+  bottom: 1px;
+  left: 1px;
+  white-space: nowrap;
+  font-size: 0.8rem;
+  text-align: left;
+}
+.timeline-wrapper .domain.year-end {
+  left: auto;
+  right: 1px;
+  text-align: right;
+}
+.timeline-wrapper .marker {
+  width: 4px;
+  height: 80%;
+  background: white;
+  bottom: 0;
+}
+.timeline-wrapper .marker-label {
+  position: absolute;
+  top: -20px;
+  left: 50%;
+  width: 100px;
+  margin-left: -50px;
+  text-align: center;
+  white-space: nowrap;
 }
 
 @keyframes fadeIn {
