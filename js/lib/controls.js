@@ -10,7 +10,8 @@ var Controls = (function() {
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
       "latRange": [-85, 85],  // range of field of view in y-axis
-      "lonRange": [-60, 60] // range of field of view in x-axis
+      "lonRange": [-60, 60], // range of field of view in x-axis
+      "disableInputDuration": 500
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -55,8 +56,12 @@ var Controls = (function() {
     var isTouch = this.isTouch;
     var $doc = $(document);
 
-    $('input[type="radio"]').on('change', function(e) {
-      _this.onRadioMenuChange($(this));
+    $('input[type="radio"]').on('click', function(e) {
+      var result = _this.onRadioMenuChange($(this));
+      if (result === false) {
+        e.preventDefault();
+        return false;
+      }
     });
 
     $('.move-button').each(function(){
@@ -181,15 +186,19 @@ var Controls = (function() {
 
   Controls.prototype.loadRadioMenu = function(options){
     var html = '';
+    var currentOptionIndex = 0;
     html += '<div id="'+options.id+'" class="'+options.className+' menu">';
       if (options.label) {
         html += '<h2>'+options.label+':</h2>';
       }
       html += '<form class="radio-button-form">';
       _.each(options.radioItems, function(item, i){
+        var type = options.parseType || 'string';
         var id = item.name + (i+1);
         var checked = item.checked ? 'checked' : '';
-        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+options.parseType+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
+        var isPrimary = options.default ? '1' : '0';
+        if (item.checked) currentOptionIndex = i;
+        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+type+'" data-index="'+i+'" data-primary="'+isPrimary+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
       });
       html += '</form>';
     html += '</div>';
@@ -197,6 +206,7 @@ var Controls = (function() {
 
     // the first menu is the default menu
     if (options.default) {
+      this.currentOptionIndex = currentOptionIndex;
       this.$primaryOptions = $menu.find('input[type="radio"]');
     }
 
@@ -208,9 +218,25 @@ var Controls = (function() {
   };
 
   Controls.prototype.onRadioMenuChange = function($input){
+    var now = new Date().getTime();
+    if (this.lastRadioChangeTime) {
+      var delta = now - this.lastRadioChangeTime;
+      if (delta < this.opt.disableInputDuration) {
+        console.log('Too soon');
+        return false;
+      }
+    }
+    this.lastRadioChangeTime = now;
+
     var name = $input.attr('name');
     var value = $input.val();
     var parseType = $input.attr('data-type');
+    var index = parseInt($input.attr('data-index'));
+    var isPrimary = parseInt($input.attr('data-primary'));
+
+    if (isPrimary > 0) {
+      this.currentOptionIndex = index;
+    }
 
     if (parseType==='int') value = parseInt(value);
     else if (parseType==='float') value = parseFloat(value);
@@ -225,6 +251,7 @@ var Controls = (function() {
 
     // console.log('Triggering event "change-'+name+'" with value "'+value+'"');
     $(document).trigger(name, value);
+    return true;
   };
 
   Controls.prototype.onResize = function(){
@@ -239,12 +266,23 @@ var Controls = (function() {
   Controls.prototype.stepOption = function(step){
     if (!this.$primaryOptions || !this.$primaryOptions.length) return;
 
-    var currentOptionIndex = this.$primaryOptions.index(this.$primaryOptions.filter(':checked')) + step;
+    var currentOptionIndex = this.currentOptionIndex + step;
     if (currentOptionIndex < 0) currentOptionIndex = this.$primaryOptions.length-1;
     else if (currentOptionIndex >= this.$primaryOptions.length) currentOptionIndex = 0;
 
+    // this.currentOptionIndex = currentOptionIndex;
+    // this.isManualOptionChange = true;
+
+    // console.log('Step to option:' + currentOptionIndex);
+    // this.$primaryOptions.each(function(i){
+    //   if (i===currentOptionIndex) $(this).prop('checked', true);
+    //   else $(this).prop('checked', false);
+    // });
     this.$primaryOptions.eq(currentOptionIndex).prop('checked', true);
-    this.$primaryOptions.eq(currentOptionIndex).trigger('change');
+    this.$primaryOptions.eq(currentOptionIndex).focus();
+    this.onRadioMenuChange(this.$primaryOptions.eq(currentOptionIndex));
+
+    // this.$primaryOptions.eq(currentOptionIndex).trigger('change');
   };
 
   Controls.prototype.update = function(now, delta){
