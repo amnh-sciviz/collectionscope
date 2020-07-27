@@ -1,7 +1,7 @@
 _.extend(CONFIG, {
   "labels": {
     "years": {
-      "fontSize": 12,
+      "fontSize": 16,
       "thickness": 2,
       "defaultView": "timeline",
       "src": "data/labels/years.json"

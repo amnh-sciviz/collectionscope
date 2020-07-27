@@ -67,8 +67,12 @@ _.extend(CONFIG, {
         "years",
         "categoryYears"
       ],
+      "overlays": [
+        "regions"
+      ],
       "keys": [
-        "years"
+        "years",
+        "regions"
       ],
       "sounds": [
         "yearLabels"
@@ -97,7 +101,8 @@ _.extend(CONFIG, {
         "viewOptions"
       ],
       "keys": [
-        "map"
+        "map",
+        "regions"
       ],
       "labels": [
         "countries"
@@ -191,7 +196,28 @@ _.extend(CONFIG, {
       "years": {}
     },
     "overlays": {
-      "map": {}
+      "map": {
+        "type": "plane",
+        "width": 8192,
+        "height": 4096,
+        "image": "world_map_with_regions.png",
+        "offset": [
+          0,
+          -20,
+          0
+        ]
+      },
+      "regions": {
+        "type": "plane",
+        "width": 1360,
+        "height": 65536,
+        "image": "regions.png",
+        "offset": [
+          0,
+          -128,
+          0
+        ]
+      }
     }
   }
 });

@@ -16,6 +16,10 @@ var Collection = (function() {
     this.listener = this.opt.listener;
     this.currentViewKey = 'random';
     this.minAlpha = this.opt.ui.minAlpha;
+
+    this.labelSets = {};
+    this.overlays = {};
+    this.soundSets = {};
   };
 
   Collection.prototype.filter = function(prop, value){
@@ -77,6 +81,8 @@ var Collection = (function() {
     totalToLoad += _.reduce(this.opt.textures, function(memo, t){ return memo + t.assets.length; }, 0);
     // load labels
     totalToLoad += _.keys(this.opt.labels).length;
+    // load overlays
+    totalToLoad += 1;
     // load sounds
     totalToLoad += _.keys(this.opt.sounds).length;
     return totalToLoad;
@@ -90,6 +96,7 @@ var Collection = (function() {
     $.when(
       this.loadLabels(),
       this.loadMetadata(),
+      this.loadOverlays(),
       this.loadPositions(),
       this.loadSets(),
       this.loadSounds(),
@@ -210,6 +217,30 @@ var Collection = (function() {
       console.log('Loaded metadata: '+_this.metadata.length);
       deferred.resolve();
     });
+    return deferred;
+  };
+
+  Collection.prototype.loadOverlays = function(){
+    var _this = this;
+    var overlayPromises = [];
+    var overlays = {};
+    _.each(this.opt.ui.overlays, function(options, key){
+      var overlay = new Overlay(options);
+      var deferred = overlay.load();
+      overlays[key] = overlay;
+      overlayPromises.push(deferred);
+    });
+
+    var deferred = $.Deferred();
+    if (overlayPromises.length < 1) deferred.resolve();
+    else {
+      $.when.apply(null, overlayPromises).done(function() {
+        _this.opt.onLoadProgress();
+        console.log('Loaded overlays');
+        _this.overlays = overlays;
+        deferred.resolve();
+      });
+    }
     return deferred;
   };
 
@@ -395,6 +426,10 @@ var Collection = (function() {
       container.add(labelSet.getThree());
     });
 
+    _.each(this.overlays, function(overlay, key){
+      container.add(overlay.getThree());
+    });
+
     this.container = container;
 
     this.loadListeners();
@@ -407,6 +442,10 @@ var Collection = (function() {
 
     _.each(this.labelSets, function(labelSet, key){
       labelSet.update(now);
+    });
+
+    _.each(this.overlays, function(overlay, key){
+      overlay.update(now);
     });
 
     _.each(this.soundSets, function(soundSet){
@@ -447,6 +486,15 @@ var Collection = (function() {
       else labelSet.hide(transitionDuration);
     });
 
+    // update overlays
+    var viewOverlays = newView.overlays ? newView.overlays : [];
+    _.each(this.overlays, function(overlay, key){
+      var valid = _.indexOf(viewOverlays, key) >= 0;
+      if (valid && overlay.visible) return false;
+      else if (valid) overlay.show(transitionDuration);
+      else overlay.hide(transitionDuration);
+    });
+
     // update sounds
     var viewSounds = newView.sounds ? newView.sounds : [];
     _.each(this.soundSets, function(soundSet, key){
@@ -461,7 +509,7 @@ var Collection = (function() {
 
     // TODO: update keys
 
-    // TODO: update overlays
+
   };
 
   return Collection;

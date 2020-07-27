@@ -63,7 +63,7 @@
       "layout": "geographyBars",
       "controls": ["firstPerson"],
       "menus": ["viewOptions"],
-      "keys": ["map"],
+      "keys": ["map", "regions"],
       "labels": ["countries"],
       "overlays": ["map"],
       "width": 8192, "height": 2048, "depth": 4096,
@@ -74,7 +74,7 @@
 
   "labels": {
     "years": {
-      "fontSize": 12,
+      "fontSize": 16,
       "thickness": 2,
       "defaultView": "timeline"
     },
@@ -144,8 +144,18 @@
     },
 
     "overlays": {
-      "map": {},
-      "regions": {}
+      "map": {
+        "type": "plane",
+        "width": 8192, "height": 4096,
+        "image": "world_map_with_regions.png",
+        "offset": [0, -20, 0]
+      },
+      "regions": {
+        "type": "plane",
+        "width": 1360, "height": 65536,
+        "image": "regions.png",
+        "offset": [0, -128, 0]
+      }
     }
   },
 
