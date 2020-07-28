@@ -53,10 +53,41 @@ body {
   display: block;
 }
 
+.top-right-ui,
+.bottom-right-ui {
+  position: absolute;
+  right: 10px;
+}
+.top-right-ui {
+  top: 10px;
+  max-width: 90%;
+}
+.bottom-right-ui {
+  bottom: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: flex-end;
+}
+.toggle-controls {
+  padding: 0 0.4rem;
+  background: #ccc;
+  color: black;
+  border: none;
+  position: absolute;
+  height: 30px;
+  line-height: 30px;
+  top: -30px;
+  right: 0;
+  font-weight: bold;
+}
+.is-loading .toggle-controls {
+  display: none;
+}
+
 .menu {
   box-sizing: border-box;
   width: auto;
-  position: absolute;
   z-index: 100;
   background: rgba(20, 46, 87,0.9);
   padding: 10px;
@@ -64,6 +95,13 @@ body {
   animation: fadeIn ease 2s;
   animation-fill-mode: forwards;
   border: 2px solid #666;
+
+}
+.bottom-right-ui .menu {
+  display: none;
+}
+.bottom-right-ui.active .menu {
+  display: block;
 }
 .menu h2 {
   margin: 0 0 0.8rem;
@@ -101,9 +139,6 @@ input[type="radio"]:checked ~ .checked-bg {
 
 .menu.radio-buttons {
   width: 500px;
-  right: 10px;
-  bottom: 10px;
-  height: 87px;
 }
 
 .camera-nav {
@@ -173,13 +208,11 @@ input[type="radio"]:checked ~ .checked-bg {
 }
 
 .key {
-  position: absolute;
   z-index: 100;
   display: none;
   opacity: 0;
-  transition: opacity 1s;
-  bottom: 97px;
-  right: 10px;
+  animation: fadeIn ease 2s;
+  animation-fill-mode: forwards;
   background: rgba(0,0,0,0.9);
   padding: 5px;
   border: 2px solid #666;
@@ -189,17 +222,19 @@ input[type="radio"]:checked ~ .checked-bg {
 }
 .key.active {
   display: block;
-  opacity: 1;
 }
+.bottom-right-ui .key.active {
+  display: none;
+}
+.bottom-right-ui.active .key.active {
+  display: block;
+}
+
 .key .marker {
   position: absolute;
 }
 .legend.key {
-  bottom: auto;
-  top: 10px;
   width: auto;
-  max-width: 90%;
-  height: auto;
   border: 2px solid #666;
 }
 .legend-list {
@@ -223,8 +258,10 @@ input[type="radio"]:checked ~ .checked-bg {
   height: 30px;
 }
 .map.key {
-  height: 250px;
+  width: 400px;
+  height: 200px;
   padding: 0;
+  position: relative;
 }
 .map.key img {
   display: block;

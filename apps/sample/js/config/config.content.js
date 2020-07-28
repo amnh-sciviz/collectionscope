@@ -162,6 +162,7 @@ _.extend(CONFIG, {
     "minAlpha": 0.0,
     "menus": {
       "viewOptions": {
+        "parent": "#bottom-right-ui",
         "id": "radio-buttons-views",
         "type": "radioItems",
         "label": "Choose your layout",
@@ -864,6 +865,7 @@ _.extend(CONFIG, {
       },
       "regions": {
         "type": "legend",
+        "parent": "#top-right-ui",
         "items": [
           {
             "text": "Africa",

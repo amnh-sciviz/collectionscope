@@ -14,7 +14,7 @@
 
 <body>
 
-  <div id="app" class="app">
+  <div id="app" class="app is-loading">
     <div class="loading">
       <h2>Loading assets and data...</h2>
       <div class="loading-bar">
@@ -26,6 +26,10 @@
       <button class="move-button" data-direction="1" aria-label="Move camera forward">⇧</button>
       <button class="move-button" data-direction="-1" aria-label="Move camera backward">⇩</button>
     </nav>
+    <div id="top-right-ui" class="top-right-ui"></div>
+    <div id="bottom-right-ui" class="bottom-right-ui active">
+      <button class="toggle-controls active" data-on="Minimize" data-off="Maximize">Minimize</button>
+    </div>
   </div>
 
   <div id="instructions" class="instructions">

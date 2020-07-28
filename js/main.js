@@ -147,6 +147,7 @@ var MainApp = (function() {
       _this.$el.addClass('loaded');
       _this.controls.load();
       _this.collection.onFinishedStart();
+      _this.$el.removeClass('is-loading');
     }, 100);
   };
 

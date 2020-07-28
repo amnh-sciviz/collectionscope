@@ -125,6 +125,7 @@
 
     "menus": {
       "viewOptions": {
+        "parent": "#bottom-right-ui",
         "id": "radio-buttons-views",
         "type": "radioItems",
         "label": "Choose your layout",
@@ -149,6 +150,7 @@
       },
       "regions": {
         "type": "legend",
+        "parent": "#top-right-ui",
         "items": [
           {"text": "Africa", "color": "#7aa030"},
           {"text": "Asia", "color": "#726aa4"},

@@ -172,6 +172,10 @@ var Controls = (function() {
         _this.pointerY = e.center.y;
       });
     }
+
+    $('.toggle-controls').on('click', function(){
+      _this.toggleControls($(this));
+    });
   };
 
   Controls.prototype.loadMenus = function(){
@@ -209,7 +213,11 @@ var Controls = (function() {
       this.$primaryOptions = $menu.find('input[type="radio"]');
     }
 
-    this.$el.append($menu);
+    if (options.parent) {
+      $(options.parent).append($menu);
+    } else {
+      this.$el.append($menu);
+    }
   };
 
   Controls.prototype.loadSliderMenu = function(options){
@@ -282,6 +290,19 @@ var Controls = (function() {
     this.onRadioMenuChange(this.$primaryOptions.eq(currentOptionIndex));
 
     // this.$primaryOptions.eq(currentOptionIndex).trigger('change');
+  };
+
+  Controls.prototype.toggleControls = function($button){
+    $button.toggleClass('active');
+    var isActive = $button.hasClass('active');
+
+    var newText = isActive ? $button.attr('data-on') : $button.attr('data-off');
+    var $parent = $button.parent();
+
+    $button.text(newText);
+
+    if (isActive) $parent.addClass('active');
+    else $parent.removeClass('active');
   };
 
   Controls.prototype.update = function(now, delta){

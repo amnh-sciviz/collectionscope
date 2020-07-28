@@ -3,7 +3,7 @@
 var Key = (function() {
 
   Key.defaultValues = {
-    'parent': '#app',
+    'parent': '#bottom-right-ui',
     'type': 'legend',
     'imageDir': '../../img/',
     'camera': false,
@@ -45,7 +45,7 @@ var Key = (function() {
       html += '</ul>';
     html += '</div>';
     this.$el = $(html);
-    this.$parent.append(this.$el);
+    this.$parent.prepend(this.$el);
   };
 
   Key.prototype.loadMap = function(){
@@ -58,7 +58,7 @@ var Key = (function() {
     html += '</div>';
     this.$el = $(html);
     this.$marker = this.$el.find('.marker').first();
-    this.$parent.append(this.$el);
+    this.$parent.prepend(this.$el);
   };
 
   Key.prototype.loadTimeline = function(){
@@ -84,7 +84,7 @@ var Key = (function() {
     this.$el = $(html);
     this.$marker = this.$el.find('.marker').first();
     this.$markerLabel = this.$marker.find('.marker-label').first();
-    this.$parent.append(this.$el);
+    this.$parent.prepend(this.$el);
     this.dataHeight = this.$el.find('.timeline-data').first().height();
   };
 
