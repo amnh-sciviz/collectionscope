@@ -158,6 +158,7 @@ _.extend(CONFIG, {
   "ui": {
     "startTransitionDuration": 5000,
     "transitionDuration": 3000,
+    "componentTransitionDuration": 500,
     "minAlpha": 0.0,
     "menus": {
       "viewOptions": {

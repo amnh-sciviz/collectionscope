@@ -10,8 +10,7 @@ var Controls = (function() {
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
       "latRange": [-85, 85],  // range of field of view in y-axis
-      "lonRange": [-60, 60], // range of field of view in x-axis
-      "disableInputDuration": 500
+      "lonRange": [-60, 60] // range of field of view in x-axis
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -221,8 +220,8 @@ var Controls = (function() {
     var now = new Date().getTime();
     if (this.lastRadioChangeTime) {
       var delta = now - this.lastRadioChangeTime;
-      if (delta < this.opt.disableInputDuration) {
-        console.log('Too soon');
+      if (delta < (this.opt.transitionDuration+this.opt.componentTransitionDuration)) {
+        console.log('Requesting change too soon');
         return false;
       }
     }

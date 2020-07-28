@@ -399,9 +399,9 @@ var Collection = (function() {
   };
 
   Collection.prototype.onFinishedStart = function(){
-    _.each(this.soundSets, function(soundSet, key){
-      soundSet.active = true;
-    });
+    // _.each(this.soundSets, function(soundSet, key){
+    //   soundSet.active = true;
+    // });
   };
 
   Collection.prototype.onReady = function(){
@@ -482,6 +482,8 @@ var Collection = (function() {
     if (newValue === this.currentViewKey) return;
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
 
+    if (this.changeViewComponentsTimeout) clearTimeout(this.changeViewComponentsTimeout);
+
     var _this = this;
     var newView = this.views[newValue];
     var newPositions = this.positions[newView.layout];
@@ -493,9 +495,23 @@ var Collection = (function() {
       set.updatePositions(newPositions, transitionDuration);
     });
 
+    this.updateViewComponents(newView, this.opt.ui.componentTransitionDuration, true);
+
+    // update components after finished changing positions to avoid overloading graphics
+    this.changeViewComponentsTimeout = setTimeout(function(){
+      _this.updateViewComponents(newView, _this.opt.ui.componentTransitionDuration, false);
+    }, transitionDuration);
+
+  };
+
+  Collection.prototype.updateViewComponents = function(newView, transitionDuration, hide){
     // update keys
     var viewKeys = newView.keys ? newView.keys : [];
     _.each(this.keys, function(key, keyValue){
+      if (hide && key.visible) {
+        key.hide();
+        return;
+      } else if (hide) return;
       var valid = _.indexOf(viewKeys, keyValue) >= 0;
       if (valid && key.visible) return false;
       else if (valid) {
@@ -507,6 +523,10 @@ var Collection = (function() {
     // update labels
     var viewLabels = newView.labels ? newView.labels : [];
     _.each(this.labelSets, function(labelSet, key){
+      if (hide && labelSet.visible) {
+        labelSet.hide(transitionDuration);
+        return;
+      } else if (hide) return;
       var valid = _.indexOf(viewLabels, key) >= 0;
       if (valid && labelSet.visible) return false;
       else if (valid) labelSet.show(transitionDuration);
@@ -516,6 +536,10 @@ var Collection = (function() {
     // update overlays
     var viewOverlays = newView.overlays ? newView.overlays : [];
     _.each(this.overlays, function(overlay, key){
+      if (hide && overlay.visible) {
+        overlay.hide(transitionDuration);
+        return;
+      } else if (hide) return;
       var valid = _.indexOf(viewOverlays, key) >= 0;
       if (valid && overlay.visible) return false;
       else if (valid) overlay.show(transitionDuration);
@@ -525,6 +549,10 @@ var Collection = (function() {
     // update sounds
     var viewSounds = newView.sounds ? newView.sounds : [];
     _.each(this.soundSets, function(soundSet, key){
+      if (hide && soundSet.active) {
+        soundSet.active = false;
+        return;
+      } else if (hide) return;
       var valid = _.indexOf(viewLabels, key) >= 0;
       if (valid) soundSet.active = true;
       else soundSet.active = false;
@@ -533,10 +561,6 @@ var Collection = (function() {
     // TODO: update menus
 
     // TODO: update controls
-
-    // TODO: update keys
-
-
   };
 
   return Collection;
