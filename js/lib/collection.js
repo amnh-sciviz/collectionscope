@@ -17,6 +17,15 @@ var Collection = (function() {
     this.currentViewKey = 'random';
     this.minAlpha = this.opt.ui.minAlpha;
 
+    this.content = this.opt.content;
+    this.ui = this.opt.ui;
+
+    var views = this.opt.views;
+    _.each(views, function(view, key){
+      views[key].key = key;
+    })
+    this.views = views;
+
     this.labelSets = {};
     this.overlays = {};
     this.soundSets = {};
@@ -111,16 +120,38 @@ var Collection = (function() {
 
   Collection.prototype.loadContent = function(){
     var _this = this;
-    this.content = this.opt.content;
-    this.ui = this.opt.ui;
-    this.views = this.opt.views;
+    var stories = {};
+    var views = this.opt.views;
+
+    var markerTexture = new THREE.TextureLoader().load("../../img/marker.png");
+
+    _.each(this.content, function(content, contentKey){
+      if (!content.html) return;
+      var hotspots = {};
+      _.each(views, function(view, viewKey){
+        if (!view.hotspots) return;
+        _.each(view.hotspots, function(hotspot, hotspotKey){
+          if (hotspotKey == contentKey) {
+            hotspots[viewKey] = _.extend({}, view, hotspot);
+          }
+        });
+      });
+      if (_.isEmpty(hotspots)) {
+        console.log('No hotspots found for '+contentKey);
+        return;
+      }
+      var story = new Story(_.extend({}, content, {'hotspots': hotspots, 'markerTexture': markerTexture}));
+      stories[contentKey] = story;
+    });
+
+    this.stories = stories;
     console.log('Loaded content.');
   };
 
   Collection.prototype.loadKeys = function(){
     var _this = this;
     var keys = {};
-    _.each(this.opt.ui.keys, function(keyOptions, keyValue){
+    _.each(this.opt.keys, function(keyOptions, keyValue){
       var key = new Key(_.extend({}, keyOptions, {camera: _this.camera}));
       keys[keyValue] = key;
     });
@@ -236,7 +267,7 @@ var Collection = (function() {
     var _this = this;
     var overlayPromises = [];
     var overlays = {};
-    _.each(this.opt.ui.overlays, function(options, key){
+    _.each(this.opt.overlays, function(options, key){
       var overlay = new Overlay(options);
       var deferred = overlay.load();
       overlays[key] = overlay;
@@ -370,7 +401,7 @@ var Collection = (function() {
       });
     }
     return deferred;
-  },
+  };
 
   Collection.prototype.loadTextures = function(){
     var _this = this;
@@ -441,6 +472,16 @@ var Collection = (function() {
     _.each(this.overlays, function(overlay, key){
       container.add(overlay.getThree());
     });
+
+    var hotspotGroup = new THREE.Group();
+    _.each(this.stories, function(story, contentKey){
+      story.updateView(_this.currentViewKey);
+      _.each(story.hotspots, function(hotspot, viewKey){
+        hotspotGroup.add(hotspot.object);
+      });
+    });
+    container.add(hotspotGroup);
+    this.hotspotGroup = hotspotGroup;
 
     this.container = container;
 
@@ -556,6 +597,23 @@ var Collection = (function() {
       var valid = _.indexOf(viewLabels, key) >= 0;
       if (valid) soundSet.active = true;
       else soundSet.active = false;
+    });
+
+    // update stories
+    var viewContent = newView.content ? newView.content : [];
+    _.each(this.stories, function(story, key){
+      if (hide) {
+        story.hide();
+        story.hideHotspots();
+        return;
+      }
+      var valid = _.indexOf(viewContent, key) >= 0;
+      if (valid) {
+        story.updateView(newView.key);
+      } else {
+        story.hide();
+        story.hideHotspots();
+      }
     });
 
     // TODO: update menus

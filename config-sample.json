@@ -55,6 +55,7 @@
       "overlays": ["regions"],
       "keys": ["years", "regions"],
       "sounds": ["yearLabels"],
+      "content": ["laufer", "lumholtz"],
       "width": 1024, "height": 512, "depth": 65536,
       "cameraPosition": [0, 256, -17080],
       "bounds": [-256, 256, -32768, 32768]
@@ -100,20 +101,88 @@
     "laufer": {
       "query": "Donor CONTAINS Laufer AND Country CONTAINS China AND Acquisition Year < 1910",
       "visibleTimeRange": [1900, 1905],
-      "image": "https://lbry-web-007.amnh.org/digital/files/thumbnails/cd198760f782344a393abae73444b7d8.jpg",
-      "imageCaption": "Sacred dance of five lamas, China",
-      "imageCaptionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29130",
+      "country": "China",
+      "category": "Asia",
+      "images": [
+        {
+          "url": "img/content/laufer/laufer_29130.jpg",
+          "caption": "Sacred dance of five lamas, China",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29130"
+        },{
+          "url": "img/content/laufer/laufer_40283.jpg",
+          "caption": "Mask, papier mache, Tibet",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/40283"
+        },{
+          "url": "img/content/laufer/laufer_29058.jpg",
+          "caption": "Eating rice, China",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29058"
+        },{
+          "url": "img/content/laufer/laufer_44325.jpg",
+          "caption": "Chinese shadow puppet, White Snake, character from Buddhist play series",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/44325"
+        },{
+          "url": "img/content/laufer/laufer_44493.jpg",
+          "caption": "Mask, Tibetan, collected by Berthold Laufer in China, 1903",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/44493"
+        },{
+          "url": "img/content/laufer/laufer_29128.jpg",
+          "caption": "Stairs to Temple of Heaven, Peking, China",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29128"
+        },{
+          "url": "img/content/laufer/laufer_29117.jpg",
+          "caption": "Actors in costume, China",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29117"
+        },{
+          "url": "img/content/laufer/laufer_29056.jpg",
+          "caption": "Barber braiding queue, China",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29056"
+        }
+      ],
       "title": "Laufer China Expedition",
-      "html": "<p>Berthold Laufer led an expedition to China between 1901 and 1904. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>"
+      "html": "<p>Berthold Laufer led an expedition to China between 1901 and 1904. Over 6,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>"
     },
     "lumholtz": {
       "query": "Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1902",
       "visibleTimeRange": [1890, 1897],
-      "image": "https://lbry-web-007.amnh.org/digital/files/thumbnails/05d7c86dfd3d1eaba0b26ce30555e17a.jpg",
-      "imageCaption": "Tarahumara women, Guadalupe, Chihuahua, 1892",
-      "imageCaptionUrl": "https://lbry-web-007.amnh.org/digital/items/show/18793",
+      "country": "Mexico",
+      "category": "Mexico And Central America",
+      "images": [
+        {
+          "url": "img/content/lumholtz/lumholtz_18793.jpg",
+          "caption": "Tarahumara women, Guadalupe, Chihuahua, 1892",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/18793"
+        },{
+          "url": "img/content/lumholtz/lumholtz_39342.jpg",
+          "caption": "Pseudo-cloisonne style jar, ceramic, Hacienda Estanzuela, West Mexico",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/39342"
+        },{
+          "url": "img/content/lumholtz/lumholtz_27127.jpg",
+          "caption": "Pima men, Mexico, 1890-1898",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/27127"
+        },{
+          "url": "img/content/lumholtz/lumholtz_55575.jpg",
+          "caption": "Men travelling on donkeys and horseback, Mexico, [1890-1898]",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/55575"
+        },{
+          "url": "img/content/lumholtz/lumholtz_30190.jpg",
+          "caption": "Tarahumara man, Mexico, 1890-1898",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/30190"
+        },{
+          "url": "img/content/lumholtz/lumholtz_27237.jpg",
+          "caption": "Shield, cane and yarn, Mexico, 1890-1898",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/27237"
+        },{
+          "url": "img/content/lumholtz/lumholtz_26190.jpg",
+          "caption": "Stone disc with design, Mexico",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/26190"
+        },{
+          "url": "img/content/lumholtz/lumholtz_19275.jpg",
+          "caption": "Man riding donkey, Nonoava, Chihuahua, 1892",
+          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/19275"
+        }
+      ],
       "title": "Lumholtz Mexico Expeditions",
-      "html": "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>"
+      "html": "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. Over 5,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>"
     }
   },
 
@@ -121,60 +190,60 @@
     "startTransitionDuration": 5000,
     "transitionDuration": 3000,
     "componentTransitionDuration": 500,
-    "minAlpha": 0.0,
+    "minAlpha": 0.0
+  },
 
-    "menus": {
-      "viewOptions": {
-        "parent": "#bottom-right-ui",
-        "id": "radio-buttons-views",
-        "type": "radioItems",
-        "label": "Choose your layout",
-        "className": "radio-buttons radio-buttons-views",
-        "default": true,
-        "radioItems": [
-          {"name": "change-view", "value": "random", "label": "Random", "checked": true},
-          {"name": "change-view", "value": "timeline", "label": "Timeline"},
-          {"name": "change-view", "value": "categoryTimeline", "label": "Regions over time"},
-          {"name": "change-view", "value": "map", "label": "Map"}
-        ]
-      }
+  "menus": {
+    "viewOptions": {
+      "parent": "#bottom-right-ui",
+      "id": "radio-buttons-views",
+      "type": "radioItems",
+      "label": "Choose your layout",
+      "className": "radio-buttons radio-buttons-views",
+      "default": true,
+      "radioItems": [
+        {"name": "change-view", "value": "random", "label": "Random", "checked": true},
+        {"name": "change-view", "value": "timeline", "label": "Timeline"},
+        {"name": "change-view", "value": "map", "label": "Map"},
+        {"name": "change-view", "value": "categoryTimeline", "label": "Regions over time"}
+      ]
+    }
+  },
+
+  "keys": {
+    "map": {
+      "type": "map",
+      "image": "world_map_key_with_regions.png"
     },
-
-    "keys": {
-      "map": {
-        "type": "map",
-        "image": "world_map_key_with_regions.png"
-      },
-      "years": {
-        "type": "timeline"
-      },
-      "regions": {
-        "type": "legend",
-        "parent": "#top-right-ui",
-        "items": [
-          {"text": "Africa", "color": "#7aa030"},
-          {"text": "Asia", "color": "#726aa4"},
-          {"text": "Mexico &amp; Central America", "color": "#d37200"},
-          {"text": "North America", "color": "#d6a900"},
-          {"text": "Pacific", "color": "#529c99"},
-          {"text": "South America", "color": "#b13734"}
-        ]
-      }
+    "years": {
+      "type": "timeline"
     },
+    "regions": {
+      "type": "legend",
+      "parent": "#top-right-ui",
+      "items": [
+        {"text": "Africa", "color": "#7aa030"},
+        {"text": "Asia", "color": "#726aa4"},
+        {"text": "Mexico &amp; Central America", "color": "#d37200"},
+        {"text": "North America", "color": "#d6a900"},
+        {"text": "Pacific", "color": "#529c99"},
+        {"text": "South America", "color": "#b13734"}
+      ]
+    }
+  },
 
-    "overlays": {
-      "map": {
-        "type": "plane",
-        "width": 8192, "height": 4096,
-        "image": "world_map_with_regions.png",
-        "offset": [0, -20, 0]
-      },
-      "regions": {
-        "type": "plane",
-        "width": 1360, "height": 65536,
-        "image": "regions.png",
-        "offset": [0, -128, 0]
-      }
+  "overlays": {
+    "map": {
+      "type": "plane",
+      "width": 8192, "height": 4096,
+      "image": "world_map_with_regions.png",
+      "offset": [0, -20, 0]
+    },
+    "regions": {
+      "type": "plane",
+      "width": 1360, "height": 65536,
+      "image": "regions.png",
+      "offset": [0, -128, 0]
     }
   },
 

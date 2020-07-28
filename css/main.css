@@ -53,23 +53,35 @@ body {
   display: block;
 }
 
-.top-right-ui,
-.bottom-right-ui {
+.bottom-ui,
+.top-right-ui {
   position: absolute;
   right: 10px;
+}
+.bottom-ui {
+  bottom: 10px;
+  left: 10px;
+  width: auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
 }
 .top-right-ui {
   top: 10px;
   max-width: 90%;
 }
 .bottom-right-ui {
-  bottom: 10px;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
   align-items: flex-end;
+  position: relative;
 }
-.toggle-controls {
+.bottom-left-ui {
+  margin-right: 10px;
+  flex-grow: 1;
+}
+.toggle-button {
   padding: 0 0.4rem;
   background: #ccc;
   color: black;
@@ -81,7 +93,7 @@ body {
   right: 0;
   font-weight: bold;
 }
-.is-loading .toggle-controls {
+.is-loading .toggle-button {
   display: none;
 }
 
@@ -328,6 +340,37 @@ input[type="radio"]:checked ~ .checked-bg {
   margin-left: -50px;
   text-align: center;
   white-space: nowrap;
+}
+
+.story {
+  display: none;
+  opacity: 0;
+  animation: fadeIn ease 2s;
+  animation-fill-mode: forwards;
+  background: rgba(0,0,0,0.9);
+  padding: 5px;
+  border: 2px solid #666;
+  box-sizing: border-box;
+  color: #ddd;
+  position: relative;
+}
+.story.active {
+  display: block;
+}
+.story h3,
+.story p {
+  margin: 0 0 10px;
+  line-height: 1.4;
+}
+.story a {
+  color: white;
+  text-decoration: underline;
+}
+.story img {
+  display: inline-block;
+  height: 100px;
+  width: auto;
+  margin: 0 10px 0 0;
 }
 
 @keyframes fadeIn {
