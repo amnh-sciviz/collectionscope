@@ -126,7 +126,8 @@ var Geometry = (function() {
     this.threeGeometry = geom;
   };
 
-  Geometry.prototype.getPositions = function(positionOptions) {
+  Geometry.prototype.getPositions = function(positionOptions, multiplier) {
+    multiplier = multiplier || 1.0;
     // filter and map positions
     var layout = positionOptions.layout;
 
@@ -163,7 +164,7 @@ var Geometry = (function() {
 
       // random point in sphere if sphere layout
       if (layout === 'spheres') {
-        var radius = MathUtil.lerp(canvasHeight/20, canvasHeight/2, allPositions[index][1]);
+        var radius = MathUtil.lerp(canvasHeight/20, canvasHeight/2, allPositions[index][1]) * multiplier;
         var newPoint = MathUtil.randomPointInSphere([x, z, 0], radius);
         x = newPoint[0];
         z = newPoint[1];
@@ -173,7 +174,7 @@ var Geometry = (function() {
       } else if (layout === 'bars') {
         var minRadius = Math.max(canvasHeight/120, 1);
         var minHeight = Math.max(canvasHeight/60, 1);
-        var radius = MathUtil.lerp(minRadius, canvasHeight/6, allPositions[index][1]);
+        var radius = MathUtil.lerp(minRadius, canvasHeight/6, allPositions[index][1]) * multiplier;
         var height = MathUtil.lerp(minHeight, canvasHeight, allPositions[index][1]);
         var newPoint = MathUtil.randomPointInCylinder([x, z, 0], radius, height);
         x = newPoint[0];
@@ -203,30 +204,29 @@ var Geometry = (function() {
 
     var alphaArr = fromAttr.array;
     var alphaDestArr = toAttr.array;
-    var maxInstancedCount = this.threeGeometry.maxInstancedCount;
 
-    for (var i=0; i<maxInstancedCount; i++) {
+    _.each(this.opt.indices, function(index, i){
       if (fromAlpha === false) alphaArr[i] = alphaDestArr[i];
       else if (fromIsNumber) alphaArr[i] = fromAlpha;
-      else alphaArr[i] = fromAlpha[i];
+      else alphaArr[i] = fromAlpha[index];
 
       if (toIsNumber) alphaDestArr[i] = toAlpha;
-      else alphaDestArr[i] = toAlpha[i];
-    }
+      else alphaDestArr[i] = toAlpha[index];
+    });
 
     fromAttr.needsUpdate = true;
     toAttr.needsUpdate = true;
     renderNeeded = true;
   };
 
-  Geometry.prototype.updatePositions = function(positionOptions, transitionDuration){
+  Geometry.prototype.updatePositions = function(positionOptions, transitionDuration, multiplier){
     // console.log(positionOptions, transitionDuration)
     var fromAttr = this.attributeLookup['translate'];
     var toAttr = this.attributeLookup['translateDest'];
 
     var translateArr = fromAttr.array;
     var translateDestArr = toAttr.array;
-    var positions = this.getPositions(positionOptions);
+    var positions = this.getPositions(positionOptions, multiplier);
     var maxInstancedCount = this.threeGeometry.maxInstancedCount;
 
     for (var i=0; i<maxInstancedCount; i++) {

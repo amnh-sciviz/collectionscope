@@ -47,7 +47,7 @@ var Collection = (function() {
 
     // reset alpha
     if (value === false) {
-      this.updateAlpha(false, 1.0);
+      this.resetFilters();
       return;
     }
 
@@ -61,6 +61,26 @@ var Collection = (function() {
       }
     });
     this.updateAlpha(false, toAlphaValues);
+  };
+
+  Collection.prototype.filterBySet = function(setKey, transitionDuration){
+    transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
+    var sets = this.opt.sets;
+    if (!_.has(sets, setKey)) {
+      console.log('No set key found in sets:'+setKey)
+      return;
+    }
+
+    var indices = sets[setKey].values;
+    var _this = this;
+    var toAlphaValues = new Float32Array(this.metadata.length);
+    _.each(this.metadata, function(item, i){
+      toAlphaValues[i] = _this.minAlpha;
+    });
+    _.each(indices, function(index, i){
+      toAlphaValues[index] = 1.0;
+    })
+    this.updateAlpha(false, toAlphaValues, transitionDuration);
   };
 
   Collection.prototype.getCurrentView = function(key){
@@ -467,13 +487,11 @@ var Collection = (function() {
     _.each(this.opt.sets, function(set, key){
       if (key !== 'default') return;
       var setPositions = _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]);
-      var setContent = _.has(_this.content, key) ? _this.content[key] : _this.content.default;
       var setTextures = _.has(_this.textures, key) ? _this.textures[key] : _this.textures.default;
       var set = new Set({
         'metadata': _this.metadata,
         'indices': set.values,
         'positions': setPositions,
-        'content': setContent,
         'textures': setTextures
       });
       sets[key] = set;
@@ -504,6 +522,11 @@ var Collection = (function() {
     this.loadListeners();
   };
 
+  Collection.prototype.resetFilters = function(transitionDuration){
+    transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
+    this.updateAlpha(false, 1.0, transitionDuration);
+  };
+
   Collection.prototype.selectHotspot = function(uuid){
     _.each(this.stories, function(story, contentKey){
       story.selectHotspot(uuid);
@@ -511,41 +534,57 @@ var Collection = (function() {
   };
 
   Collection.prototype.triggerSelectedHotspot = function(forceClose){
-    var openedStory = false;
-    var closedStory = false;
+    var _this = this;
+    var openedStoryKey = false;
+    var closedStoryKey = false;
 
     _.each(this.stories, function(story, contentKey){
       // force everything to close
       if (forceClose && story.visible) {
         story.hide();
-        if (closedStory === false) closedStory = story;
+        if (closedStoryKey === false) closedStoryKey = contentKey;
         return;
       }
       // show a story
       if (story.isSelected() & !story.visible) {
         story.show();
-        if (openedStory === false) openedStory = story;
+        if (openedStoryKey === false) openedStoryKey = contentKey;
         return;
       }
       // hide a story
       if (!story.isSelected() && story.visible) {
         story.hide();
-        if (closedStory === false) closedStory = story;
+        if (closedStoryKey === false) closedStoryKey = contentKey;
         return;
       }
     });
 
-    if (openedStory !== false) {
+    var transitionDuration = Math.round(this.opt.ui.transitionDuration / 2);
+    var view = this.views[this.currentViewKey];
+    if (openedStoryKey !== false) {
       // apply filters
+      this.filterBySet(openedStoryKey, transitionDuration);
+      // hide hotspots
+      _.each(this.stories, function(story, key){
+        story.hideHotspots();
+      });
       // adjust positions
-      // hide labels
-      // hide overlays
-      // hide ui
-    } else if (closedStory !== false) {
-      // show overlays
-      // show labels
-      // show ui
+      if (this.updatePositionTimeout) clearTimeout(this.updatePositionTimeout);
+      this.updatePositionTimeout = setTimeout(function(){
+        _this.updatePositions(view, transitionDuration, 4.0);
+      }, transitionDuration);
+
+    } else if (closedStoryKey !== false) {
+      // adjust positions
+      this.updatePositions(view, transitionDuration, 1.0);
       // reset filters
+      this.resetFilters(transitionDuration);
+      // show hotspots
+      var viewContent = view.content ? view.content : [];
+      _.each(this.stories, function(story, key){
+        if (_.indexOf(viewContent, key) >= 0) story.updateView(view.key);
+      });
+
     }
 
   };
@@ -581,6 +620,16 @@ var Collection = (function() {
     })
   };
 
+  Collection.prototype.updatePositions = function(newView, transitionDuration, multiplier) {
+    if (this.updatePositionTimeout) clearTimeout(this.updatePositionTimeout);
+    var newPositions = this.positions[newView.layout];
+    newPositions = _.extend({}, _.pick(newView, 'width', 'height', 'depth'), newPositions);
+    // update layout
+    _.each(this.sets, function(set){
+      set.updatePositions(newPositions, transitionDuration, multiplier);
+    });
+  };
+
   Collection.prototype.updateView = function(newValue, transitionDuration){
     if (newValue === this.currentViewKey) return;
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
@@ -589,15 +638,9 @@ var Collection = (function() {
 
     var _this = this;
     var newView = this.views[newValue];
-    var newPositions = this.positions[newView.layout];
-    newPositions = _.extend({}, _.pick(newView, 'width', 'height', 'depth'), newPositions);
     this.currentViewKey = newValue;
 
-    // update layout
-    _.each(this.sets, function(set){
-      set.updatePositions(newPositions, transitionDuration);
-    });
-
+    this.updatePositions(newView, transitionDuration, 1.0);
     this.updateViewComponents(newView, this.opt.ui.componentTransitionDuration, true);
 
     // update components after finished changing positions to avoid overloading graphics

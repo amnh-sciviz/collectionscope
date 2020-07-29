@@ -20,7 +20,7 @@ var Set = (function() {
     this.container = new THREE.Group();
 
     // check if we have everything we need
-    this.isValid = this.opt.content && this.opt.metadata && this.opt.positions && this.opt.textures;
+    this.isValid = this.opt.metadata && this.opt.positions && this.opt.textures;
     if (!this.isValid) {
       console.log('Invalid set');
       return;
@@ -69,9 +69,9 @@ var Set = (function() {
     });
   };
 
-  Set.prototype.updatePositions = function(newPositions, transitionDuration){
+  Set.prototype.updatePositions = function(newPositions, transitionDuration, multiplier){
     _.each(this.meshes, function(mesh){
-      mesh.updatePositions(newPositions, transitionDuration);
+      mesh.updatePositions(newPositions, transitionDuration, multiplier);
     });
   };
 

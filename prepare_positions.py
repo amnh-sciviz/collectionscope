@@ -78,9 +78,9 @@ def getTimelineTunnelLayout(userOptions={}):
             angle =  mu.randomUniform(0, 360, seed=count+7)
             distance =  mu.randomUniform(0.5-nThickness, 0.5, seed=count+9)
             x, y =  mu.translatePoint(x, y, distance, angle)
-            values[count*dimensions] = round(x, PRECISION)
-            values[count*dimensions+1] = round(y, PRECISION)
-            values[count*dimensions+2] = round(z, PRECISION)
+            values[index*dimensions] = round(x, PRECISION)
+            values[index*dimensions+1] = round(y, PRECISION)
+            values[index*dimensions+2] = round(z, PRECISION)
             count += 1
     values = values.tolist()
     return (cfg, values)

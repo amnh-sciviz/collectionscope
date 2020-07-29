@@ -41,8 +41,8 @@ var Mesh = (function() {
     this.material.transitionAlpha(transitionDuration);
   };
 
-  Mesh.prototype.updatePositions = function(newPositions, transitionDuration){
-    this.geometry.updatePositions(newPositions, transitionDuration);
+  Mesh.prototype.updatePositions = function(newPositions, transitionDuration, multiplier){
+    this.geometry.updatePositions(newPositions, transitionDuration, multiplier);
     this.material.transitionPosition(transitionDuration);
   };
 
