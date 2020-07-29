@@ -31,6 +31,12 @@ var Collection = (function() {
     this.soundSets = {};
   };
 
+  Collection.prototype.deselectHotspots = function(){
+    _.each(this.stories, function(story, contentKey){
+      story.deselectHotspots();
+    });
+  };
+
   Collection.prototype.filter = function(prop, value){
     if (!this.metaCols || !this.metaCols.length || this.metaCols.indexOf(prop) < 0) {
       console.log("Invalid property "+prop);
@@ -244,6 +250,16 @@ var Collection = (function() {
     $(document).on('filter-property', function(e, propertyName, newValue) {
       console.log('Filtering '+propertyName+' to '+newValue);
       _this.filter(propertyName, newValue);
+    });
+
+    $(document).on('select-hotspot', function(e, uuid){
+      console.log('Select hotspot: '+uuid);
+      _this.selectHotspot(uuid);
+    });
+
+    $(document).on('deselect-hotspots', function(e, value){
+      console.log('Deselect hotspots');
+      _this.deselectHotspots();
     });
   };
 
@@ -486,6 +502,12 @@ var Collection = (function() {
     this.container = container;
 
     this.loadListeners();
+  };
+
+  Collection.prototype.selectHotspot = function(uuid){
+    _.each(this.stories, function(story, contentKey){
+      story.selectHotspot(uuid);
+    });
   };
 
   Collection.prototype.update = function(now){

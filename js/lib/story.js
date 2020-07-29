@@ -22,6 +22,14 @@ var Story = (function() {
     this.loadHotspots();
   };
 
+  Story.prototype.deselectHotspots = function(){
+    var _this = this;
+    _.each(this.hotspots, function(hotspot, viewKey){
+      hotspot.material.color.set(0xffffff);
+      _this.hotspots[viewKey].selected = false;
+    });
+  };
+
   Story.prototype.hide = function(){
     this.$el.removeClass('active');
     this.visible = false;
@@ -58,7 +66,8 @@ var Story = (function() {
       sprite.scale.set(200, 200, 1);
       hotspots[viewKey] = {
         object: sprite,
-        material: spriteMaterial
+        material: spriteMaterial,
+        selected: false
       };
     });
     this.hotspots = hotspots;
@@ -80,6 +89,19 @@ var Story = (function() {
     html += '</div>';
     this.$el = $(html);
     this.$parent.append(this.$el);
+  };
+
+  Story.prototype.selectHotspot = function(uuid){
+    var _this = this;
+    _.each(this.hotspots, function(hotspot, viewKey){
+      if (hotspot.object.uuid == uuid) {
+        hotspot.material.color.setHSL(0.5, 0.9, 0.9);
+        _this.hotspots[viewKey].selected = true;
+      } else {
+        hotspot.material.color.set(0xffffff);
+        _this.hotspots[viewKey].selected = false;
+      }
+    });
   };
 
   Story.prototype.show = function(){

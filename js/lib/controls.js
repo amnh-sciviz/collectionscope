@@ -36,11 +36,17 @@ var Controls = (function() {
     this.loaded = false;
 
     // for determining what the camera is looking at
-    this.pointerX = false;
-    this.pointerY = false;
+    this.pointed = false;
+    this.pointer = new THREE.Vector2();
+    this.npointer = new THREE.Vector2();
     this.lat = 0;
     this.lon = 0;
     this.onResize();
+
+    // for tracking hotspots
+    this.hotspotGroup = this.opt.hotspotGroup;
+    this.raycaster = new THREE.Raycaster();
+    this.hotspotSelected = false;
   };
 
   Controls.prototype.load = function(){
@@ -160,16 +166,20 @@ var Controls = (function() {
 
     $doc.on("mousemove", function(e){
       if (isTouch) return;
-      _this.pointerX = e.pageX;
-      _this.pointerY = e.pageY;
+      _this.pointed = true;
+      _this.pointer.x = e.pageX;
+      _this.pointer.y = e.pageY;
+      _this.normalizePointer();
     });
 
     if (isTouch) {
       var el = this.$el[0];
       var mc = new Hammer(el);
       mc.on("panmove", function(e) {
-        _this.pointerX = e.center.x;
-        _this.pointerY = e.center.y;
+        _this.pointed = true;
+        _this.pointer.x = e.center.x;
+        _this.pointer.x = e.center.y;
+        _this.normalizePointer();
       });
     }
 
@@ -222,6 +232,11 @@ var Controls = (function() {
 
   Controls.prototype.loadSliderMenu = function(options){
 
+  };
+
+  Controls.prototype.normalizePointer = function(){
+    this.npointer.x = ( this.pointer.x / window.innerWidth ) * 2 - 1;
+    this.npointer.y = -( this.pointer.y / window.innerHeight ) * 2 + 1;
   };
 
   Controls.prototype.onRadioMenuChange = function($input){
@@ -312,10 +327,12 @@ var Controls = (function() {
     this.updateAxis('Y');
 
     // move camera direction based on pointer
-    if (this.pointerX === false || this.pointerY === false || delta <= 0) return;
+    if (this.pointed === false || delta <= 0) return;
 
-    var x = this.pointerX - this.viewHalfX;
-    var y = this.pointerY - this.viewHalfY;
+    this.updateHotspots();
+
+    var x = this.pointer.x - this.viewHalfX;
+    var y = this.pointer.y - this.viewHalfY;
     var prevLat = this.lat;
     var prevLon = this.lon;
     var actualLookSpeed = delta * this.opt.lookSpeed;
@@ -370,6 +387,43 @@ var Controls = (function() {
         // console.log(newX)
       }
       renderNeeded = true;
+    }
+  };
+
+  Controls.prototype.updateHotspots = function(){
+    var _this = this;
+    var activeHotspot = _.find(this.hotspotGroup.children, function(obj){ return obj.visible; });
+
+    if (!activeHotspot) {
+      if (this.hotspotSelected !== false) {
+        this.hotspotSelected = false;
+        $(document).trigger('deselect-hotspots', [true]);
+      }
+      return;
+    }
+
+    // https://threejs.org/docs/#api/en/core/Raycaster
+    // update the picking ray with the camera and mouse position
+    this.raycaster.setFromCamera(this.npointer, this.camera);
+    var intersects = this.raycaster.intersectObjects(this.hotspotGroup.children);
+
+    if (intersects.length < 1) {
+      if (this.hotspotSelected !== false) {
+        this.hotspotSelected = false;
+        $(document).trigger('deselect-hotspots', [true]);
+      }
+      return;
+    }
+
+    var match = intersects[0];
+    if (intersects.length > 1) {
+      var sorted = _.sortBy(intersects, function(entry){ return entry.object.position.distanceTo(_this.camera.position); });
+      match = sorted[0];
+    }
+
+    if (match.object.uuid !== this.hotspotSelected) {
+      this.hotspotSelected = match.object.uuid;
+      $(document).trigger('select-hotspot', [match.object.uuid]);
     }
   };
 
