@@ -138,30 +138,29 @@ var Controls = (function() {
       }
     });
 
-    $doc.on('mousedown', 'canvas', function(e) {
-      if (isTouch) return;
-      switch (e.which) {
-        // left mouse
-        case 1:
-          _this.moveDirectionY = 1;
-          break;
-        // right mouse
-        case 3:
-          e.preventDefault();
-          _this.moveDirectionY = -1;
-          break;
-        default:
-          break;
-      }
-    });
+    // $doc.on('mousedown', 'canvas', function(e) {
+    //   if (isTouch) return;
+    //   switch (e.which) {
+    //     // left mouse
+    //     case 1:
+    //       _this.moveDirectionY = 1;
+    //       break;
+    //     // right mouse
+    //     case 3:
+    //       e.preventDefault();
+    //       _this.moveDirectionY = -1;
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // });
+    // $doc.on('mouseup', 'canvas', function(e) {
+    //   if (isTouch) return;
+    //   _this.moveDirectionY = 0;
+    // });
 
     $doc.on('contextmenu', 'canvas', function(e) {
       e.preventDefault();
-    });
-
-    $doc.on('mouseup', 'canvas', function(e) {
-      if (isTouch) return;
-      _this.moveDirectionY = 0;
     });
 
     $doc.on("mousemove", function(e){

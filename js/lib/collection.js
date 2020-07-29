@@ -510,6 +510,46 @@ var Collection = (function() {
     });
   };
 
+  Collection.prototype.triggerSelectedHotspot = function(forceClose){
+    var openedStory = false;
+    var closedStory = false;
+
+    _.each(this.stories, function(story, contentKey){
+      // force everything to close
+      if (forceClose && story.visible) {
+        story.hide();
+        if (closedStory === false) closedStory = story;
+        return;
+      }
+      // show a story
+      if (story.isSelected() & !story.visible) {
+        story.show();
+        if (openedStory === false) openedStory = story;
+        return;
+      }
+      // hide a story
+      if (!story.isSelected() && story.visible) {
+        story.hide();
+        if (closedStory === false) closedStory = story;
+        return;
+      }
+    });
+
+    if (openedStory !== false) {
+      // apply filters
+      // adjust positions
+      // hide labels
+      // hide overlays
+      // hide ui
+    } else if (closedStory !== false) {
+      // show overlays
+      // show labels
+      // show ui
+      // reset filters
+    }
+
+  };
+
   Collection.prototype.update = function(now){
     _.each(this.sets, function(set, key){
       set.update(now);

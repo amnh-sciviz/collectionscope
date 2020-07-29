@@ -25,7 +25,8 @@ var Story = (function() {
   Story.prototype.deselectHotspots = function(){
     var _this = this;
     _.each(this.hotspots, function(hotspot, viewKey){
-      hotspot.material.color.set(0xffffff);
+      // hotspot.material.color.set(0xffffff);
+      hotspot.material.opacity = 0.5;
       _this.hotspots[viewKey].selected = false;
     });
   };
@@ -41,6 +42,14 @@ var Story = (function() {
     });
   };
 
+  Story.prototype.isSelected = function(){
+    var selected = false;
+    _.each(this.hotspots, function(hotspot, viewKey){
+      if (hotspot.selected) selected = true;
+    });
+    return selected;
+  };
+
   Story.prototype.loadHotspots = function(){
     if (!this.opt.markerTexture) {
       console.log('Pass in markerTexture to Story');
@@ -52,7 +61,7 @@ var Story = (function() {
     _.each(this.opt.hotspots, function(options, viewKey){
       var spriteMaterial = new THREE.SpriteMaterial({ map: _this.opt.markerTexture });
       spriteMaterial.transparent = true;
-      // spriteMaterial.opacity = 0.0;
+      spriteMaterial.opacity = 0.5;
       var sprite = new THREE.Sprite(spriteMaterial);
       var w = options.width;
       var h = options.height;
@@ -85,7 +94,7 @@ var Story = (function() {
       });
       html += '</div>';
     }
-    html += '<button class="close-story toggle-button">Close<button>';
+    html += '<button class="close-story toggle-button">Close</button>';
     html += '</div>';
     this.$el = $(html);
     this.$parent.append(this.$el);
@@ -95,10 +104,12 @@ var Story = (function() {
     var _this = this;
     _.each(this.hotspots, function(hotspot, viewKey){
       if (hotspot.object.uuid == uuid) {
-        hotspot.material.color.setHSL(0.5, 0.9, 0.9);
+        // hotspot.material.color.setHSL(0.5, 0.9, 0.9);
+        hotspot.material.opacity = 1.0;
         _this.hotspots[viewKey].selected = true;
       } else {
-        hotspot.material.color.set(0xffffff);
+        // hotspot.material.color.set(0xffffff);
+        hotspot.material.opacity = 0.5;
         _this.hotspots[viewKey].selected = false;
       }
     });

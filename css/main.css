@@ -366,10 +366,14 @@ input[type="radio"]:checked ~ .checked-bg {
   color: white;
   text-decoration: underline;
 }
+.story .images {
+  display: flex;
+  flex-wrap: wrap;
+}
 .story img {
-  display: inline-block;
-  height: 100px;
+  height: auto;
   width: auto;
+  max-height: 100px;
   margin: 0 10px 0 0;
 }
 

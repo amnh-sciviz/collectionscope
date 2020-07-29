@@ -37,12 +37,22 @@ var MainApp = (function() {
 
   MainApp.prototype.loadListeners = function(){
     var _this = this;
+    var $doc = $(document);
+
     $(window).on('resize', function(){
       _this.onResize();
     });
 
-    $(document).on('change-view', function(e, newValue, duration) {
+    $doc.on('change-view', function(e, newValue, duration) {
       _this.onChangeView(newValue);
+    });
+
+    $doc.on('click', 'canvas', function(e) {
+      _this.collection && _this.collection.triggerSelectedHotspot();
+    });
+
+    $doc.on('click', '.close-story', function(e) {
+      _this.collection && _this.collection.triggerSelectedHotspot(true);
     });
 
     $('.start').on('click', function(e){

@@ -242,11 +242,6 @@ _.extend(CONFIG, {
           "url": "img/content/lumholtz/lumholtz_26190.jpg",
           "caption": "Stone disc with design, Mexico",
           "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/26190"
-        },
-        {
-          "url": "img/content/lumholtz/lumholtz_19275.jpg",
-          "caption": "Man riding donkey, Nonoava, Chihuahua, 1892",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/19275"
         }
       ],
       "title": "Lumholtz Mexico Expeditions",
