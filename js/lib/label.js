@@ -7,7 +7,7 @@ var Label = (function() {
       'text': 'Default text',
       'position': [0, 0, 0],
       'color': '#ffffff',
-      'size': 12,
+      'fontSize': 12,
       'thickness': 2,
       'faceUp': false,
       'faceEast': false,
@@ -23,14 +23,20 @@ var Label = (function() {
       return;
     }
 
-    var textMat = new THREE.MeshBasicMaterial({ color: this.opt.color });
+    var textMat = [
+      new THREE.MeshBasicMaterial( { color: this.opt.color } ), // front
+      new THREE.MeshBasicMaterial( { color: 0x000000 } ) // side
+    ];
+    // var textMat = new THREE.MeshBasicMaterial({ color: this.opt.color });
     var textGeo = new THREE.TextGeometry( ''+this.opt.text, {
       font: this.opt.font,
-      size: this.opt.size,
+      size: this.opt.fontSize,
       height: this.opt.thickness
     });
-    textMat.transparent = true;
-    textMat.opacity = 0.0;
+    textMat[0].transparent = true;
+    textMat[0].opacity = 0.0;
+    textMat[1].transparent = true;
+    textMat[1].opacity = 0.0;
 
     textGeo.computeBoundingBox();
     // textGeo.center();
@@ -83,7 +89,8 @@ var Label = (function() {
   };
 
   Label.prototype.setAlpha = function(alpha){
-    this.material.opacity = alpha;
+    this.material[0].opacity = alpha;
+    this.material[1].opacity = alpha;
     if (alpha > 0.0) this.mesh.visible = true;
     else this.mesh.visible = false;
   };

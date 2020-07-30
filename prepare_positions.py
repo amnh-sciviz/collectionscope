@@ -75,7 +75,8 @@ def getTimelineTunnelLayout(userOptions={}):
             index = item["index"]
             x = y = 0.5
             z = mu.randomUniform(minZ, maxZ, seed=count+5)
-            angle =  mu.randomUniform(0, 360, seed=count+7)
+            # angle =  mu.randomUniform(0, 360, seed=count+7)
+            angle =  mu.randomUniform(-240, 60, seed=count+7)
             distance =  mu.randomUniform(0.5-nThickness, 0.5, seed=count+9)
             x, y =  mu.translatePoint(x, y, distance, angle)
             values[index*dimensions] = round(x, PRECISION)

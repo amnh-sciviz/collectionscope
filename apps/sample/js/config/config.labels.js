@@ -1,13 +1,13 @@
 _.extend(CONFIG, {
   "labels": {
     "years": {
-      "fontSize": 16,
-      "thickness": 2,
+      "fontSize": 24,
+      "thickness": 4,
       "defaultView": "timeline",
       "src": "data/labels/years.json"
     },
     "categoryYears": {
-      "fontSize": 9,
+      "fontSize": 16,
       "thickness": 1,
       "defaultView": "categoryTimeline",
       "faceUp": true,
@@ -15,7 +15,7 @@ _.extend(CONFIG, {
       "src": "data/labels/categoryYears.json"
     },
     "countries": {
-      "fontSize": 8,
+      "fontSize": 12,
       "thickness": 1,
       "defaultView": "map",
       "layout": "bars",
