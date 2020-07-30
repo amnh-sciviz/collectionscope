@@ -149,7 +149,7 @@ var Collection = (function() {
     var stories = {};
     var views = this.opt.views;
 
-    var markerTexture = new THREE.TextureLoader().load("../../img/marker.png");
+    var markerTexture = new THREE.TextureLoader().load("../../img/compass_red.png");
 
     _.each(this.content, function(content, contentKey){
       if (!content.html) return;
