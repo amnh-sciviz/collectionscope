@@ -101,7 +101,7 @@ def parseQueryString(str):
     orStrings = str.split(" OR ")
     ors = []
     for orString in orStrings:
-        andStrings = str.split(" AND ")
+        andStrings = orString.split(" AND ")
         ands = []
         for andString in andStrings:
             for comparator in comparators:
