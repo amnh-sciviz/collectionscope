@@ -499,6 +499,16 @@ var Collection = (function() {
     });
     this.sets = sets;
 
+    // create an invisible pointcloud for raycasting
+    var pointCloud = new PointGeometry({
+      'itemCount': _this.metadata.length,
+      'positions': _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]),
+      'indices': _this.opt.sets.default.values.slice()
+    });
+    container.add(pointCloud.getThree());
+    this.pointCloud = pointCloud;
+    this.raycaster = new Raycaster({});
+
     _.each(this.labelSets, function(labelSet, key){
       container.add(labelSet.getThree());
     });
@@ -628,6 +638,8 @@ var Collection = (function() {
     _.each(this.sets, function(set){
       set.updatePositions(newPositions, transitionDuration, multiplier);
     });
+    // update point cloud for raycasting
+    this.pointCloud.updatePositions(newPositions, transitionDuration, multiplier);
   };
 
   Collection.prototype.updateView = function(newValue, transitionDuration){
