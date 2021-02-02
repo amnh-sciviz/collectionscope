@@ -1,3 +1,6 @@
+// we need a random seeder do make "random" positions the same each time
+var globalRandomSeeder = new Math.seedrandom();
+
 (function() {
   window.MathUtil = {};
 
@@ -13,6 +16,10 @@
 
   MathUtil.ease = function(n){
     return (Math.sin((n+1.5)*Math.PI)+1.0) / 2.0;
+  };
+
+  MathUtil.hypot = function(a, b){
+    return Math.sqrt(a*a + b*b);
   };
 
   MathUtil.lerp = function(a, b, percent) {
@@ -31,11 +38,11 @@
   MathUtil.randomBetween = function(a, b){
     var delta = b - a;
     if (delta <= 0) return 0;
-    return Math.random() * delta + a;
+    return globalRandomSeeder() * delta + a;
   };
 
   MathUtil.randomPointInCylinder = function(baseCenter, radius, height) {
-    var s = Math.random();
+    var s = globalRandomSeeder();
     var theta = MathUtil.randomBetween(0, 2*Math.PI);
     var r = Math.sqrt(s) * radius;
     var x = r * Math.cos(theta);
@@ -47,7 +54,7 @@
   MathUtil.randomPointInSphere = function(center, radius) {
     var phi = MathUtil.randomBetween(0, 2*Math.PI);
     var costheta = MathUtil.randomBetween(-1, 1);
-    var u = Math.random();
+    var u = globalRandomSeeder();
     var theta = Math.acos(costheta);
     var r = radius * Math.pow(u, (1./3));
     var x = r * Math.sin(theta) * Math.cos(phi)

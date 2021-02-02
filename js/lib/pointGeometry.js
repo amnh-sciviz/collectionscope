@@ -17,14 +17,21 @@ var PointGeometry = (function() {
     var pointSize = this.opt.fixedCellWidth;
     var positions = this.getPositions(this.opt.positions);
     var positionArr = new Float32Array( numPoints * 3 );
+    var colorsArr = new Float32Array( numPoints * 3 );
     for (var i=0; i<numPoints; i++) {
       var p = positions[i];
       positionArr[ 3 * i ] = p.x;
       positionArr[ 3 * i + 1 ] = p.y;
       positionArr[ 3 * i + 2 ] = p.z;
+
+      colorsArr[ 3 * i ] = 255;
+      colorsArr[ 3 * i + 1 ] = 0;
+      colorsArr[ 3 * i + 2 ] = 0;
     }
     var positionAttr = new THREE.BufferAttribute( positionArr, 3 );
     geometry.setAttribute( 'position', positionAttr );
+    var colorAttr = new THREE.BufferAttribute( colorsArr, 3 );
+    geometry.setAttribute( 'color', colorAttr );
     this.positionAttr = positionAttr;
     geometry.computeBoundingBox();
     var material = new THREE.PointsMaterial( { size: pointSize, vertexColors: true } );

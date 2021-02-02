@@ -182,8 +182,9 @@ var MainApp = (function() {
       this.clock = new THREE.Clock();
     }
 
+    var pointerPosition = this.controls.npointer;
     this.update(now);
-    this.collection && this.collection.update(now);
+    this.collection && this.collection.update(now, pointerPosition);
     this.controls && this.controls.update(now, this.clock.getDelta());
 
     if (renderNeeded) {

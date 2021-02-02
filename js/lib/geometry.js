@@ -5,7 +5,8 @@ var Geometry = (function() {
   function Geometry(config) {
     var defaults = {
       "fixedCellWidth": 16, // the target dimensions of each cell in THREE.js scene
-      "fixedCellHeight": 16
+      "fixedCellHeight": 16,
+      "indexOffset": 0
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -69,10 +70,12 @@ var Geometry = (function() {
     var alphaArr = geom.getAttribute('alpha').array;
     var alphaDestArr = geom.getAttribute('alphaDest').array;
     var randArr = geom.getAttribute('randSeed').array;
+    var seed = this.opt.seed + this.opt.indexOffset;
     for (var i=0; i<maxInstancedCount; i++) {
+      var n = 1.0 * i / maxInstancedCount;
       alphaArr[i] = 0;
       alphaDestArr[i] = 0;
-      randArr[i] = MathUtil.lerp(0.5, 1, Math.random()); // used for creating item-level variability when transitioning
+      randArr[i] = MathUtil.lerp(0.5, 1, n); // used for creating item-level variability when transitioning
     }
 
     // set uv offset

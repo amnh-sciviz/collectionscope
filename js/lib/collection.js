@@ -5,7 +5,8 @@ var Collection = (function() {
   function Collection(config) {
     var defaults = {
       'onLoadEnd': function(){ console.log('Loading finished'); },
-      'onLoadProgress': function(){ console.log('Loading progress...') }
+      'onLoadProgress': function(){ console.log('Loading progress...') },
+      'seedString': 'museum' // seed for randomizing positions
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -482,6 +483,7 @@ var Collection = (function() {
       };
     }
 
+    globalRandomSeeder = new Math.seedrandom(this.opt.seedString);
     var currentView = this.views[this.currentViewKey];
     var sets = {};
     _.each(this.opt.sets, function(set, key){
@@ -500,6 +502,7 @@ var Collection = (function() {
     this.sets = sets;
 
     // create an invisible pointcloud for raycasting
+    globalRandomSeeder = new Math.seedrandom(this.opt.seedString); // reset seed
     var pointCloud = new PointGeometry({
       'itemCount': _this.metadata.length,
       'positions': _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]),
@@ -507,7 +510,11 @@ var Collection = (function() {
     });
     container.add(pointCloud.getThree());
     this.pointCloud = pointCloud;
-    this.raycaster = new Raycaster({});
+    this.raycaster = new Raycaster({
+      'camera': this.camera,
+      'points': pointCloud
+    });
+    container.add(this.raycaster.getThree());
 
     _.each(this.labelSets, function(labelSet, key){
       container.add(labelSet.getThree());
@@ -599,7 +606,7 @@ var Collection = (function() {
 
   };
 
-  Collection.prototype.update = function(now){
+  Collection.prototype.update = function(now, pointerPosition){
     _.each(this.sets, function(set, key){
       set.update(now);
     });
@@ -619,6 +626,8 @@ var Collection = (function() {
     _.each(this.soundSets, function(soundSet){
       soundSet.update(now);
     });
+
+    this.raycaster.update(pointerPosition);
   };
 
   Collection.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
@@ -635,11 +644,14 @@ var Collection = (function() {
     var newPositions = this.positions[newView.layout];
     newPositions = _.extend({}, _.pick(newView, 'width', 'height', 'depth'), newPositions);
     // update layout
+    globalRandomSeeder = new Math.seedrandom(this.opt.seedString);
     _.each(this.sets, function(set){
       set.updatePositions(newPositions, transitionDuration, multiplier);
     });
     // update point cloud for raycasting
+    globalRandomSeeder = new Math.seedrandom(this.opt.seedString);
     this.pointCloud.updatePositions(newPositions, transitionDuration, multiplier);
+    this.raycaster.hide(transitionDuration);
   };
 
   Collection.prototype.updateView = function(newValue, transitionDuration){

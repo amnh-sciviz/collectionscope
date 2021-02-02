@@ -377,6 +377,27 @@ input[type="radio"]:checked ~ .checked-bg {
   margin: 0 10px 0 0;
 }
 
+.viewer {
+  width: 80px;
+  height: 80px;
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  position: absolute;
+  z-index: 10000;
+  top: 50%;
+  left: 50%;
+  margin-left: -40px;
+  margin-top: -40px;
+  border-radius: 50%;
+  opacity: 0;
+  display: none;
+  box-shadow: 0 1px 2px 2px rgb(0, 0, 0, 0.8);
+}
+/* .app.loaded .viewer {
+  display: block;
+  animation: fadeIn 1s ease-in;
+  animation-fill-mode: both;
+} */
+
 @keyframes fadeIn {
   0% {opacity:0;}
   100% {opacity:1;}

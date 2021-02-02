@@ -3,7 +3,9 @@
 var Mesh = (function() {
 
   function Mesh(config) {
-    var defaults = {  };
+    var defaults = {
+      indexOffset: 0
+    };
     this.opt = _.extend({}, defaults, config);
     this.init();
   }
@@ -13,6 +15,7 @@ var Mesh = (function() {
 
     var geometry = new Geometry({
       'indices': this.opt.indices,
+      'indexOffset': this.opt.indexOffset,
       'itemCount': this.opt.itemCount,
       'textureProps': this.opt.textureProps,
       'positions': this.opt.positions

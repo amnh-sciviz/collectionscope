@@ -41,6 +41,7 @@ var Set = (function() {
       var mesh = new Mesh({
         'itemCount': _this.opt.metadata.length,
         'indices': indices,
+        'indexOffset': i*itemsPerAsset,
         'positions': _this.opt.positions,
         'texture': texture,
         'textureProps': _.omit(_this.opt.textures, 'assets')
