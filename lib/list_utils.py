@@ -13,7 +13,7 @@ def addIndices(arr, keyName="index", startIndex=0):
 def createLookup(arr, key):
     return dict([(str(item[key]), item) for item in arr])
 
-def filterByQuery(arr, ors):
+def filterByQuery(arr, ors, caseSensitive=False):
     if isinstance(ors, tuple):
         ors = [[ors]]
     # pprint(ors)
@@ -27,8 +27,12 @@ def filterByQuery(arr, ors):
         for ands in ors:
             andValid = True
             for key, comparator, value in ands:
-                itemValue = item[key]
-                if comparator not in ["CONTAINS", "EXCLUDES"]:
+                value = str(value)
+                itemValue = str(item[key])
+                if not caseSensitive:
+                    value = value.lower()
+                    itemValue = itemValue.lower()
+                if comparator not in ["CONTAINS", "EXCLUDES", "EXISTS"]:
                     value = mu.parseNumber(value)
                     itemValue = mu.parseNumber(itemValue)
                 if comparator == "<=" and itemValue > value:
@@ -53,6 +57,12 @@ def filterByQuery(arr, ors):
                     andValid = False
                     break
                 elif comparator == "=" and itemValue != value:
+                    andValid = False
+                    break
+                elif comparator == "EXISTS" and value == "true" and itemValue == "":
+                    andValid = False
+                    break
+                elif comparator == "EXISTS" and value == "false" and itemValue != "":
                     andValid = False
                     break
             if andValid:
@@ -97,7 +107,7 @@ def groupListByValue(arr):
 def parseQueryString(str):
     if len(str) <= 0:
         return []
-    comparators = ["<=", ">=", " EXCLUDES ", " CONTAINS ", "!=", ">", "<", "="]
+    comparators = ["<=", ">=", " EXCLUDES ", " CONTAINS ", "!=", ">", "<", "=", " EXISTS "]
     orStrings = str.split(" OR ")
     ors = []
     for orString in orStrings:
