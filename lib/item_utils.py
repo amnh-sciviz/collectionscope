@@ -1,5 +1,3 @@
-
-
 import lib.io_utils as io
 import lib.list_utils as lu
 
@@ -31,20 +29,21 @@ def addColumnsToItems(items, config):
 
     return (sets, items)
 
+
 def getItems(config):
-    configMeta = config["metadata"]
-    inputFile = configMeta["src"]
+    inputFile = config["metadataFile"]
+    idCol = config["identifierColumn"]
 
     fieldnames, items = io.readCsv(inputFile, parseNumbers=False)
-    if "query" in configMeta:
-        items = lu.filterByQueryString(items, configMeta["query"])
+    if "metadataFilterQuery" in config:
+        items = lu.filterByQueryString(items, config["metadataFilterQuery"])
         print("%s items after filtering" % len(items))
 
-    # Add columns
-    sets, items = addColumnsToItems(items, config)
-
     # Sort so that index corresponds to ID
-    items = sorted(items, key=lambda item: item["id"])
+    items = sorted(items, key=lambda item: item[idCol])
     items = lu.addIndices(items)
 
-    return (sets, items)
+    return items
+
+def loadConfig(fn):
+    return io.readYaml(fn)
