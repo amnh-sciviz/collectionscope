@@ -38,32 +38,6 @@ var Collection = (function() {
     });
   };
 
-  Collection.prototype.filter = function(prop, value){
-    if (!this.metaCols || !this.metaCols.length || this.metaCols.indexOf(prop) < 0) {
-      console.log("Invalid property "+prop);
-      return;
-    }
-
-    if (value === "" || value === -1) value = false;
-
-    // reset alpha
-    if (value === false) {
-      this.resetFilters();
-      return;
-    }
-
-    var _this = this;
-    var toAlphaValues = new Float32Array(this.metadata.length);
-    _.each(this.metadata, function(item, i){
-      if (item[prop] === value) {
-        toAlphaValues[i] = 1.0;
-      } else {
-        toAlphaValues[i] = _this.minAlpha;
-      }
-    });
-    this.updateAlpha(false, toAlphaValues);
-  };
-
   Collection.prototype.filterBySet = function(setKey, transitionDuration){
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
     var sets = this.opt.sets;
@@ -74,8 +48,8 @@ var Collection = (function() {
 
     var indices = sets[setKey].values;
     var _this = this;
-    var toAlphaValues = new Float32Array(this.metadata.length);
-    _.each(this.metadata, function(item, i){
+    var toAlphaValues = new Float32Array(this.metadata.itemCount);
+    _.times(this.metadata.itemCount, function(i){
       toAlphaValues[i] = _this.minAlpha;
     });
     _.each(indices, function(index, i){
@@ -268,11 +242,6 @@ var Collection = (function() {
       _this.updateView(newValue, duration);
     });
 
-    $(document).on('filter-property', function(e, propertyName, newValue) {
-      console.log('Filtering '+propertyName+' to '+newValue);
-      _this.filter(propertyName, newValue);
-    });
-
     $(document).on('select-hotspot', function(e, uuid){
       console.log('Select hotspot: '+uuid);
       _this.selectHotspot(uuid);
@@ -286,17 +255,11 @@ var Collection = (function() {
 
   Collection.prototype.loadMetadata = function(){
     var _this = this;
-    this.metadata = [];
     var deferred = $.Deferred();
-    $.getJSON(this.opt.metadata.src, function(data){
-      _this.metaCols = data.cols;
-      _this.opt.onLoadProgress();
-      _this.metadata = _.map(data.rows, function(row){
-        return _.object(data.cols, row);
-      });
-      console.log('Loaded metadata: '+_this.metadata.length);
-      deferred.resolve();
-    });
+    this.metadata = this.opt.metadata;
+    setTimeout(function(){
+      deferred.resolve()
+    }, 1);
     return deferred;
   };
 
@@ -479,7 +442,7 @@ var Collection = (function() {
     // default set is everything
     if (!_.has(this.opt.sets, 'default')) {
       this.opt.sets.default = {
-        'values': _.range(_this.metadata.length)
+        'values': _.range(_this.metadata.itemCount)
       };
     }
 
@@ -504,7 +467,7 @@ var Collection = (function() {
     // create an invisible pointcloud for raycasting
     globalRandomSeeder = new Math.seedrandom(this.opt.seedString); // reset seed
     var pointCloud = new PointGeometry({
-      'itemCount': _this.metadata.length,
+      'itemCount': _this.metadata.itemCount,
       'positions': _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]),
       'indices': _this.opt.sets.default.values.slice()
     });

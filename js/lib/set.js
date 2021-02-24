@@ -39,7 +39,7 @@ var Set = (function() {
         indices = indices.slice(i*itemsPerAsset, Math.min(indices.length, (i+1)*itemsPerAsset));
       }
       var mesh = new Mesh({
-        'itemCount': _this.opt.metadata.length,
+        'itemCount': _this.opt.metadata.itemCount,
         'indices': indices,
         'indexOffset': i*itemsPerAsset,
         'positions': _this.opt.positions,
