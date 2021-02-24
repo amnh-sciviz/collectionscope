@@ -1,0 +1,259 @@
+# The name of the app; this will be the unique identifier and path of the app, e.g. localhost:2222/apps/sample/
+name: sample
+
+# Site metadta to be used in the meta tags and introduction screen
+title: CollectionScope
+logo: img/logo.png  # this path is relative to your /apps/{your project}/index.html file
+description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+
+#################################
+# Define your meta data source
+#################################
+# this can be an absolute path or a path relative to the `make_app.py` script
+metadataFile: E:/Dropbox/amnh/Knight2020/data/all_normalized.csv
+# Basic query for filtering out metadata if applicable; comment this out if you want all the data
+  # Supports the following: =, !=, <, >, <=, >=, CONTAINS, EXCLUDES, EXISTS, AND, OR
+  # Examples:
+    # Year >= 1900 AND Year <= 2000
+    # Description CONTAINS Portrait OR Description CONTAINS Figure
+    # Image EXISTS True AND Image != no image
+  # String conditions are case-insensitve
+  # Parentheses currently not supported
+metadataFilterQuery: Acquisition Year < 9999 AND Latitude < 9999 AND Longitude < 9999 AND Region != Europe
+# column that contains a unique identifier for each item
+identifierColumn: Catalog No
+
+#################################
+# Dates
+#################################
+# If you data has a date column, enter it here, otherwise comment it out
+  # Note that this can be a date string in any format as long as the year is 4-digits within the valid year range
+  # For example '1979', '1979-01-01', 'January 1, 1979' are all valid, while '1/1/79' is not valid since the year is ambiguous.
+  # Regular expressions will be used to extract the year automatically, so the format doesn't need to be consistent
+dateColumn: Acquisition Year
+dateLabel: Acquisition Year # name of this date for displaying to the user
+# If there is a valid range of years for date, enter it here, otherwise comment it out.
+  # Entries with invalid dates will be removed
+minimumYear: 1800
+maximumYear: 2050
+
+#################################
+# Location
+#################################
+# Latitude and longitude values as floats are required for location-based visualization
+# Comment it out if you are not using
+  # E.g. NYC would have latitude 40.674239442221605 and longitude -74.02503271185628
+  # If you do not have lat/lon values but have countries, states, cities, and/or addresses,
+    # there is a script for geocoding these: see `scripts/geocode_locations.py`
+  # Entries with invalid or missing Lat/Lon will be excluded
+latitudeColumn: Latitude
+longitudeColumn: Longitude
+# Country column is used for labelling countries in the map view; comment out or ignore if not applicable
+countryColumn: Country
+
+#################################
+# Group by
+#################################
+# This column will be used to group the items in different ways; ideally this would be somewhere between 4 and 12 unique groups
+  # E.g. "Object type", "Subject", "Era", etc
+  # If there are a large number of resulting groups, excess groups can be combined into an "Other" group which is configurable below
+groupByColumn: Region
+groupLabel: Region # the name of this column for displaying to the user
+groupLimit: 8 # the maximum number of groups; if greater than this number, the last group will be "Other" (combination of all remainder groups); you can disable this in the next parameter
+showOtherGroup: true # if number of groups exceeds the group limit above, combine the remaining groups into an "Other" group; if false, disregard remaining groups
+otherLabel: Other # what to call the "Other" group if applicable
+# Each group will be assigned a color for use in the UI
+groupColors:
+  - "#7aa030"
+  - "#726aa4"
+  - "#d37200"
+  - "#d6a900"
+  - "#529c99"
+  - "#b13734"
+  - "#1f3c90"
+  - "#5a0661"
+
+#################################
+# Item details
+#################################
+# These are arbitrary fields that will be displayed to the user when they select an item
+  # Comment any of these out if they are not applicable
+  # Entries with blank or null values will not be displayed
+itemFields:
+  - column: Title
+    isTitle: true # titles will be displayed as headings
+
+  - column: URL
+    label: View item details # labels support string formatting, e.g. View {Title}
+    isLink: true # links will look like a button and hyperlink to a new window/tab
+
+  - column: ImageURL
+    isImage: true # images will be embedded in the page, so larger images will negaively impact the user experience since it will take longer to load
+
+  - column: Catalog No
+    label: Catalog Number
+
+  - column: Acquisition Year
+    label: Year acquired
+
+  - column: Acquisition Type
+    label: Type of acquisition
+
+  - column: Country
+    label: Country of origin
+
+  - column: Donor
+    label: Donor
+
+#################################
+# Images
+#################################
+# It is assumed you have all of the item images somewhere accessible from the computer you are
+  # running the scripts from. If the images are somewhere else and accessible by URL, you
+  # can run the following script for downloading these somewhere locally: `scripts/download_images.py`
+
+# If you have a column in your .csv file that has the name of the image file, put it here.
+  # Note if you ran `scripts/download_images.py`, this filename has been added to your .csv file
+  # Alternatively you can define a format string, e.g. "{OtherColumnName}.jpg" (where "OtherColumnName"
+    # is the name of an existing column in the .csv file)
+filenameColumn: Filename
+
+# Path to where the images are stored; again, you can use a format string based on existing column names
+  # this can be an absolute path or a path relative to the `make_app.py` script
+imageDirectory: E:/production/amnh/knight/images/{Region}/
+
+# do images have a transparency value? (i.e. PNG images)
+imageHasAlpha: false
+
+# the width of the thumbnail image; set to "auto" to automatically set to recommended values based on number of items
+  # The minumum should probably be about 16 to be legible
+  # The maximum depends on the total number of images you need to display;
+    # if too big, the user will need to load too many large images and the app may crash
+  # Here are some ballpark recommendations:
+    # 100K+: 16
+    # ~50K: 32
+    # ~10K: 64
+    # ~2K: 128
+    # ~1K: 256
+imageThumbnailWidth: auto
+
+# if image filename contains this value, treat it as if there's no image
+noImageValue: no_image.jpg
+
+#################################
+# Visualizations
+#################################
+# This app currently supports a number of different visualizations. All of them are enabled by default
+  # and you can customize or comment out any one that is not applicable to you.
+  # Don't edit these if you want to see the default visualizations (recommended)
+
+visualizations:
+  # This places items randomly within a sphere
+  randomSphere:
+    radius: 8192 # increase this number to make less dense
+    keyboardControls: firstPerson # type of controls for keyboard/mouse users; supports: "firstPerson" and "railcar"
+
+  # This places the items along a "tunnel" organized by time; this will be disabled if no "dateColumn" field is set above
+  timelineTunnel:
+    radius: 256 # increase this to make the tunnel wider
+    depthPerYear: 512 # increase this to make the tunnel longer
+    keyboardControls: railcar
+
+  # This stacks item on top of a map; this will be disabled if no "latitudeColumn/longitudeColumn" fields are set above
+  geographyBars:
+    mapWidth: 8192 # increase this to make the map larger
+    barHeight: 2048 # increase this to make the bars taller
+    basemap: img/world_map_with_regions.png # path is relative to the `make_app.py` script
+    keyboardControls: firstPerson
+
+  # Places items along "tracks" based on "groupBy" categories along a timeline
+  timelineTracks:
+    keyboardControls: railcar
+    trackWidth: 180 # width per each track; increase to make the tracks wider
+    depthPerYear: 512 # increase this to make the tracks longer
+    trackHeight: 512 # increase this to make the tunnel wider
+
+#################################
+# Stories
+#################################
+# This app gives you the opportunity to highlight and give context to specific parts of your collection
+  # and overlay additional content and media. You can simply comment out this entire section if you want to
+  # just visualize the data without any overlays
+# All media paths should be relative to your /apps/{your project}/index.html file
+
+stories:
+  laufer:
+    query: "Donor CONTAINS Laufer AND Country CONTAINS China AND Acquisition Year < 1910"
+    images:
+        - url: img/content/laufer/laufer_29130.jpg
+          caption: Sacred dance of five lamas, China
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/29130
+        - url: img/content/laufer/laufer_40283.jpg
+          caption: Mask, papier mache, Tibet
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/40283
+        - url: img/content/laufer/laufer_29058.jpg
+          caption: Eating rice, China
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/29058
+        - url: img/content/laufer/laufer_44325.jpg
+          caption: Chinese shadow puppet, White Snake, character from Buddhist play series
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/44325
+        - url: img/content/laufer/laufer_44493.jpg
+          caption: Mask, Tibetan, collected by Berthold Laufer in China, 1903
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/44493
+        - url: img/content/laufer/laufer_29128.jpg
+          caption: Stairs to Temple of Heaven, Peking, China
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/29128
+        - url: img/content/laufer/laufer_29117.jpg
+          caption: Actors in costume, China
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/29117
+        - url: img/content/laufer/laufer_29056.jpg
+          caption: Barber braiding queue, China
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/29056
+    title: Laufer China Expedition
+    html: "<p>Berthold Laufer led an expedition to China between 1901 and 1904. Over 6,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>"
+
+  lumholtz:
+    query: Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1902
+    images:
+        - url: img/content/lumholtz/lumholtz_18793.jpg
+          caption: Tarahumara women, Guadalupe, Chihuahua, 1892
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/18793
+        - url: img/content/lumholtz/lumholtz_39342.jpg
+          caption: Pseudo-cloisonne style jar, ceramic, Hacienda Estanzuela, West Mexico
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/39342
+        - url: img/content/lumholtz/lumholtz_27127.jpg
+          caption: Pima men, Mexico, 1890-1898
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/27127
+        - url: img/content/lumholtz/lumholtz_55575.jpg
+          caption: Men travelling on donkeys and horseback, Mexico, [1890-1898]
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/55575
+        - url: img/content/lumholtz/lumholtz_30190.jpg
+          caption: Tarahumara man, Mexico, 1890-1898
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/30190
+        - url: img/content/lumholtz/lumholtz_27237.jpg
+          caption: Shield, cane and yarn, Mexico, 1890-1898
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/27237
+        - url: img/content/lumholtz/lumholtz_26190.jpg
+          caption: Stone disc with design, Mexico
+          captionUrl: https://lbry-web-007.amnh.org/digital/items/show/26190
+    title: Lumholtz Mexico Expeditions
+    html: "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. Over 5,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>"
+
+#################################
+# User interface
+#################################
+# You can mostly leave these alone, but update these values to customize the user interface
+
+labels:
+  yearFontSize: 24
+  yearFontThickness: 4
+  groupFontSize: 16
+  groupFontThickness: 1
+  countryFontSize: 12
+  countryFontThickness: 1
+
+animation:
+  startTransitionDuration: 5000 # The initial fade in duration
+  transitionDuration: 3000 # The amount of time to transition between views
+  componentTransitionDuration: 500 # How long components like labels and overlays should fade in/out
+  minAlpha: 0.0 # the transparency of inactive items (not visible by default)

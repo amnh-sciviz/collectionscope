@@ -1,0 +1,16 @@
+#
+####### requirements.txt #######
+#
+# Run: pip install -r requirements.txt
+
+# For image creation
+Pillow
+
+# For configuration files
+pyyaml
+
+# Optional: For downloading images from remote URLs
+requests
+
+# Optional: For geocoding addresses, cities, states, countries
+geopy
