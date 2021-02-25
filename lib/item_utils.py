@@ -1,5 +1,6 @@
 import lib.io_utils as io
 import lib.list_utils as lu
+import lib.string_utils as su
 
 def addColumnsToItems(items, config):
     configMeta = config["metadata"]
@@ -29,6 +30,16 @@ def addColumnsToItems(items, config):
 
     return (sets, items)
 
+def getItemCategories(items):
+    values = []
+    for item in items:
+        if "category" not in item:
+            continue
+        value = item["category"]
+        if value not in values:
+            values.append(value)
+    values = sorted(values)
+    return values
 
 def getItems(config):
     inputFile = config["metadataFile"]
@@ -39,12 +50,49 @@ def getItems(config):
         items = lu.filterByQueryString(items, config["metadataFilterQuery"])
         print("%s items after filtering" % len(items))
 
+    # map year, lat/lon, and category
+    columnMap = [
+        ("dateColumn", "year"),
+        ("latitudeColumn", "lat"),
+        ("longitudeColumn", "lon"),
+        ("countryColumn", "country"),
+        ("groupByColumn", "category")
+    ]
+    minimumYear = config["minimumYear"] if "minimumYear" in config else None
+    maximumYear = config["maximumYear"] if "maximumYear" in config else None
+    validItems = []
+    for i, item in enumerate(items):
+        validatedItem = item.copy()
+        isValid = True
+        for configKey, toColumn in columnMap:
+            if configKey not in config:
+                continue
+
+            value = item[config[configKey]]
+            if toColumn == "year":
+                value = su.validateYear(value, minimumYear, maximumYear)
+            elif toColumn == "lat":
+                value = su.validateLat(value)
+            elif toColumn == "lon":
+                value = su.validateLon(value)
+            if value is None:
+                isValid = False
+                break
+
+            validatedItem[toColumn] = value
+
+        if isValid:
+            validItems.append(validatedItem)
+
+    diff = len(items) - len(validItems)
+    print(f'Found {diff} invalid items.')
+
     # Sort so that index corresponds to ID
     if idCol is not None:
-        items = sorted(items, key=lambda item: item[idCol])
-    items = lu.addIndices(items)
+        validItems = sorted(validItems, key=lambda item: item[idCol])
+    validItems = lu.addIndices(validItems)
 
-    return items
+    return validItems
 
 def loadConfig(fn):
     return io.readYaml(fn)

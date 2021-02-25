@@ -44,14 +44,17 @@ def norm(value, ab, limit=False):
         n = lim(n)
     return n
 
-def parseNumber(string, alwaysFloat=False):
+def parseNumber(string, alwaysFloat=False, invalidValue="self"):
     try:
         num = float(string)
         if "." not in str(string) and not alwaysFloat:
             num = int(string)
         return num
     except ValueError:
-        return string
+        if invalidValue == "self":
+            return string
+        else:
+            return invalidValue
 
 def parseNumbers(arr):
     for i, item in enumerate(arr):

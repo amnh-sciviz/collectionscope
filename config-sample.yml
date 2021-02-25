@@ -34,7 +34,7 @@ dateColumn: Acquisition Year
 dateLabel: Acquisition Year # name of this date for displaying to the user
 # If there is a valid range of years for date, enter it here, otherwise comment it out.
   # Entries with invalid dates will be removed
-minimumYear: 1800
+minimumYear: 1600
 maximumYear: 2050
 
 #################################
