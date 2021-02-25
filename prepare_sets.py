@@ -12,11 +12,11 @@ import lib.list_utils as lu
 
 # input
 parser = argparse.ArgumentParser()
-parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
+parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", help="Config file")
 a = parser.parse_args()
 
-config = io.readJSON(a.CONFIG_FILE)
-configContent = config["content"]
+config = tu.loadConfig(a.CONFIG_FILE)
+configStories = config["stories"]
 
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_SET_DIR_REL = "data/sets/"
@@ -25,13 +25,13 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_SET_DIR, CONFIG_FILE])
-sets, items = tu.getItems(config)
+items = tu.getItems(config)
 
 # Remove existing data
 io.removeFiles(OUTPUT_SET_DIR + "*.json")
 
 jsonsets = {}
-for keyName, options in configContent.items():
+for keyName, options in configStories.items():
 
     if "query" not in options:
         continue

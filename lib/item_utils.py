@@ -32,7 +32,7 @@ def addColumnsToItems(items, config):
 
 def getItems(config):
     inputFile = config["metadataFile"]
-    idCol = config["identifierColumn"]
+    idCol = config["identifierColumn"] if "identifierColumn" in config else None
 
     fieldnames, items = io.readCsv(inputFile, parseNumbers=False)
     if "metadataFilterQuery" in config:
@@ -40,7 +40,8 @@ def getItems(config):
         print("%s items after filtering" % len(items))
 
     # Sort so that index corresponds to ID
-    items = sorted(items, key=lambda item: item[idCol])
+    if idCol is not None:
+        items = sorted(items, key=lambda item: item[idCol])
     items = lu.addIndices(items)
 
     return items
