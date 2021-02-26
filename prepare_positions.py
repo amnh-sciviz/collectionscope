@@ -56,8 +56,8 @@ def getTimelineTunnelLayout(userOptions={}):
     dimensions = 3
 
     if yearCol not in items[0]:
-        print("Could not find column %s in items, please add this column to metadata cols with 'type' = 'int'" % yearCol)
-        sys.exit()
+        print("`dateColumn` needs to be set in config yml to support timelineTunnel layout")
+        return (False, False)
 
     years = [item[yearCol] for item in items]
     minYear = min(years)
@@ -97,8 +97,12 @@ def getSphereCategoryTimelineLayout(userOptions={}):
     categoryCol = "category"
     yearCol = "year"
     if yearCol not in items[0]:
-        print("Could not find column %s in items, please add this column to metadata cols with 'type' = 'int'" % yearCol)
-        sys.exit()
+        print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
+        return (False, False)
+
+    if categoryCol not in items[0]:
+        print("`groupByColumn` needs to be set in config yml to support timelineTracks layout")
+        return (False, False)
 
     categoryCount = len(categories)
     dimensions = 3
@@ -150,8 +154,8 @@ def getGeographyBarsLayout(userOptions={}):
     latCol = "lat"
     lonCol = "lon"
     if latCol not in items[0] or lonCol not in items[0]:
-        print("Could not find column (%s, %s) in items, please add these columns to metadata cols with 'type' = 'float'" % (lonCol, latCol))
-        sys.exit()
+        print("`latitudeColumn` and `latitudeColumn` need to be set in config yml to support geographyBars layout")
+        return (False, False)
 
     # create unique key for lat lon
     for i, item in enumerate(items):
@@ -196,17 +200,18 @@ for layout in layouts:
 
     else:
         layout = "randomSphere"
-        layoutData = None
+        layoutData = False
         layoutConfig["layout"] = "spheres"
         print("Using default layout %s" % layout)
 
     # Write position file
-    if layoutData is not None:
+    if layoutData is not False:
         posOutFile = OUTPUT_POS_DIR + layout + ".json"
         io.writeJSON(posOutFile, layoutData)
         layoutConfig["src"] = OUTPUT_POS_DIR_REL + layout + ".json"
 
-    jsonPositions[layout] = layoutConfig
+    if layoutConfig is not False:
+        jsonPositions[layout] = layoutConfig
 
 # Write config file
 outjson = {

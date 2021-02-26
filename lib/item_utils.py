@@ -30,12 +30,12 @@ def addColumnsToItems(items, config):
 
     return (sets, items)
 
-def getItemCategories(items):
+def getItemCategories(items, key="category"):
     values = []
     for item in items:
-        if "category" not in item:
+        if key not in item:
             continue
-        value = item["category"]
+        value = item[key]
         if value not in values:
             values.append(value)
     values = sorted(values)

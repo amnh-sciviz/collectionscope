@@ -125,20 +125,11 @@ imageDirectory: E:/production/amnh/knight/images/{Region}/
 # do images have a transparency value? (i.e. PNG images)
 imageHasAlpha: false
 
-# the width of the thumbnail image; set to "auto" to automatically set to recommended values based on number of items
-  # The minumum should probably be about 16 to be legible
-  # The maximum depends on the total number of images you need to display;
-    # if too big, the user will need to load too many large images and the app may crash
-  # Here are some ballpark recommendations:
-    # 100K+: 16
-    # ~50K: 32
-    # ~10K: 64
-    # ~2K: 128
-    # ~1K: 256
-imageThumbnailWidth: auto
-
 # if image filename contains this value, treat it as if there's no image
 noImageValue: no_image.jpg
+
+# color of item if no image is present
+defaultColor: "#3C3C3C"
 
 #################################
 # Visualizations
@@ -245,10 +236,13 @@ stories:
 # You can mostly leave these alone, but update these values to customize the user interface
 
 labels:
+  # these are the labels of the years for the `timelineTunnel` and `timelineTracks` views
   yearFontSize: 24
   yearFontThickness: 4
+  # these are the labels for each group in `timelineTracks` view
   groupFontSize: 16
   groupFontThickness: 1
+  # these are the labels of the countries in the `geographyBars` view
   countryFontSize: 12
   countryFontThickness: 1
 

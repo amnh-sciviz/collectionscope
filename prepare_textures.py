@@ -16,27 +16,36 @@ import lib.math_utils as mu
 
 # input
 parser = argparse.ArgumentParser()
-parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
+parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", help="Config file")
 parser.add_argument("-cache", dest="CACHE_DIR", default="tmp/", help="Directory for caching image data")
 parser.add_argument('-probe', dest="PROBE", action="store_true", help="Just output details?")
 a = parser.parse_args()
 
-config = io.readJSON(a.CONFIG_FILE)
-# configSets = config["sets"]
-configTextures = config["textures"]
+config = tu.loadConfig(a.CONFIG_FILE)
+
+maxWidth = 4096
+maxTextureFiles = 10
+minCellWidth = 1
+maxCellWidth = 512
+containsAlpha = config["imageHasAlpha"] if "imageHasAlpha" in config else False
+defaultColor = config["defaultColor"] if "defaultColor" in config else "#3C3C3C"
+filenameKey = config["filenameColumn"] if "filenameColumn" in config else "filename"
+imageDir = config["imageDirectory"]
+noImageValue = config["noImageValue"] if "noImageValue" in config else None
 
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_TEXTURES_DIR_REL = "img/textures/"
 OUTPUT_TEXTURES_DIR = OUTPUT_DIR + OUTPUT_TEXTURES_DIR_REL
 CONFIG_FILE = OUTPUT_DIR + "js/config/config.textures.js"
 
-# Make sure output dirs exist
-io.makeDirectories([OUTPUT_TEXTURES_DIR, CONFIG_FILE, a.CACHE_DIR])
+if not a.PROBE:
+    # Make sure output dirs exist
+    io.makeDirectories([OUTPUT_TEXTURES_DIR, CONFIG_FILE, a.CACHE_DIR])
 
-# Remove existing images
-io.removeFiles(OUTPUT_TEXTURES_DIR + "*.jpg")
+    # Remove existing images
+    io.removeFiles(OUTPUT_TEXTURES_DIR + "*.jpg")
 
-sets, items = tu.getItems(config)
+items = tu.getItems(config)
 
 # Make texture for each set
 # sets = list(configSets.items())
@@ -57,10 +66,6 @@ for keyName, options in sets:
     setCount = len(setItems)
 
     # determine ideal cell width
-    maxWidth = configTextures["maxWidth"]
-    maxTextureFiles = configTextures["maxTextureFiles"]
-    minCellWidth = configTextures["minCellWidth"]
-    maxCellWidth = configTextures["maxCellWidth"]
     cellWidth = maxCellWidth
     textureFileCount = 1
     cellsPerFile = 1
@@ -88,11 +93,8 @@ for keyName, options in sets:
     cacheFilename = a.CACHE_DIR + "%s_%s_%s.p.gz" % (config["name"], keyName, cellWidth)
     imageData = io.readCacheFile(cacheFilename)
 
-    colors = 3 if configTextures["containsAlpha"] < 1 else 4
+    colors = 3 if containsAlpha < 1 else 4
     colorMode = "RGB" if colors == 3 else "RGBA"
-    defaultColor = configTextures["defaultColor"]
-    if len(defaultColor) < 4 and colors >= 4:
-        defaultColor.append(255)
 
     # if no cache, read and process images and save cache
     if imageData is None:
@@ -100,20 +102,20 @@ for keyName, options in sets:
         shape = (setCount, cellWidth, cellWidth, colors)
         imageData = np.zeros(shape, dtype=np.uint8)
         for i, item in enumerate(setItems):
-            basename = item[configTextures["filenameKey"]]
-            fn = configTextures["imageDir"] + basename
+            basename = item[filenameKey]
+            fn = imageDir + basename
             if "{" in fn:
                 fn = fn.format(**item)
             # check for no image
-            if "noImageValue" in configTextures and basename == configTextures["noImageValue"] or not os.path.isfile(fn):
-                img = Image.new(mode=colorMode, size=(cellWidth, cellWidth), color=tuple(defaultColor))
+            if noImageValue is not None and basename == noImageValue or not os.path.isfile(fn):
+                img = Image.new(mode=colorMode, size=(cellWidth, cellWidth), color=defaultColor)
             else:
                 img = iu.readImage(fn, mode=colorMode)
                 if img is not None:
                     img = iu.containImage(img, cellWidth, cellWidth)
 
                 if img is None:
-                    img = Image.new(mode=colorMode, size=(cellWidth, cellWidth), color=tuple(defaultColor))
+                    img = Image.new(mode=colorMode, size=(cellWidth, cellWidth), color=defaultColor)
 
             imageData[i] = np.array(img)
             mu.printProgress(i+1, setCount)

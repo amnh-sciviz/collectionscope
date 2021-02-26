@@ -2,14 +2,14 @@ _.extend(CONFIG, {
   "labels": {
     "years": {
       "fontSize": 24,
-      "thickness": 4,
-      "defaultView": "timeline",
+      "thickness": 24,
+      "defaultView": "timelineTunnel",
       "src": "data/labels/years.json"
     },
     "categoryYears": {
       "fontSize": 16,
       "thickness": 1,
-      "defaultView": "categoryTimeline",
+      "defaultView": "timelineTracks",
       "faceUp": true,
       "faceEast": true,
       "src": "data/labels/categoryYears.json"
@@ -17,7 +17,7 @@ _.extend(CONFIG, {
     "countries": {
       "fontSize": 12,
       "thickness": 1,
-      "defaultView": "map",
+      "defaultView": "geographyBars",
       "layout": "bars",
       "src": "data/labels/countries.json"
     }

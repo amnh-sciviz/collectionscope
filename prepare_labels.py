@@ -15,11 +15,30 @@ import lib.math_utils as mu
 
 # input
 parser = argparse.ArgumentParser()
-parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
+parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", help="Config file")
 a = parser.parse_args()
 
-config = io.readJSON(a.CONFIG_FILE)
-configLabels = config["labels"]
+config = tu.loadConfig(a.CONFIG_FILE)
+configLabels = {
+    "years": {
+      "fontSize": config["labels"]["yearFontSize"],
+      "thickness": config["labels"]["yearFontSize"],
+      "defaultView": "timelineTunnel"
+    },
+    "categoryYears": {
+      "fontSize": config["labels"]["groupFontSize"],
+      "thickness": config["labels"]["groupFontThickness"],
+      "defaultView": "timelineTracks",
+      "faceUp": True,
+      "faceEast": True
+    },
+    "countries": {
+      "fontSize": config["labels"]["countryFontSize"],
+      "thickness": config["labels"]["countryFontThickness"],
+      "defaultView": "geographyBars",
+      "layout": "bars"
+    }
+}
 
 PRECISION = 5
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
@@ -33,8 +52,9 @@ io.makeDirectories([OUTPUT_LABEL_DIR, CONFIG_FILE])
 # Remove existing data
 io.removeFiles(OUTPUT_LABEL_DIR + "*.json")
 
-sets, items = tu.getItems(config)
+items = tu.getItems(config)
 itemCount = len(items)
+categories = tu.getItemCategories(items)
 
 def getYearLabels(userOptions={}):
     global items
@@ -45,8 +65,8 @@ def getYearLabels(userOptions={}):
     options.update(userOptions)
     yearCol = "year"
     if yearCol not in items[0]:
-        print("Could not find column %s in items, please add this column to metadata cols with 'type' = 'int'" % yearCol)
-        sys.exit()
+        # print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
+        return (None, None)
 
     years = [item[yearCol] for item in items]
     minYear = min(years)
@@ -65,7 +85,7 @@ def getYearLabels(userOptions={}):
 
 def getCategoryYearLabels(userOptions={}):
     global items
-    global sets
+    global categories
 
     cfg = {}
     options = {
@@ -76,14 +96,14 @@ def getCategoryYearLabels(userOptions={}):
     yearCol = "year"
     categoryCol = "category"
     if yearCol not in items[0]:
-        print("Could not find column %s in items, please add this column to metadata cols with 'type' = 'int'" % yearCol)
-        sys.exit()
-    if categoryCol not in sets:
-        print("Could not find column %s in sets, please add this column to metadata cols with 'asIndex' = true" % categoryCol)
-        sys.exit()
+        # print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
+        return (None, None)
 
-    categorySet = sets[categoryCol]
-    categoryCount = len(categorySet)
+    if categoryCol not in items[0]:
+        # print("`groupByColumn` needs to be set in config yml to support timelineTracks layout")
+        return (None, None)
+
+    categoryCount = len(categories)
 
     years = [item[yearCol] for item in items]
     minYear = min(years)
@@ -99,7 +119,7 @@ def getCategoryYearLabels(userOptions={}):
         y = options["y"]
         z = mu.norm(year, (minYear, maxYear)) # beginning of year
 
-        for j, category in enumerate(categorySet):
+        for j, category in enumerate(categories):
             x = 1.0 - 1.0 * j / (categoryCount-1)
             labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), category]
 
@@ -107,7 +127,6 @@ def getCategoryYearLabels(userOptions={}):
 
 def getCountryLabels(userOptions={}):
     global items
-    global sets
 
     cfg = {}
     options = {
@@ -118,23 +137,23 @@ def getCountryLabels(userOptions={}):
     countryCol = "country"
     latCol = "lat"
     lonCol = "lon"
-    if countryCol not in items[0] or countryCol not in sets:
-        print("Could not find column %s in items, please add this column to metadata cols with 'asIndex' = true" % countryCol)
-        sys.exit()
+    if countryCol not in items[0]:
+        print("`countryColumn` needs to be set in config yml to support country labels; they will not show otherwise.")
+        return (None, None)
+
     if latCol not in items[0] or lonCol not in items[0]:
-        print("Could not find column (%s, %s) in items, please add these columns to metadata cols with 'type' = 'float'" % (lonCol, latCol))
-        sys.exit()
+        # print("`latitudeColumn` and `latitudeColumn` need to be set in config yml to support country labels; they will not show otherwise.")
+        return (None, None)
 
     latRange = (90.0, -90.0)
     lonRange = (-180.0, 180.0)
-    countrySet = sets[countryCol]
     groups = lu.groupList(items, countryCol) # group by country
     counts = [group["count"] for group in groups]
     minCount, maxCount = (min(counts), max(counts))
     labels = []
     for group in groups:
         firstItem = group["items"][0]
-        label = countrySet[int(group[countryCol])]
+        label = firstItem[countryCol]
         lon = firstItem[lonCol]
         lat = firstItem[latCol]
         y = options["y"]
@@ -157,15 +176,18 @@ for labelKey, labelOptions in configLabels.items():
 
     if labelKey == "years":
         _labelConfig, labelData = getYearLabels()
-        labelConfig.update(_labelConfig)
+        if _labelConfig is not None:
+            labelConfig.update(_labelConfig)
 
     elif labelKey == "categoryYears":
         _labelConfig, labelData = getCategoryYearLabels()
-        labelConfig.update(_labelConfig)
+        if _labelConfig is not None:
+            labelConfig.update(_labelConfig)
 
     elif labelKey == "countries":
         _labelConfig, labelData = getCountryLabels()
-        labelConfig.update(_labelConfig)
+        if _labelConfig is not None:
+            labelConfig.update(_labelConfig)
 
     else:
         print("Invalid label key: %s" % labelKey)
