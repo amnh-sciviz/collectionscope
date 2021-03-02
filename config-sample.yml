@@ -146,23 +146,19 @@ visualizations:
   # This places items randomly within a sphere
   randomSphere:
     radius: 8192 # increase this number to make less dense
-    keyboardControls: firstPerson # type of controls for keyboard/mouse users; supports: "firstPerson" and "railcar"
 
   # This places the items along a "tunnel" organized by time; this will be disabled if no "dateColumn" field is set above
   timelineTunnel:
     radius: 256 # increase this to make the tunnel wider
     depthPerYear: 400 # increase this to make the tunnel longer
-    keyboardControls: railcar
 
   # This stacks item on top of a map; this will be disabled if no "latitudeColumn/longitudeColumn" fields are set above
   geographyBars:
     mapWidth: 8192 # increase this to make the map larger
     barHeight: 2048 # increase this to make the bars taller
-    keyboardControls: firstPerson
 
   # Places items along "tracks" based on "groupBy" categories along a timeline
   timelineTracks:
-    keyboardControls: railcar
     trackWidth: 180 # width per each track; increase to make the tracks wider
     depthPerYear: 400 # increase this to make the tracks longer
     trackHeight: 512 # increase this to make the tunnel wider

@@ -804,7 +804,6 @@ _.extend(CONFIG, {
   "views": {
     "randomSphere": {
       "radius": 8192,
-      "keyboardControls": "firstPerson",
       "layout": "randomSphere",
       "width": 16384,
       "height": 16384,
@@ -824,7 +823,6 @@ _.extend(CONFIG, {
     "timelineTunnel": {
       "radius": 256,
       "depthPerYear": 400,
-      "keyboardControls": "railcar",
       "layout": "timelineTunnel",
       "keys": [
         "years"
@@ -850,7 +848,6 @@ _.extend(CONFIG, {
     "geographyBars": {
       "mapWidth": 8192,
       "barHeight": 2048,
-      "keyboardControls": "firstPerson",
       "layout": "geographyBars",
       "keys": [
         "map"
@@ -887,7 +884,6 @@ _.extend(CONFIG, {
       ]
     },
     "timelineTracks": {
-      "keyboardControls": "railcar",
       "trackWidth": 180,
       "depthPerYear": 400,
       "trackHeight": 512,

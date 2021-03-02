@@ -5,6 +5,7 @@ var Controls = (function() {
   function Controls(config) {
     var defaults = {
       "el": "#app",
+      "mode": "firstPerson", // mode: firstPerson or railcar
       "maxVelocity": 20,
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
@@ -28,11 +29,13 @@ var Controls = (function() {
   Controls.prototype.init = function(){
     this.$el = $(this.opt.el);
     this.isTouch = isTouchDevice();
+    this.isXR = false;
     this.moveDirectionX = 0;
     this.moveDirectionY = 0;
     this.velocityX = 0;
     this.velocityY = 0;
     this.camera = this.opt.camera;
+    this.mode = this.opt.mode;
     this.loaded = false;
 
     // for determining what the camera is looking at
@@ -322,39 +325,42 @@ var Controls = (function() {
   Controls.prototype.update = function(now, delta){
     if (!this.loaded) return;
 
+    // move camera direction based on pointer
+    if (this.pointed !== false && delta > 0) {
+      this.updateHotspots();
+
+      var x = this.pointer.x - this.viewHalfX;
+      var y = this.pointer.y - this.viewHalfY;
+      var prevLat = this.lat;
+      var prevLon = this.lon;
+      var actualLookSpeed = delta * this.opt.lookSpeed;
+      this.lon -= x * actualLookSpeed;
+      this.lat -= y * actualLookSpeed;
+      this.lat = MathUtil.clamp(this.lat, this.opt.latRange[0], this.opt.latRange[1]);
+      this.lon = MathUtil.clamp(this.lon, this.opt.lonRange[0], this.opt.lonRange[1]);
+
+      if (prevLat === this.lat && prevLon === this.lon) return;
+
+      var phi = MathUtil.degToRad(90 - this.lat);
+      var theta = MathUtil.degToRad(this.lon);
+
+      var position = this.camera.position;
+      var targetPosition = new THREE.Vector3();
+      targetPosition.setFromSphericalCoords(1, phi, theta).add(position);
+      this.camera.lookAt(targetPosition);
+    }
+
     this.updateAxis('X');
     this.updateAxis('Y');
 
-    // move camera direction based on pointer
-    if (this.pointed === false || delta <= 0) return;
-
-    this.updateHotspots();
-
-    var x = this.pointer.x - this.viewHalfX;
-    var y = this.pointer.y - this.viewHalfY;
-    var prevLat = this.lat;
-    var prevLon = this.lon;
-    var actualLookSpeed = delta * this.opt.lookSpeed;
-    this.lon -= x * actualLookSpeed;
-    this.lat -= y * actualLookSpeed;
-    this.lat = MathUtil.clamp(this.lat, this.opt.latRange[0], this.opt.latRange[1]);
-    this.lon = MathUtil.clamp(this.lon, this.opt.lonRange[0], this.opt.lonRange[1]);
-
-    if (prevLat === this.lat && prevLon === this.lon) return;
-
-    var phi = MathUtil.degToRad(90 - this.lat);
-    var theta = MathUtil.degToRad(this.lon);
-
-    var position = this.camera.position;
-    var targetPosition = new THREE.Vector3();
-    targetPosition.setFromSphericalCoords(1, phi, theta).add(position);
-    this.camera.lookAt(targetPosition);
     renderNeeded = true;
   };
 
   Controls.prototype.updateAxis = function(axis){
     var moveDirection = this['moveDirection'+axis];
+    var mode = this.mode;
     var acceleration = false;
+    var fixedY = this.camera.position.y;
 
     // accelerate
     if (moveDirection !== 0 && Math.abs(this['velocity'+axis]) < this.opt.maxVelocity) {
@@ -377,14 +383,22 @@ var Controls = (function() {
       if (axis == 'Y') {
         var newZ = this.camera.position.z + this['velocity'+axis];
         newZ = MathUtil.clamp(newZ, this.opt.bounds[2], this.opt.bounds[3]);
-        this.camera.position.setZ(newZ);
+        var deltaZ = newZ - this.camera.position.z;
+        if (mode==="firstPerson") this.camera.translateZ(-deltaZ);
+        else this.camera.position.setZ(newZ);
         // console.log(newZ)
       } else {
         var newX = this.camera.position.x + this['velocity'+axis];
         newX = MathUtil.clamp(newX, this.opt.bounds[0], this.opt.bounds[1]);
-        this.camera.position.setX(newX);
+        var deltaX = newX - this.camera.position.x;
+        if (mode==="firstPerson") this.camera.translateX(-deltaX);
+        else this.camera.position.setX(newX);
         // console.log(newX)
       }
+
+      // constrain Y
+      this.camera.position.setY(fixedY);
+
       renderNeeded = true;
     }
   };
