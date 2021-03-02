@@ -552,10 +552,10 @@ var Collection = (function() {
       }, transitionDuration);
 
     } else if (closedStoryKey !== false) {
-      // adjust positions
-      this.updatePositions(view, transitionDuration, 1.0);
       // reset filters
       this.resetFilters(transitionDuration);
+      // adjust positions
+      this.updatePositions(view, transitionDuration, 1.0);
       // show hotspots
       _.each(this.stories, function(story, key){
         story.updateView(view.key);
@@ -599,7 +599,9 @@ var Collection = (function() {
     var _this = this;
     _.each(this.sets, function(set){
       set.updateAlpha(fromAlpha, toAlpha, transitionDuration);
-    })
+    });
+
+    this.pointCloud.updateAlpha(fromAlpha, toAlpha, transitionDuration)
   };
 
   Collection.prototype.updatePositions = function(newView, transitionDuration, multiplier) {

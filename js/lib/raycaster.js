@@ -7,6 +7,7 @@ var Raycaster = (function() {
       highlightWidth: 16,
       highlightThickness: 2,
       highlightColor: 0xf57542,
+      near: 0.001,
       far: 400,
       points: false, // required!
       camera: false // required!
@@ -25,6 +26,7 @@ var Raycaster = (function() {
     var innerRadius = diagonal * 0.5;
 
     var raycaster = new THREE.Raycaster();
+    raycaster.near = this.opt.near;
     raycaster.far = this.opt.far;
     raycaster.params.Points.threshold = innerRadius;
     raycaster.layers.set( Raycaster.LAYER_NUMBER );
