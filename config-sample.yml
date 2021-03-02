@@ -50,6 +50,10 @@ latitudeColumn: Latitude
 longitudeColumn: Longitude
 # Country column is used for labelling countries in the map view; comment out or ignore if not applicable
 countryColumn: Country
+# This is the map that will be used for the map view
+baseMap: img/world_map_with_regions.png # path is relative to the `make_app.py` script
+# And the map used for the map key in the map view
+baseMapKey: img/world_map_key_with_regions.png # path is relative to the `make_app.py` script
 
 #################################
 # Group by
@@ -147,21 +151,20 @@ visualizations:
   # This places the items along a "tunnel" organized by time; this will be disabled if no "dateColumn" field is set above
   timelineTunnel:
     radius: 256 # increase this to make the tunnel wider
-    depthPerYear: 512 # increase this to make the tunnel longer
+    depthPerYear: 400 # increase this to make the tunnel longer
     keyboardControls: railcar
 
   # This stacks item on top of a map; this will be disabled if no "latitudeColumn/longitudeColumn" fields are set above
   geographyBars:
     mapWidth: 8192 # increase this to make the map larger
     barHeight: 2048 # increase this to make the bars taller
-    basemap: img/world_map_with_regions.png # path is relative to the `make_app.py` script
     keyboardControls: firstPerson
 
   # Places items along "tracks" based on "groupBy" categories along a timeline
   timelineTracks:
     keyboardControls: railcar
     trackWidth: 180 # width per each track; increase to make the tracks wider
-    depthPerYear: 512 # increase this to make the tracks longer
+    depthPerYear: 400 # increase this to make the tracks longer
     trackHeight: 512 # increase this to make the tunnel wider
 
 #################################
@@ -171,10 +174,13 @@ visualizations:
   # and overlay additional content and media. You can simply comment out this entire section if you want to
   # just visualize the data without any overlays
 # All media paths should be relative to your /apps/{your project}/index.html file
+# Currently all stories are "anchored" around a specific item; so you must pass in an item id for each (via column "identifierColumn" above)
+  # if no item is passed in, a random item from the group will be assigned
 
 stories:
   laufer:
     query: "Donor CONTAINS Laufer AND Country CONTAINS China AND Acquisition Year < 1910"
+    itemId: "70 / 2628"
     images:
         - url: img/content/laufer/laufer_29130.jpg
           caption: Sacred dance of five lamas, China
@@ -205,6 +211,7 @@ stories:
 
   lumholtz:
     query: Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1902
+    itemId: "30 / 1873"
     images:
         - url: img/content/lumholtz/lumholtz_18793.jpg
           caption: Tarahumara women, Guadalupe, Chihuahua, 1892

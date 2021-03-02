@@ -33,7 +33,7 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.metadata.js"
 io.makeDirectories([OUTPUT_FILE, CONFIG_FILE])
 io.removeFiles(OUTPUT_FILE + "*.json")
 
-items = tu.getItems(config)
+items, categories = tu.getItems(config)
 itemCount = len(items)
 
 itemsPerFile = a.ITEMS_PER_FILE

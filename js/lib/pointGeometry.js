@@ -62,6 +62,8 @@ var PointGeometry = (function() {
 
     positionAttr.needsUpdate = true;
     renderNeeded = true;
+
+    return positions;
   };
 
   return PointGeometry;

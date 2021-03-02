@@ -89,10 +89,39 @@ def getItems(config):
 
     # Sort so that index corresponds to ID
     if idCol is not None:
-        validItems = sorted(validItems, key=lambda item: item[idCol])
-    validItems = lu.addIndices(validItems)
+        for i, item in enumerate(validItems):
+            validItems[i]["_id"] = str(item[idCol])
+        validItems = sorted(validItems, key=lambda item: item["_id"])
 
-    return validItems
+    validItems = lu.addIndices(validItems)
+    if idCol is None:
+        for i, item in enumerate(validItems):
+            validItems[i]["_id"] = str(i)
+
+    # Retrieve categories
+    categories = []
+    itemsByCategory = lu.groupList(validItems, "category", sort=True, desc=True)
+    if "groupLimit" in config and len(itemsByCategory) > config["groupLimit"]:
+        limit = config["groupLimit"]-1
+        otherItems = itemsByCategory[limit:]
+        otherLabel = config["otherLabel"] if "otherLabel" in config else "Other"
+        otherCount = 0
+        for group in otherItems:
+            for item in group["items"]:
+                validItems[item["index"]]["category"] = otherLabel
+                otherCount += 1
+        itemsByCategory = itemsByCategory[:limit] + [{"category": otherLabel, "count": otherCount}]
+    categoryColors = config["groupColors"]
+    colorCount = len(categoryColors)
+    for i, category in enumerate(itemsByCategory):
+        color = categoryColors[i % colorCount]
+        categories.append({
+            "text": category["category"],
+            "color": color,
+            "count": category["count"]
+        })
+
+    return (validItems, categories)
 
 def loadConfig(fn):
     return io.readYaml(fn)

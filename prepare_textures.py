@@ -45,7 +45,7 @@ if not a.PROBE:
     # Remove existing images
     io.removeFiles(OUTPUT_TEXTURES_DIR + "*.jpg")
 
-items = tu.getItems(config)
+items, categories = tu.getItems(config)
 
 # Make texture for each set
 # sets = list(configSets.items())

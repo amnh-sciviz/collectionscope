@@ -3,6 +3,7 @@
 import argparse
 import math
 import os
+from PIL import Image, ImageDraw
 from pprint import pprint
 import sys
 
@@ -13,70 +14,17 @@ import lib.math_utils as mu
 
 # input
 parser = argparse.ArgumentParser()
-parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
-parser.add_argument("-keys", dest="KEY_LIST", default="views,content,ui,menus,keys,overlays", help="Keys that should be included in config")
+parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", help="Config file")
 a = parser.parse_args()
 
-config = io.readJSON(a.CONFIG_FILE)
-
-sets, items = tu.getItems(config)
+config = tu.loadConfig(a.CONFIG_FILE)
+items, categories = tu.getItems(config)
+categoryCount = len(categories)
 
 OUTPUT_FILE = "apps/{appname}/js/config/config.content.js".format(appname=config["name"])
-KEY_LIST =  [k.strip() for k in a.KEY_LIST.split(",")]
 PRECISION = 5
 
 io.makeDirectories([OUTPUT_FILE])
-
-def getCategoryTimelineHotspot(view, content):
-    global items
-    global sets
-
-    year = None
-
-    if "year" in content:
-        year = content["year"]
-    elif "visibleTimeRange" in content:
-        year = mu.roundInt(mu.lerp(tuple(content["visibleTimeRange"]), 0.5))
-
-    if year is None:
-        print("Need to set year or time range in content")
-        return None
-
-    yearCol = "year"
-    if yearCol not in items[0]:
-        print("Could not find column %s in items, please add this column to metadata cols with 'type' = 'int'" % yearCol)
-        return None
-    years = [item[yearCol] for item in items]
-    minYear = min(years)
-    maxYear = max(years) + 1
-    nUnit = 1.0 / (maxYear-minYear)
-
-    if "category" not in sets:
-        print("Could not find column 'category' in sets")
-        return None
-
-    categories = sets["category"]
-    if "category" not in content:
-        print("Could not find column 'category' in content")
-        return None
-    if content["category"] not in categories:
-        print("Could not find %s in categories" % content["category"])
-        return None
-
-    categoryCount = len(categories)
-    categoryIndex = categories.index(content["category"])
-
-    # place at in the center of the year
-    z = mu.norm(year, (minYear, maxYear)) + nUnit*0.5
-    # place at center of region
-    x = 1.0 - 1.0 * categoryIndex / (categoryCount-1)
-    # place at top of bounds
-    y = 0.0
-    return {
-        "x":  round(x, PRECISION),
-        "y":  round(y, PRECISION),
-        "z":  round(z, PRECISION)
-    }
 
 def getTimelineValues():
     global items
@@ -94,76 +42,188 @@ def getTimelineValues():
     groups = lu.groupList(items, yearCol) # group by year
     yearDataLookup = lu.createLookup(groups, yearCol)
 
-    items = []
+    timelineItems = []
     for i in range(totalYears):
         year = i + minYear
         yearKey = str(year)
         count = 0
         if yearKey in yearDataLookup:
             count = yearDataLookup[yearKey]["count"]
-        items.append({
+        timelineItems.append({
             "year": year,
             "value": count
         })
-    return items
+    return timelineItems
 
-# check to see if we should make a menu from a property set
-if "menus" in config:
-    for menuKey, menu in config["menus"].items():
-        # check to see if we should make a menu from a property set
-        if "property" in menu and "items" not in menu and menu["property"] in sets:
-            keyName = "items" if "type" not in menu else menu["type"]
-            items = [{
-                "label": "All",
-                "name": "filter-"+menu["property"],
-                "value": -1,
-                "checked": True
-            }]
-            propSet = sets[menu["property"]]
-            for index, prop in enumerate(propSet):
-                items.append({
-                    "label": prop,
-                    "name": "filter-"+menu["property"],
-                    "value": index
-                })
-            config["menus"][menuKey][keyName] = items
+def makeCategoryTrackOverlay(filename, width=2048, lineThickness=4):
+    global categories
 
-# generate labels for timeline key
-if "keys" in config:
-    for keyValue, keyOptions in config["keys"].items():
-        if keyOptions["type"] == "timeline":
-            timelineValues = getTimelineValues()
-            config["keys"][keyValue]["items"] = timelineValues
+    categoryCount = len(categories)
 
-# create hotspots for stories
-if "views" in config and "content" in config:
-    for viewKey, view in config["views"].items():
-        if "content" not in view:
-            continue
+    if categoryCount < 1:
+        return
 
-        hotspots = {}
-        valid = False
-        for contentKey in view["content"]:
-            hotspot = {}
-            if contentKey not in config["content"]:
-                continue
+    height = width
+    baseImg = Image.new(mode="RGB", size=(width, height), color=(255, 255, 255))
+    draw = ImageDraw.Draw(baseImg)
 
-            if view["layout"] == "sphereCategoryTimeline":
-                hotspot = getCategoryTimelineHotspot(view, config["content"][contentKey])
-                if hotspot is not None:
-                    hotspots[contentKey] = hotspot
-                    valid = True
+    barWidth = (width - (categoryCount-1) * lineThickness) / categoryCount
+    for i, cat in enumerate(categories):
+        x0 = mu.roundInt(i * (barWidth + lineThickness))
+        x1 = mu.roundInt(x0 + barWidth)
+        y0 = 0
+        y1 = height
+        if i >= (categoryCount-1):
+            x1 = width
+        draw.rectangle([x0, y0, x1, y1], fill=cat["color"])
 
-        if valid:
-            config["views"][viewKey]["hotspots"] = hotspots
+    baseImg.save(filename)
 
 outjson = {}
-for key in KEY_LIST:
-    if key not in config:
-        print("Warning: %s does not exist in %s" % (key, a.CONFIG_FILE))
-        continue
 
-    outjson[key] = config[key]
+# Generate keys
+keys = {}
+# Map key
+keys["map"] = {
+    "type": "map",
+    "image": "../../"+config["baseMapKey"]
+}
+# Timeline key
+timelineValues = getTimelineValues()
+yearCount = len(timelineValues)
+keys["years"] = {
+    "type": "timeline",
+    "items": timelineValues
+}
+# Category key
+keys["categories"] = {
+    "type": "legend",
+    "parent": "#top-right-ui",
+    "items": categories
+}
+outjson["keys"] = keys
 
+# Generate content/Stories
+validStories = {}
+if "stories" in config:
+
+    itemLookup = lu.createLookup(items, "_id")
+
+    stories = config["stories"]
+    for key, story in stories.items():
+
+        # determine which item to highlight for this story
+        hotspotItemIndex = -1
+        if "itemId" in story and story["itemId"] in itemLookup:
+            hotspotItemIndex = itemLookup[story["itemId"]]["index"]
+
+        else:
+            # retrieve the story-specific items
+            storyItems = lu.filterByQueryString(items, story["query"]) if "query" in story else items[:]
+            # limit the results if specified
+            if "limit" in story and len(storyItems) > story["limit"]:
+                storyItems = storyItems[:story["limit"]]
+            # Take the first item
+            if len(storyItems) > 0:
+                hotspotItemIndex = storyItems[0]["index"]
+
+        if hotspotItemIndex >= 0:
+            story['hotspotItemIndex'] = hotspotItemIndex
+            validStories[key] = story
+        else:
+            print(f'Warning: no item found for story `{key}`; skipping...')
+
+    outjson["stories"] = validStories
+
+# Generate views/visualizations
+if "visualizations" in config:
+    visualizations = config["visualizations"]
+    for key, options in visualizations.items():
+
+        options["layout"] = key
+
+        # Do some layout calculations based on visualization type
+        if key == "randomSphere":
+            radius = options["radius"]
+            diameter = options["radius"] * 2
+            options["width"] = diameter
+            options["height"] = diameter
+            options["depth"] = diameter
+            options["cameraPosition"] = [0, 0, -radius/8]
+            options["bounds"] = [-radius, radius, -radius, radius]
+
+        elif key == "timelineTunnel":
+            radius = options["radius"]
+            depthPerYear = options["depthPerYear"]
+            depth = depthPerYear * yearCount
+            options["keys"] = ["years"]
+            options["labels"] = ["years"]
+            options["width"] = radius * 2
+            options["height"] = radius * 2
+            options["depth"] = depth
+            options["cameraPosition"] = [0, 0, -depth/4]
+            options["bounds"] = [-radius, radius, -depth/2, depth/2]
+
+        elif key == "geographyBars":
+            options["keys"] = ["map"]
+            options["labels"] = ["countries"]
+            options["width"] = options["mapWidth"]
+            options["height"] = options["barHeight"]
+            options["depth"] = options["mapWidth"] / 2
+            options["cameraPosition"] = [0, options["barHeight"]/8, -options["mapWidth"]/8]
+            options["bounds"] = [-options["width"]/2, options["width"]/2, -options["depth"]/2, options["depth"]/2]
+            options["overlays"] = [{
+              "type": "plane",
+              "width": options["width"], "height": options["depth"],
+              "image": "../../"+config["baseMap"],
+              "offset": [0, -20, 0]
+            }]
+
+        elif key == "timelineTracks":
+            depthPerYear = options["depthPerYear"]
+            depth = depthPerYear * yearCount
+            width = options["trackWidth"] * categoryCount
+            options["labels"] = ["years", "categoryYears"]
+            options["keys"] = ["years", "categories"]
+            options["width"] = width - options["trackWidth"]
+            options["height"] = options["trackHeight"]
+            options["depth"] = depth
+            options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
+            options["bounds"] = [-width/4, width/4, -depth/2, depth/2]
+            overlayRelativePath = "img/categories.png"
+            overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
+            makeCategoryTrackOverlay(overlayFullPath)
+            options["overlays"] = [{
+                "type": "plane",
+                "width": width, "height": depth,
+                "image": overlayRelativePath,
+                "offset": [0, -options["trackHeight"]/4, 0]
+            }]
+
+        visualizations[key] = options
+    outjson["views"] = visualizations
+
+# Generate UI
+outjson["ui"] = config["animation"]
+
+# Generate menus
+viewOptions = [
+  {"name": "change-view", "value": "randomSphere", "label": "Random", "checked": True},
+  {"name": "change-view", "value": "timelineTunnel", "label": "Time tunnel"},
+  {"name": "change-view", "value": "geographyBars", "label": "Map"},
+  {"name": "change-view", "value": "timelineTracks", "label": "Race track"}
+]
+viewOptions = [view for view in viewOptions if view["value"] in visualizations]
+outjson["menus"] = {
+    "viewOptions": {
+      "parent": "#bottom-right-ui",
+      "id": "radio-buttons-views",
+      "type": "radioItems",
+      "label": "Choose your layout",
+      "className": "radio-buttons radio-buttons-views",
+      "default": True,
+      "radioItems": viewOptions
+    }
+}
 
 io.writeJSON(OUTPUT_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")

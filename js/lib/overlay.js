@@ -4,7 +4,7 @@ var Overlay = (function() {
 
   Overlay.defaultValues = {
     'type': 'plane',
-    'imageDir': '../../img/',
+    'imageDir': '',
     'color': '#ffff00',
     'width': 16384,
     'height': 16384,

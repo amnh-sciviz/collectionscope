@@ -15,12 +15,12 @@ import lib.math_utils as mu
 
 # input
 parser = argparse.ArgumentParser()
-parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.json", help="Config file")
+parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", help="Config file")
 parser.add_argument("-dir", dest="AUDIO_DIR", default="audio/", help="Audio directory")
 parser.add_argument('-overwrite', dest="OVERWRITE", action="store_true", help="Overwrite existing audio?")
 a = parser.parse_args()
 
-config = io.readJSON(a.CONFIG_FILE)
+config = tu.loadConfig(a.CONFIG_FILE)
 configSounds = config["sounds"]
 
 PRECISION = 5

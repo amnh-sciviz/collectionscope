@@ -15,10 +15,10 @@ var Collection = (function() {
   Collection.prototype.init = function(){
     this.camera = this.opt.camera;
     this.listener = this.opt.listener;
-    this.currentViewKey = 'random';
+    this.currentViewKey = 'randomSphere';
     this.minAlpha = this.opt.ui.minAlpha;
 
-    this.content = this.opt.content;
+    this.storiesOptions = this.opt.stories;
     this.ui = this.opt.ui;
 
     var views = this.opt.views;
@@ -28,13 +28,13 @@ var Collection = (function() {
     this.views = views;
 
     this.labelSets = {};
-    this.overlays = {};
+    this.overlays = [];
     this.soundSets = {};
   };
 
   Collection.prototype.deselectHotspots = function(){
     _.each(this.stories, function(story, contentKey){
-      story.deselectHotspots();
+      story.deselectHotspot();
     });
   };
 
@@ -92,16 +92,19 @@ var Collection = (function() {
     // load labels
     totalToLoad += _.keys(this.opt.labels).length;
     // load overlays
-    totalToLoad += 1;
+    totalToLoad += _.reduce(this.views, function(memo, view){
+      if (_.has(view, 'overlays')) return memo + view.overlays.length;
+      else return memo;
+    }, 0);
     // load sounds
-    totalToLoad += _.keys(this.opt.sounds).length;
+    // totalToLoad += _.keys(this.opt.sounds).length;
     return totalToLoad;
   };
 
   Collection.prototype.load = function(){
     var _this = this;
 
-    this.loadContent();
+    this.loadStories();
     this.loadKeys();
 
     $.when(
@@ -110,43 +113,13 @@ var Collection = (function() {
       this.loadOverlays(),
       this.loadPositions(),
       this.loadSets(),
-      this.loadSounds(),
+      // this.loadSounds(),
       this.loadTextures()
 
     ).done(function(){
       _this.onReady();
       _this.opt.onLoadEnd();
     });
-  };
-
-  Collection.prototype.loadContent = function(){
-    var _this = this;
-    var stories = {};
-    var views = this.opt.views;
-
-    var markerTexture = new THREE.TextureLoader().load("../../img/compass_red.png");
-
-    _.each(this.content, function(content, contentKey){
-      if (!content.html) return;
-      var hotspots = {};
-      _.each(views, function(view, viewKey){
-        if (!view.hotspots) return;
-        _.each(view.hotspots, function(hotspot, hotspotKey){
-          if (hotspotKey == contentKey) {
-            hotspots[viewKey] = _.extend({}, view, hotspot);
-          }
-        });
-      });
-      if (_.isEmpty(hotspots)) {
-        console.log('No hotspots found for '+contentKey);
-        return;
-      }
-      var story = new Story(_.extend({}, content, {'hotspots': hotspots, 'markerTexture': markerTexture}));
-      stories[contentKey] = story;
-    });
-
-    this.stories = stories;
-    console.log('Loaded content.');
   };
 
   Collection.prototype.loadKeys = function(){
@@ -266,21 +239,31 @@ var Collection = (function() {
   Collection.prototype.loadOverlays = function(){
     var _this = this;
     var overlayPromises = [];
-    var overlays = {};
-    _.each(this.opt.overlays, function(options, key){
-      var overlay = new Overlay(options);
-      var deferred = overlay.load();
-      overlays[key] = overlay;
-      overlayPromises.push(deferred);
+    var overlays = [];
+
+    _.each(this.views, function(view, key){
+      if (!_.has(view, 'overlays')) {
+        _this.views[key].overlays = [];
+        return;
+      }
+      var viewOverlays = [];
+      _.each(view.overlays, function(options){
+        var overlay = new Overlay(options);
+        var deferred = overlay.load();
+        viewOverlays.push(overlay);
+        overlays.push(overlay);
+        overlayPromises.push(deferred);
+      });
+      _this.views[key].overlays = viewOverlays;
     });
 
+    this.overlays = overlays;
     var deferred = $.Deferred();
     if (overlayPromises.length < 1) deferred.resolve();
     else {
       $.when.apply(null, overlayPromises).done(function() {
         _this.opt.onLoadProgress();
         console.log('Loaded overlays');
-        _this.overlays = overlays;
         deferred.resolve();
       });
     }
@@ -403,6 +386,22 @@ var Collection = (function() {
     return deferred;
   };
 
+  Collection.prototype.loadStories = function(){
+    var _this = this;
+    var stories = {};
+
+    var markerTexture = new THREE.TextureLoader().load("../../img/compass_red.png");
+
+    _.each(this.storiesOptions, function(content, contentKey){
+      if (!content.hotspotItemIndex) return;
+      var story = new Story(_.extend({}, content, {'markerTexture': markerTexture}));
+      stories[contentKey] = story;
+    });
+
+    this.stories = stories;
+    console.log('Loaded content.');
+  };
+
   Collection.prototype.loadTextures = function(){
     var _this = this;
     var deferred = $.Deferred();
@@ -430,9 +429,9 @@ var Collection = (function() {
   };
 
   Collection.prototype.onFinishedStart = function(){
-    // _.each(this.soundSets, function(soundSet, key){
-    //   soundSet.active = true;
-    // });
+    _.each(this.soundSets, function(soundSet, key){
+      soundSet.active = true;
+    });
   };
 
   Collection.prototype.onReady = function(){
@@ -483,16 +482,14 @@ var Collection = (function() {
       container.add(labelSet.getThree());
     });
 
-    _.each(this.overlays, function(overlay, key){
+    _.each(this.overlays, function(overlay){
       container.add(overlay.getThree());
     });
 
     var hotspotGroup = new THREE.Group();
     _.each(this.stories, function(story, contentKey){
       story.updateView(_this.currentViewKey);
-      _.each(story.hotspots, function(hotspot, viewKey){
-        hotspotGroup.add(hotspot.object);
-      });
+      hotspotGroup.add(story.hotspot.object);
     });
     container.add(hotspotGroup);
     this.hotspotGroup = hotspotGroup;
@@ -526,13 +523,13 @@ var Collection = (function() {
         return;
       }
       // show a story
-      if (story.isSelected() & !story.visible) {
+      if (story.isSelected & !story.visible) {
         story.show();
         if (openedStoryKey === false) openedStoryKey = contentKey;
         return;
       }
       // hide a story
-      if (!story.isSelected() && story.visible) {
+      if (!story.isSelected && story.visible) {
         story.hide();
         if (closedStoryKey === false) closedStoryKey = contentKey;
         return;
@@ -546,7 +543,7 @@ var Collection = (function() {
       this.filterBySet(openedStoryKey, transitionDuration);
       // hide hotspots
       _.each(this.stories, function(story, key){
-        story.hideHotspots();
+        story.hideHotspot();
       });
       // adjust positions
       if (this.updatePositionTimeout) clearTimeout(this.updatePositionTimeout);
@@ -560,9 +557,8 @@ var Collection = (function() {
       // reset filters
       this.resetFilters(transitionDuration);
       // show hotspots
-      var viewContent = view.content ? view.content : [];
       _.each(this.stories, function(story, key){
-        if (_.indexOf(viewContent, key) >= 0) story.updateView(view.key);
+        story.updateView(view.key);
       });
 
     }
@@ -590,6 +586,10 @@ var Collection = (function() {
       soundSet.update(now);
     });
 
+    _.each(this.stories, function(story){
+      story.update(now);
+    });
+
     this.raycaster.update(pointerPosition);
   };
 
@@ -613,8 +613,15 @@ var Collection = (function() {
     });
     // update point cloud for raycasting
     globalRandomSeeder = new Math.seedrandom(this.opt.seedString);
-    this.pointCloud.updatePositions(newPositions, transitionDuration, multiplier);
+    var positionArr = this.pointCloud.updatePositions(newPositions, transitionDuration, multiplier);
     this.raycaster.hide(transitionDuration);
+
+    // console.log(positionArr);
+
+    // update stories
+    _.each(this.stories, function(story, key){
+      story.updatePositions(positionArr, transitionDuration);
+    });
   };
 
   Collection.prototype.updateView = function(newValue, transitionDuration){
@@ -667,16 +674,16 @@ var Collection = (function() {
     });
 
     // update overlays
-    var viewOverlays = newView.overlays ? newView.overlays : [];
-    _.each(this.overlays, function(overlay, key){
-      if (hide && overlay.visible) {
-        overlay.hide(transitionDuration);
-        return;
-      } else if (hide) return;
-      var valid = _.indexOf(viewOverlays, key) >= 0;
-      if (valid && overlay.visible) return false;
-      else if (valid) overlay.show(transitionDuration);
-      else overlay.hide(transitionDuration);
+    _.each(this.views, function(view, key){
+      if (key === newView.key) {
+        _.each(view.overlays, function(overlay){
+          if (!overlay.visible) overlay.show(transitionDuration);
+        });
+      } else {
+        _.each(view.overlays, function(overlay){
+          if (overlay.visible) overlay.hide(transitionDuration);
+        });
+      }
     });
 
     // update sounds
@@ -686,26 +693,14 @@ var Collection = (function() {
         soundSet.active = false;
         return;
       } else if (hide) return;
-      var valid = _.indexOf(viewLabels, key) >= 0;
+      var valid = _.indexOf(viewSounds, key) >= 0;
       if (valid) soundSet.active = true;
       else soundSet.active = false;
     });
 
     // update stories
-    var viewContent = newView.content ? newView.content : [];
     _.each(this.stories, function(story, key){
-      if (hide) {
-        story.hide();
-        story.hideHotspots();
-        return;
-      }
-      var valid = _.indexOf(viewContent, key) >= 0;
-      if (valid) {
-        story.updateView(newView.key);
-      } else {
-        story.hide();
-        story.hideHotspots();
-      }
+      story.updateView(newView.key);
     });
 
     // TODO: update menus

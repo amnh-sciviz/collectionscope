@@ -34,8 +34,7 @@ io.makeDirectories([OUTPUT_POS_DIR, CONFIG_FILE])
 # Remove existing data
 io.removeFiles(OUTPUT_POS_DIR + "*.json")
 
-items = tu.getItems(config)
-categories = tu.getItemCategories(items)
+items, categories = tu.getItems(config)
 itemCount = len(items)
 dimensions = 3
 
@@ -131,7 +130,7 @@ def getSphereCategoryTimelineLayout(userOptions={}):
         subgroupLookup = lu.createLookup(subgroups, categoryCol)
         for j, category in enumerate(categories):
             x = 1.0 - 1.0 * j / (categoryCount-1)
-            categoryKey = str(j)
+            categoryKey = category["text"]
             if categoryKey in subgroupLookup:
                 subgroup = subgroupLookup[categoryKey]
                 y = mu.norm(subgroup["count"], (minCount, maxCount))
@@ -143,6 +142,7 @@ def getSphereCategoryTimelineLayout(userOptions={}):
                     values[itemIndex*dimensions+2] = round(z, PRECISION)
 
     values = values.tolist()
+
     return (cfg, values)
 
 def getGeographyBarsLayout(userOptions={}):

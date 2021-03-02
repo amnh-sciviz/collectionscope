@@ -52,9 +52,8 @@ io.makeDirectories([OUTPUT_LABEL_DIR, CONFIG_FILE])
 # Remove existing data
 io.removeFiles(OUTPUT_LABEL_DIR + "*.json")
 
-items = tu.getItems(config)
+items, categories = tu.getItems(config)
 itemCount = len(items)
-categories = tu.getItemCategories(items)
 
 def getYearLabels(userOptions={}):
     global items
@@ -121,7 +120,7 @@ def getCategoryYearLabels(userOptions={}):
 
         for j, category in enumerate(categories):
             x = 1.0 - 1.0 * j / (categoryCount-1)
-            labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), category]
+            labels += [round(x, PRECISION), round(y, PRECISION), round(z, PRECISION), category["text"]]
 
     return (cfg, labels)
 

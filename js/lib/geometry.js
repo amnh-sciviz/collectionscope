@@ -187,7 +187,7 @@ var Geometry = (function() {
 
       return {
         'x': x,
-        'y': y, // swap z and y
+        'y': y,
         'z': z
       }
     });
@@ -247,6 +247,8 @@ var Geometry = (function() {
     fromAttr.needsUpdate = true;
     toAttr.needsUpdate = true;
     renderNeeded = true;
+
+    return positions;
   };
 
   return Geometry;

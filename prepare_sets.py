@@ -25,7 +25,7 @@ CONFIG_FILE = OUTPUT_DIR + "js/config/config.sets.js"
 
 # Make sure output dirs exist
 io.makeDirectories([OUTPUT_SET_DIR, CONFIG_FILE])
-items = tu.getItems(config)
+items, categories = tu.getItems(config)
 
 # Remove existing data
 io.removeFiles(OUTPUT_SET_DIR + "*.json")
