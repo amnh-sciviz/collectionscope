@@ -18,8 +18,11 @@ var Collection = (function() {
     this.currentViewKey = 'randomSphere';
     this.minAlpha = this.opt.ui.minAlpha;
 
-    this.storiesOptions = this.opt.stories;
     this.ui = this.opt.ui;
+
+    this.selectedItemIndex = -1;
+    this.itemManager = new ItemDetailManager(this.opt.metadata);
+    this.storyManager = new StoryManager({"stories": this.opt.stories});
 
     var views = this.opt.views;
     _.each(views, function(view, key){
@@ -30,12 +33,6 @@ var Collection = (function() {
     this.labelSets = {};
     this.overlays = [];
     this.soundSets = {};
-  };
-
-  Collection.prototype.deselectHotspots = function(){
-    _.each(this.stories, function(story, contentKey){
-      story.deselectHotspot();
-    });
   };
 
   Collection.prototype.filterBySet = function(setKey, transitionDuration){
@@ -104,7 +101,6 @@ var Collection = (function() {
   Collection.prototype.load = function(){
     var _this = this;
 
-    this.loadStories();
     this.loadKeys();
 
     $.when(
@@ -215,14 +211,9 @@ var Collection = (function() {
       _this.updateView(newValue, duration);
     });
 
-    $(document).on('select-hotspot', function(e, uuid){
-      console.log('Select hotspot: '+uuid);
-      _this.selectHotspot(uuid);
-    });
-
-    $(document).on('deselect-hotspots', function(e, value){
-      console.log('Deselect hotspots');
-      _this.deselectHotspots();
+    $(document).on('select-item', function(e, itemIndex) {
+      console.log("Select item index "+itemIndex);
+      _this.selectItem(itemIndex);
     });
   };
 
@@ -386,22 +377,6 @@ var Collection = (function() {
     return deferred;
   };
 
-  Collection.prototype.loadStories = function(){
-    var _this = this;
-    var stories = {};
-
-    var markerTexture = new THREE.TextureLoader().load("../../img/compass_red.png");
-
-    _.each(this.storiesOptions, function(content, contentKey){
-      if (!content.hotspotItemIndex) return;
-      var story = new Story(_.extend({}, content, {'markerTexture': markerTexture}));
-      stories[contentKey] = story;
-    });
-
-    this.stories = stories;
-    console.log('Loaded content.');
-  };
-
   Collection.prototype.loadTextures = function(){
     var _this = this;
     var deferred = $.Deferred();
@@ -426,6 +401,17 @@ var Collection = (function() {
     });
     deferred.resolve();
     return deferred;
+  };
+
+  Collection.prototype.onClickCanvas = function(){
+
+    // if story hotspot is selected, trigger
+
+    // if item is selected, trigger
+
+    // otherwise hide visible story or item
+
+    this.triggerSelectedHotspot();
   };
 
   Collection.prototype.onFinishedStart = function(){
@@ -487,12 +473,11 @@ var Collection = (function() {
     });
 
     var hotspotGroup = new THREE.Group();
-    _.each(this.stories, function(story, contentKey){
-      story.updateView(_this.currentViewKey);
+    this.storyManager.updateView(_this.currentViewKey);
+    _.each(this.storyManager.stories, function(story, contentKey){
       hotspotGroup.add(story.hotspot.object);
     });
     container.add(hotspotGroup);
-    this.hotspotGroup = hotspotGroup;
 
     this.container = container;
 
@@ -504,38 +489,21 @@ var Collection = (function() {
     this.updateAlpha(false, 1.0, transitionDuration);
   };
 
-  Collection.prototype.selectHotspot = function(uuid){
-    _.each(this.stories, function(story, contentKey){
-      story.selectHotspot(uuid);
-    });
+  Collection.prototype.selectItem = function(itemIndex){
+    if (this.selectedItemIndex === itemIndex) return;
+    this.selectedItemIndex = itemIndex;
+
+    this.itemManager.requestItem(itemIndex);
   };
 
   Collection.prototype.triggerSelectedHotspot = function(forceClose){
     var _this = this;
-    var openedStoryKey = false;
-    var closedStoryKey = false;
 
-    _.each(this.stories, function(story, contentKey){
-      // force everything to close
-      if (forceClose && story.visible) {
-        story.hide();
-        if (closedStoryKey === false) closedStoryKey = contentKey;
-        return;
-      }
-      // show a story
-      if (story.isSelected & !story.visible) {
-        story.show();
-        if (openedStoryKey === false) openedStoryKey = contentKey;
-        return;
-      }
-      // hide a story
-      if (!story.isSelected && story.visible) {
-        story.hide();
-        if (closedStoryKey === false) closedStoryKey = contentKey;
-        return;
-      }
-    });
+    var resp = this.storyManager.triggerSelectedHotspot(forceClose);
+    var openedStoryKey = resp.openedStoryKey;
+    var closedStoryKey = resp.closedStoryKey;
 
+    // apply filters accordingly
     var transitionDuration = Math.round(this.opt.ui.transitionDuration / 2);
     var view = this.views[this.currentViewKey];
     if (openedStoryKey !== false) {
@@ -557,10 +525,7 @@ var Collection = (function() {
       // adjust positions
       this.updatePositions(view, transitionDuration, 1.0);
       // show hotspots
-      _.each(this.stories, function(story, key){
-        story.updateView(view.key);
-      });
-
+      this.storyManager.updateView(view.key)
     }
 
   };
@@ -586,10 +551,7 @@ var Collection = (function() {
       soundSet.update(now);
     });
 
-    _.each(this.stories, function(story){
-      story.update(now);
-    });
-
+    this.storyManager.update(now);
     this.raycaster.update(pointerPosition);
   };
 
@@ -621,9 +583,7 @@ var Collection = (function() {
     // console.log(positionArr);
 
     // update stories
-    _.each(this.stories, function(story, key){
-      story.updatePositions(positionArr, transitionDuration);
-    });
+    this.storyManager.updatePositions(positionArr, transitionDuration);
   };
 
   Collection.prototype.updateView = function(newValue, transitionDuration){
@@ -701,9 +661,7 @@ var Collection = (function() {
     });
 
     // update stories
-    _.each(this.stories, function(story, key){
-      story.updateView(newView.key);
-    });
+    this.storyManager.updateView(newView.key);
 
     // TODO: update menus
 

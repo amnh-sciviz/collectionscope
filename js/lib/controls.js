@@ -46,10 +46,9 @@ var Controls = (function() {
     this.lon = 0;
     this.onResize();
 
-    // for tracking hotspots
-    this.hotspotGroup = this.opt.hotspotGroup;
-    this.raycaster = new THREE.Raycaster();
-    this.hotspotSelected = false;
+    // for tracking story hotspots and item hotspots
+    this.storyManager = this.opt.storyManager;
+    this.itemManager = this.opt.itemManager;
   };
 
   Controls.prototype.load = function(){
@@ -327,7 +326,7 @@ var Controls = (function() {
 
     // move camera direction based on pointer
     if (this.pointed !== false && delta > 0) {
-      this.updateHotspots();
+      this.storyManager.updateHotspots(this.npointer, this.camera);
 
       var x = this.pointer.x - this.viewHalfX;
       var y = this.pointer.y - this.viewHalfY;
@@ -400,43 +399,6 @@ var Controls = (function() {
       this.camera.position.setY(fixedY);
 
       renderNeeded = true;
-    }
-  };
-
-  Controls.prototype.updateHotspots = function(){
-    var _this = this;
-    var activeHotspot = _.find(this.hotspotGroup.children, function(obj){ return obj.visible; });
-
-    if (!activeHotspot) {
-      if (this.hotspotSelected !== false) {
-        this.hotspotSelected = false;
-        $(document).trigger('deselect-hotspots', [true]);
-      }
-      return;
-    }
-
-    // https://threejs.org/docs/#api/en/core/Raycaster
-    // update the picking ray with the camera and mouse position
-    this.raycaster.setFromCamera(this.npointer, this.camera);
-    var intersects = this.raycaster.intersectObjects(this.hotspotGroup.children);
-
-    if (intersects.length < 1) {
-      if (this.hotspotSelected !== false) {
-        this.hotspotSelected = false;
-        $(document).trigger('deselect-hotspots', [true]);
-      }
-      return;
-    }
-
-    var match = intersects[0];
-    if (intersects.length > 1) {
-      var sorted = _.sortBy(intersects, function(entry){ return entry.object.position.distanceTo(_this.camera.position); });
-      match = sorted[0];
-    }
-
-    if (match.object.uuid !== this.hotspotSelected) {
-      this.hotspotSelected = match.object.uuid;
-      $(document).trigger('select-hotspot', [match.object.uuid]);
     }
   };
 

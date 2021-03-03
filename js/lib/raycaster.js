@@ -79,6 +79,11 @@ var Raycaster = (function() {
     renderNeeded = true;
   };
 
+  Raycaster.prototype.getActiveItemIndex = function(){
+    if (!this.highlighter.visible) return false;
+    return this.highlightedObjectIndex;
+  };
+
   Raycaster.prototype.getThree = function(){
     return this.highlighter;
   };
