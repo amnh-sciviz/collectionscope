@@ -46,7 +46,7 @@ var Raycaster = (function() {
     container.visible = false;
     this.highlighter = container;
 
-    this.highlightedObjectIndex = false;
+    this.highlightedObjectIndex = -1;
     this.isHidden = false;
   };
 
@@ -57,12 +57,12 @@ var Raycaster = (function() {
 
     this.raycaster.setFromCamera( position, camera );
     var intersections = this.raycaster.intersectObjects( objects );
-    var intersectionIndex = intersections.length > 0 ? intersections[ 0 ].index : false; // return the object index
+    var intersectionIndex = intersections.length > 0 ? intersections[ 0 ].index : -1; // return the object index
 
     if (intersectionIndex === this.highlightedObjectIndex) return;
     this.highlightedObjectIndex = intersectionIndex;
 
-    if (intersectionIndex === false) {
+    if (intersectionIndex < 0) {
       this.highlighter.visible = false;
 
     } else {

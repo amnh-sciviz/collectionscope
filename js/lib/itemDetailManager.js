@@ -18,6 +18,7 @@ var ItemDetailManager = (function() {
     this.filesLoaded = {};
     this.fileIndicesLoaded = [];
     this.itemIndex = -1;
+    this.highlightedItemIndex = -1;
     this.raycaster = false;
   };
 
@@ -28,6 +29,7 @@ var ItemDetailManager = (function() {
   ItemDetailManager.prototype.loadItem = function(itemIndex){
     if (itemIndex < 0 || itemIndex >= this.opt.itemCount) return;
 
+    var _this = this;
     var fileIndex = Math.floor(itemIndex / this.opt.itemsPerFile);
     var fileItemIndex = itemIndex % this.opt.itemsPerFile;
     var fileUrl = this.opt.itemsPath + fileIndex + ".json";
@@ -35,6 +37,7 @@ var ItemDetailManager = (function() {
 
     // check to see if already loaded
     var foundIndex = _.indexOf(this.fileIndicesLoaded, fileIndex);
+
     if (foundIndex >= 0) {
       // move the index to the end of the buffer
       var temp = _.without(this.fileIndicesLoaded, foundIndex);
@@ -74,23 +77,24 @@ var ItemDetailManager = (function() {
   };
 
   ItemDetailManager.prototype.render = function(item) {
-    console.log(item);
-  };
-
-  ItemDetailManager.prototype.requestItem = function(itemIndex) {
-    var _this = this;
-
-    _.throttle(function(){
-      _this.loadItem(indexItem);
-    }, this.opt.throttleTime);
+    console.log('Render item: ', item);
   };
 
   ItemDetailManager.prototype.setRaycaster = function(raycaster){
     this.raycaster = raycaster;
   };
 
+  ItemDetailManager.prototype.triggerSelectedItem = function(){
+    if (this.highlightedItemIndex < 0) return false;
+
+    this.loadItem(this.highlightedItemIndex);
+
+    return this.highlightedItemIndex;
+  };
+
   ItemDetailManager.prototype.update = function(now, pointer){
     this.raycaster && this.raycaster.update(pointer);
+    this.highlightedItemIndex = this.raycaster.getActiveItemIndex();
   };
 
   return ItemDetailManager;

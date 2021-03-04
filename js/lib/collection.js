@@ -408,13 +408,13 @@ var Collection = (function() {
     this.storyManager.update(now, npointer, this.camera);
     this.itemManager.update(now, npointer);
 
-    // if story hotspot is selected, trigger
+    // trigger a story to open
+    var openedStoryKey = this.triggerStory();
 
-    // if item is selected, trigger
-
-    // otherwise hide visible story or item
-
-    this.triggerSelectedHotspot();
+    // trigger an item if user did not click on story
+    if (openedStoryKey===false) {
+      this.triggerItem();
+    }
   };
 
   Collection.prototype.onFinishedStart = function(){
@@ -500,7 +500,11 @@ var Collection = (function() {
     this.itemManager.requestItem(itemIndex);
   };
 
-  Collection.prototype.triggerSelectedHotspot = function(forceClose){
+  Collection.prototype.triggerItem = function(){
+    var triggeredItem = this.itemManager.triggerSelectedItem();
+  };
+
+  Collection.prototype.triggerStory = function(forceClose){
     var _this = this;
 
     var resp = this.storyManager.triggerSelectedHotspot(forceClose);
@@ -532,6 +536,7 @@ var Collection = (function() {
       this.storyManager.updateView(view.key)
     }
 
+    return openedStoryKey;
   };
 
   Collection.prototype.update = function(now, pointerPosition){

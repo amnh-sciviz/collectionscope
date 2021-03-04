@@ -79,11 +79,11 @@ var StoryManager = (function() {
         return;
       }
       // hide a story
-      if (!story.isSelected && story.visible) {
-        story.hide();
-        if (closedStoryKey === false) closedStoryKey = contentKey;
-        return;
-      }
+      // if (!story.isSelected && story.visible) {
+      //   story.hide();
+      //   if (closedStoryKey === false) closedStoryKey = contentKey;
+      //   return;
+      // }
     });
 
     return {
