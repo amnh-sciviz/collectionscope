@@ -47,6 +47,7 @@ var PointGeometry = (function() {
       alphaArr[i] = 1.0;
     }
     this.alphaArr = alphaArr;
+    this.positionArr = positions;
   };
 
   PointGeometry.prototype.getThree = function(){
@@ -79,6 +80,7 @@ var PointGeometry = (function() {
 
     this.threePoints.geometry.computeBoundingBox();
 
+    this.positionArr = positions;
     return positions;
   };
 

@@ -6,6 +6,7 @@ var Collection = (function() {
     var defaults = {
       'onLoadEnd': function(){ console.log('Loading finished'); },
       'onLoadProgress': function(){ console.log('Loading progress...') },
+      'zoomInDistance': 30, // how far away camera should be when it zooms into an item
       'seedString': 'museum' // seed for randomizing positions
     };
     this.opt = _.extend({}, defaults, config);
@@ -15,12 +16,12 @@ var Collection = (function() {
   Collection.prototype.init = function(){
     this.camera = this.opt.camera;
     this.listener = this.opt.listener;
+    this.controls = false;
     this.currentViewKey = 'randomSphere';
     this.minAlpha = this.opt.ui.minAlpha;
 
     this.ui = this.opt.ui;
 
-    this.selectedItemIndex = -1;
     this.itemManager = new ItemDetailManager(this.opt.metadata);
     this.storyManager = new StoryManager({"stories": this.opt.stories});
 
@@ -209,11 +210,6 @@ var Collection = (function() {
     $(document).on('change-view', function(e, newValue, duration) {
       console.log("Changing view to "+newValue);
       _this.updateView(newValue, duration);
-    });
-
-    $(document).on('select-item', function(e, itemIndex) {
-      console.log("Select item index "+itemIndex);
-      _this.selectItem(itemIndex);
     });
   };
 
@@ -466,6 +462,8 @@ var Collection = (function() {
       'points': pointCloud
     });
     this.itemManager.setRaycaster(raycaster);
+    this.itemManager.updatePositions(pointCloud.positionArr, 0);
+    this.storyManager.updatePositions(pointCloud.positionArr, 0);
     container.add(raycaster.getThree());
 
     _.each(this.labelSets, function(labelSet, key){
@@ -493,15 +491,17 @@ var Collection = (function() {
     this.updateAlpha(false, 1.0, transitionDuration);
   };
 
-  Collection.prototype.selectItem = function(itemIndex){
-    if (this.selectedItemIndex === itemIndex) return;
-    this.selectedItemIndex = itemIndex;
-
-    this.itemManager.requestItem(itemIndex);
+  Collection.prototype.setControls = function(controls){
+    this.controls = controls;
   };
 
   Collection.prototype.triggerItem = function(){
-    var triggeredItem = this.itemManager.triggerSelectedItem();
+    var triggeredItemIndex = this.itemManager.triggerSelectedItem();
+
+    if (triggeredItemIndex===false) return;
+
+    var position = this.itemManager.itemPositions[triggeredItemIndex];
+    this.controls && this.controls.flyTo(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration);
   };
 
   Collection.prototype.triggerStory = function(forceClose){
@@ -591,8 +591,9 @@ var Collection = (function() {
 
     // console.log(positionArr);
 
-    // update stories
+    // update stories/items
     this.storyManager.updatePositions(positionArr, transitionDuration);
+    this.itemManager.updatePositions(positionArr, transitionDuration);
   };
 
   Collection.prototype.updateView = function(newValue, transitionDuration){

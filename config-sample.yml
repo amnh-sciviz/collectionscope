@@ -253,4 +253,5 @@ animation:
   startTransitionDuration: 5000 # The initial fade in duration
   transitionDuration: 3000 # The amount of time to transition between views
   componentTransitionDuration: 500 # How long components like labels and overlays should fade in/out
+  zoomInTransitionDuration: 2000 # How long it takes ot zoom when user selects an item
   minAlpha: 0.0 # the transparency of inactive items (not visible by default)

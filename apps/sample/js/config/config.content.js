@@ -929,6 +929,7 @@ _.extend(CONFIG, {
     "startTransitionDuration": 5000,
     "transitionDuration": 3000,
     "componentTransitionDuration": 500,
+    "zoomInTransitionDuration": 2000,
     "minAlpha": 0.0
   },
   "menus": {

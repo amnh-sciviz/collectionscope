@@ -37,6 +37,7 @@ var Controls = (function() {
     this.camera = this.opt.camera;
     this.mode = this.opt.mode;
     this.loaded = false;
+    this.lookAtPosition = false;
 
     // for determining what the camera is looking at
     this.pointed = false;
@@ -55,6 +56,53 @@ var Controls = (function() {
     this.pointer.x = x;
     this.pointer.y = y;
     this.normalizePointer();
+  };
+
+  Controls.prototype.fly = function(now){
+    var percent = MathUtil.norm(now, this.flyStartTime, this.flyEndTime);
+    percent = MathUtil.clamp(percent, 0, 1.0);
+    percent = MathUtil.ease(percent);
+
+    var cameraPosition = this.flyStartPosition.clone();
+    cameraPosition = cameraPosition.lerp(this.flyEndPosition, percent);
+    var lookAt = this.flyStartLookAtPosition.clone();
+    lookAt = lookAt.lerp(this.flyEndLookAtPosition, percent);
+
+    this.camera.position.copy(cameraPosition);
+    this.camera.lookAt(lookAt);
+
+    if (percent >= 1.0){
+      this.isFlying = false;
+    }
+  };
+
+  Controls.prototype.flyTo = function(position, distance, transitionDuration){
+    this.isFlying = true;
+    this.flyStartTime = new Date().getTime();
+    this.flyEndTime = this.flyStartTime + transitionDuration;
+    var cameraPosition = this.camera.position;
+    this.flyStartPosition = cameraPosition.clone();
+
+    // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
+    var lookAtPosition = this.lookAtPosition;
+    if (!lookAtPosition) {
+      lookAtPosition = new THREE.Vector3( 0, 0, - 1 );
+      lookAtPosition.applyQuaternion(this.camera.quaternion);
+    }
+    this.flyStartLookAtPosition = lookAtPosition.clone();
+
+    position = new THREE.Vector3(position.x, position.y, position.z);
+    this.flyEndLookAtPosition = position.clone();
+    // this.flyEndLookAtPosition.applyQuaternion(this.camera.quaternion);
+
+    // compute target position based on distance away from position
+    if (distance > 0) {
+      var cameraDistance = position.distanceTo(cameraPosition);
+      var lerpAmount = 1.0 - (distance/cameraDistance);
+      position = cameraPosition.lerp(position, lerpAmount);
+    }
+    this.flyEndPosition = position.clone();
+
   };
 
   Controls.prototype.load = function(){
@@ -342,6 +390,13 @@ var Controls = (function() {
   Controls.prototype.update = function(now, delta){
     if (!this.loaded) return;
 
+    // check if we're flying
+    if (this.isFlying) {
+      this.fly(now);
+      renderNeeded = true;
+      return;
+    }
+
     // move camera direction based on pointer
     if (this.pointed !== false && delta > 0) {
       var x = this.pointer.x - this.viewHalfX;
@@ -363,6 +418,7 @@ var Controls = (function() {
       var targetPosition = new THREE.Vector3();
       targetPosition.setFromSphericalCoords(1, phi, theta).add(position);
       this.camera.lookAt(targetPosition);
+      this.lookAtPosition = targetPosition;
     }
 
     this.updateAxis('X');

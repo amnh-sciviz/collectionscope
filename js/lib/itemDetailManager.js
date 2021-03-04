@@ -20,6 +20,7 @@ var ItemDetailManager = (function() {
     this.itemIndex = -1;
     this.highlightedItemIndex = -1;
     this.raycaster = false;
+    this.itemPositions = [];
   };
 
   ItemDetailManager.prototype.hide = function(transitionDuration){
@@ -85,7 +86,7 @@ var ItemDetailManager = (function() {
   };
 
   ItemDetailManager.prototype.triggerSelectedItem = function(){
-    if (this.highlightedItemIndex < 0) return false;
+    if (this.highlightedItemIndex < 0 || this.highlightedItemIndex===this.itemIndex) return false;
 
     this.loadItem(this.highlightedItemIndex);
 
@@ -95,6 +96,10 @@ var ItemDetailManager = (function() {
   ItemDetailManager.prototype.update = function(now, pointer){
     this.raycaster && this.raycaster.update(pointer);
     this.highlightedItemIndex = this.raycaster.getActiveItemIndex();
+  };
+
+  ItemDetailManager.prototype.updatePositions = function(positionArr, transitionDuration){
+    this.itemPositions = positionArr;
   };
 
   return ItemDetailManager;
