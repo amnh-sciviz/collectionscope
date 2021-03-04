@@ -45,10 +45,6 @@ var Controls = (function() {
     this.lat = 0;
     this.lon = 0;
     this.onResize();
-
-    // for tracking story hotspots and item hotspots
-    this.storyManager = this.opt.storyManager;
-    this.itemManager = this.opt.itemManager;
   };
 
   Controls.prototype.load = function(){
@@ -171,6 +167,14 @@ var Controls = (function() {
       _this.pointer.x = e.pageX;
       _this.pointer.y = e.pageY;
       _this.normalizePointer();
+    });
+
+    $doc.on('click', 'canvas', function(e) {
+      _this.pointed = true;
+      _this.pointer.x = e.pageX;
+      _this.pointer.y = e.pageY;
+      _this.normalizePointer();
+      $(document).trigger('canvas-click', [_this.pointer, _this.npointer]);
     });
 
     if (isTouch) {
@@ -326,8 +330,6 @@ var Controls = (function() {
 
     // move camera direction based on pointer
     if (this.pointed !== false && delta > 0) {
-      this.storyManager.updateHotspots(this.npointer, this.camera);
-
       var x = this.pointer.x - this.viewHalfX;
       var y = this.pointer.y - this.viewHalfY;
       var prevLat = this.lat;

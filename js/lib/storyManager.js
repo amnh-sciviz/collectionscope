@@ -93,7 +93,9 @@ var StoryManager = (function() {
 
   };
 
-  StoryManager.prototype.update = function(now){
+  StoryManager.prototype.update = function(now, pointer, camera){
+    this.updateHotspots(pointer, camera);
+
     _.each(this.stories, function(story){
       story.update(now);
     });

@@ -18,6 +18,11 @@ var ItemDetailManager = (function() {
     this.filesLoaded = {};
     this.fileIndicesLoaded = [];
     this.itemIndex = -1;
+    this.raycaster = false;
+  };
+
+  ItemDetailManager.prototype.hide = function(transitionDuration){
+    this.raycaster && this.raycaster.hide(transitionDuration);
   };
 
   ItemDetailManager.prototype.loadItem = function(itemIndex){
@@ -78,6 +83,14 @@ var ItemDetailManager = (function() {
     _.throttle(function(){
       _this.loadItem(indexItem);
     }, this.opt.throttleTime);
+  };
+
+  ItemDetailManager.prototype.setRaycaster = function(raycaster){
+    this.raycaster = raycaster;
+  };
+
+  ItemDetailManager.prototype.update = function(now, pointer){
+    this.raycaster && this.raycaster.update(pointer);
   };
 
   return ItemDetailManager;

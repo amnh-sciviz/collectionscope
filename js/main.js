@@ -47,8 +47,8 @@ var MainApp = (function() {
       _this.onChangeView(newValue);
     });
 
-    $doc.on('click', 'canvas', function(e) {
-      _this.collection && _this.collection.onClickCanvas();
+    $doc.on('canvas-click', function(e, pointer, npointer) {
+      _this.collection && _this.collection.onClickCanvas(pointer, npointer);
     });
 
     $doc.on('click', '.close-story', function(e) {
@@ -182,10 +182,10 @@ var MainApp = (function() {
       this.clock = new THREE.Clock();
     }
 
-    var pointerPosition = this.controls.npointer;
+
     this.update(now);
-    this.collection && this.collection.update(now, pointerPosition);
     this.controls && this.controls.update(now, this.clock.getDelta());
+    this.collection && this.collection.update(now, this.controls.npointer);
 
     if (renderNeeded) {
       this.renderer.render( this.scene, this.camera );

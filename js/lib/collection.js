@@ -403,7 +403,10 @@ var Collection = (function() {
     return deferred;
   };
 
-  Collection.prototype.onClickCanvas = function(){
+  Collection.prototype.onClickCanvas = function(pointer, npointer){
+    var now = new Date().getTime();
+    this.storyManager.update(now, npointer, this.camera);
+    this.itemManager.update(now, npointer);
 
     // if story hotspot is selected, trigger
 
@@ -458,11 +461,12 @@ var Collection = (function() {
     });
     container.add(pointCloud.getThree());
     this.pointCloud = pointCloud;
-    this.raycaster = new Raycaster({
+    var raycaster = new Raycaster({
       'camera': this.camera,
       'points': pointCloud
     });
-    container.add(this.raycaster.getThree());
+    this.itemManager.setRaycaster(raycaster);
+    container.add(raycaster.getThree());
 
     _.each(this.labelSets, function(labelSet, key){
       container.add(labelSet.getThree());
@@ -551,8 +555,8 @@ var Collection = (function() {
       soundSet.update(now);
     });
 
-    this.storyManager.update(now);
-    this.raycaster.update(pointerPosition);
+    this.storyManager.update(now, pointerPosition, this.camera);
+    this.itemManager.update(now, pointerPosition);
   };
 
   Collection.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
@@ -578,7 +582,7 @@ var Collection = (function() {
     // update point cloud for raycasting
     globalRandomSeeder = new Math.seedrandom(this.opt.seedString);
     var positionArr = this.pointCloud.updatePositions(newPositions, transitionDuration, multiplier);
-    this.raycaster.hide(transitionDuration);
+    this.itemManager.hide(transitionDuration);
 
     // console.log(positionArr);
 
