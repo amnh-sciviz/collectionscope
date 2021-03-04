@@ -47,6 +47,16 @@ var Controls = (function() {
     this.onResize();
   };
 
+  Controls.prototype.centerPointer = function(){
+    var x = this.$el.width() * 0.5;
+    var y = this.$el.height() * 0.5;
+
+    this.pointed = true;
+    this.pointer.x = x;
+    this.pointer.y = y;
+    this.normalizePointer();
+  };
+
   Controls.prototype.load = function(){
     this.loadMenus();
     this.loadListeners();
@@ -180,11 +190,15 @@ var Controls = (function() {
     if (isTouch) {
       var el = this.$el[0];
       var mc = new Hammer(el);
-      mc.on("panmove", function(e) {
+      mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+      mc.on("panstart panmove press", function(e) {
         _this.pointed = true;
         _this.pointer.x = e.center.x;
-        _this.pointer.x = e.center.y;
+        _this.pointer.y = e.center.y;
         _this.normalizePointer();
+      });
+      mc.on("panend pancancel pressup", function(e){
+        _this.centerPointer();
       });
     }
 
