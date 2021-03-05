@@ -79,38 +79,41 @@ var Controls = (function() {
       this.lookAtPosition = lookAt.clone();
       if (this.anchorToFlyPosition) {
         this.setAnchor(lookAt.clone());
+      } else {
+        this.setAnchor(false);
       }
     }
   };
 
-  Controls.prototype.flyTo = function(position, distance, transitionDuration, anchorToPosition){
+  Controls.prototype.flyTo = function(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition){
     this.isFlying = true;
     this.flyStartTime = new Date().getTime();
     this.flyEndTime = this.flyStartTime + transitionDuration;
-    var cameraPosition = this.camera.position;
-    this.flyStartPosition = cameraPosition.clone();
+    var cameraPosition = this.camera.position.clone();
 
-    if (!this.isOrbiting) this.lastPreOrbitPosition = cameraPosition.clone();
+    // keep track of last position and look-at before we fly
+    if (!this.isOrbiting) {
+      this.lastPreOrbitPosition = cameraPosition.clone();
+      this.lastPreOrbitLookAt = this.lookAtPosition.clone();
+    }
     this.anchorToFlyPosition = anchorToPosition ? true : false;
 
-    // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
-    var lookAtPosition = this.lookAtPosition;
-    if (!lookAtPosition) {
-      lookAtPosition = new THREE.Vector3( 0, 0, - 1 );
-      lookAtPosition.applyQuaternion(this.camera.quaternion);
-    }
-    this.flyStartLookAtPosition = lookAtPosition.clone();
-    position = new THREE.Vector3(position.x, position.y, position.z);
-    this.flyEndLookAtPosition = position.clone();
-    // this.flyEndLookAtPosition.applyQuaternion(this.camera.quaternion);
+    this.flyStartPosition = cameraPosition.clone();
+    this.flyStartLookAtPosition = this.lookAtPosition.clone();
+    this.flyEndLookAtPosition = targetLookAtPosition.clone();
+    this.flyEndPosition = targetPosition.clone();
+  };
 
-    // compute target position based on distance away from position
-    if (distance > 0) {
-      var cameraDistance = position.distanceTo(cameraPosition);
-      var lerpAmount = 1.0 - (distance/cameraDistance);
-      position = cameraPosition.lerp(position, lerpAmount);
+  Controls.prototype.flyToOrbit = function(position, radius, transitionDuration, anchorToPosition){
+    var cameraPosition = this.camera.position.clone();
+    var targetLookAtPosition = new THREE.Vector3(position.x, position.y, position.z);
+    var targetPosition = targetLookAtPosition.clone();
+    if (radius > 0) {
+      var cameraDistance = targetPosition.distanceTo(cameraPosition);
+      var lerpAmount = 1.0 - (radius/cameraDistance);
+      targetPosition = cameraPosition.lerp(targetPosition, lerpAmount);
     }
-    this.flyEndPosition = position.clone();
+    this.flyTo(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition);
   };
 
   Controls.prototype.load = function(){
@@ -357,11 +360,9 @@ var Controls = (function() {
   };
 
   Controls.prototype.releaseAnchor = function(flyToLastPosition){
-    this.setAnchor(false);
-
-    if (flyToLastPosition && this.lastPreOrbitPosition) {
+    if (flyToLastPosition && this.lastPreOrbitPosition && this.lastPreOrbitLookAt) {
       var anchorToPosition = false;
-      this.flyTo(this.lastPreOrbitPosition, 0, this.opt.zoomInTransitionDuration, anchorToPosition);
+      this.flyTo(this.lastPreOrbitPosition, this.lastPreOrbitLookAt, this.opt.zoomInTransitionDuration, anchorToPosition);
     }
   };
 

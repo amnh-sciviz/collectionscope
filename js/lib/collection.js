@@ -516,7 +516,7 @@ var Collection = (function() {
 
     var position = this.itemManager.itemPositions[triggeredItemIndex];
     var anchorToPosition = true;
-    this.controls && this.controls.flyTo(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition);
+    this.controls && this.controls.flyToOrbit(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition);
   };
 
   Collection.prototype.triggerStory = function(forceClose){
