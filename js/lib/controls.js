@@ -38,11 +38,14 @@ var Controls = (function() {
     this.mode = this.opt.mode;
     this.loaded = false;
     this.lookAtPosition = false;
+    this.anchor = false;
+    this.orbit = new THREE.Spherical();
 
     // for determining what the camera is looking at
     this.pointed = false;
     this.pointer = new THREE.Vector2();
     this.npointer = new THREE.Vector2();
+    // this.pointerDelta = new THREE.Vector2();
     this.lat = 0;
     this.lon = 0;
     this.onResize();
@@ -52,10 +55,7 @@ var Controls = (function() {
     var x = this.$el.width() * 0.5;
     var y = this.$el.height() * 0.5;
 
-    this.pointed = true;
-    this.pointer.x = x;
-    this.pointer.y = y;
-    this.normalizePointer();
+    this.onPointChange(x, y);
   };
 
   Controls.prototype.fly = function(now){
@@ -73,6 +73,8 @@ var Controls = (function() {
 
     if (percent >= 1.0){
       this.isFlying = false;
+      this.lookAtPosition = lookAt.clone();
+      this.setAnchor(lookAt.clone());
     }
   };
 
@@ -221,17 +223,11 @@ var Controls = (function() {
 
     $doc.on("mousemove", function(e){
       if (isTouch) return;
-      _this.pointed = true;
-      _this.pointer.x = e.pageX;
-      _this.pointer.y = e.pageY;
-      _this.normalizePointer();
+      _this.onPointChange(e.pageX, e.pageY);
     });
 
     $doc.on('click', 'canvas', function(e) {
-      _this.pointed = true;
-      _this.pointer.x = e.pageX;
-      _this.pointer.y = e.pageY;
-      _this.normalizePointer();
+      _this.onPointChange(e.pageX, e.pageY);
       $(document).trigger('canvas-click', [_this.pointer, _this.npointer]);
     });
 
@@ -240,10 +236,7 @@ var Controls = (function() {
       var mc = new Hammer(el);
       mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
       mc.on("panstart panmove press", function(e) {
-        _this.pointed = true;
-        _this.pointer.x = e.center.x;
-        _this.pointer.y = e.center.y;
-        _this.normalizePointer();
+        _this.onPointChange(e.center.x, e.center.y);
       });
       mc.on("panend pancancel pressup", function(e){
         _this.centerPointer();
@@ -348,6 +341,28 @@ var Controls = (function() {
     this.viewHalfY = window.innerHeight / 2;
   };
 
+  Controls.prototype.onPointChange = function(x, y){
+    this.pointed = true;
+    // this.pointerDelta.x = x - this.pointer.x;
+    // this.pointerDelta.y = y - this.pointer.y;
+    this.pointer.x = x;
+    this.pointer.y = y;
+    this.normalizePointer();
+  };
+
+  Controls.prototype.setAnchor = function(position){
+    this.isOrbiting = false;
+    if (position !== false) {
+      this.isOrbiting = true;
+      this.anchor = position.clone();
+      this.orbit.radius = position.distanceTo(this.camera.position);
+      var cameraPos = this.camera.position.clone();
+      var pos = cameraPos.sub(this.anchor);
+      this.orbit.theta = Math.acos(pos.z / this.orbit.radius);
+      this.orbit.phi = Math.atan2(pos.y, pos.x);
+    }
+  };
+
   Controls.prototype.setBounds = function(bounds){
     this.opt.bounds = bounds;
   };
@@ -394,6 +409,12 @@ var Controls = (function() {
     if (this.isFlying) {
       this.fly(now);
       renderNeeded = true;
+      return;
+    }
+
+    // check if we're orbiting an object
+    if (this.isOrbiting) {
+      this.updateOrbit(now, delta);
       return;
     }
 
@@ -472,6 +493,34 @@ var Controls = (function() {
 
       renderNeeded = true;
     }
+  };
+
+  Controls.prototype.updateOrbit = function(now, delta){
+    if (this.pointed === false || delta <= 0 || anchor === false) return;
+
+    var anchor = this.anchor;
+    var orbit = this.orbit;
+    var camera = this.camera;
+
+    var sensitivity = 0.1;
+    var deltaTheta = this.npointer.x * sensitivity;
+    var deltaPhi = this.npointer.y * sensitivity;
+    var theta = this.orbit.theta - deltaTheta;
+    var phi = this.orbit.phi - deltaPhi;
+    var radius = this.orbit.radius;
+
+    // Turn back into Cartesian coordinates
+    var pos = new THREE.Vector3();
+    pos.x = radius * Math.sin(theta) * Math.cos(phi);
+    pos.y = radius * Math.sin(theta) * Math.sin(phi);
+    pos.z = radius * Math.cos(theta);
+
+    pos = pos.add(anchor);
+    camera.position.copy(pos);
+    camera.lookAt(anchor);
+
+    renderNeeded = true;
+
   };
 
   return Controls;
