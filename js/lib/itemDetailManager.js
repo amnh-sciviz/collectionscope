@@ -40,7 +40,7 @@ var ItemDetailManager = (function() {
     // check to see if already loaded
     var foundIndex = _.indexOf(this.fileIndicesLoaded, fileIndex);
 
-    if (foundIndex >= 0) {
+    if (foundIndex >= 0 && _.has(this.filesLoaded, ''+foundIndex)) {
       // move the index to the end of the buffer
       var temp = _.without(this.fileIndicesLoaded, foundIndex);
       temp.push(foundIndex);
@@ -76,6 +76,11 @@ var ItemDetailManager = (function() {
       this.render(data[fileItemIndex]);
     }
 
+  };
+
+  ItemDetailManager.prototype.releaseSelectedItem = function(){
+    this.itemIndex = -1;
+    this.raycaster.activeObjectIndex = -1;
   };
 
   ItemDetailManager.prototype.render = function(item) {

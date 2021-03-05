@@ -36,6 +36,12 @@ var Collection = (function() {
     this.soundSets = {};
   };
 
+  Collection.prototype.deselectActiveItem = function(){
+    var flyToLastPosition = true;
+    this.controls && this.controls.releaseAnchor(flyToLastPosition);
+    this.itemManager.releaseSelectedItem();
+  };
+
   Collection.prototype.filterBySet = function(setKey, transitionDuration){
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
     var sets = this.opt.sets;
@@ -206,10 +212,18 @@ var Collection = (function() {
 
   Collection.prototype.loadListeners = function(){
     var _this = this;
+    var $doc = $(document);
 
-    $(document).on('change-view', function(e, newValue, duration) {
+    $doc.on('change-view', function(e, newValue, duration) {
       console.log("Changing view to "+newValue);
       _this.updateView(newValue, duration);
+    });
+
+    $doc.keypress(function(e){
+      if (e.key === 'x') {
+        e.preventDefault()
+        _this.deselectActiveItem();
+      }
     });
   };
 
@@ -501,7 +515,8 @@ var Collection = (function() {
     if (triggeredItemIndex===false) return;
 
     var position = this.itemManager.itemPositions[triggeredItemIndex];
-    this.controls && this.controls.flyTo(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration);
+    var anchorToPosition = true;
+    this.controls && this.controls.flyTo(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition);
   };
 
   Collection.prototype.triggerStory = function(forceClose){

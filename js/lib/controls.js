@@ -10,6 +10,7 @@ var Controls = (function() {
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
+      "zoomInTransitionDuration": 2000,
       "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
       "lonRange": [-60, 60] // range of field of view in x-axis
@@ -76,16 +77,21 @@ var Controls = (function() {
     if (percent >= 1.0){
       this.isFlying = false;
       this.lookAtPosition = lookAt.clone();
-      this.setAnchor(lookAt.clone());
+      if (this.anchorToFlyPosition) {
+        this.setAnchor(lookAt.clone());
+      }
     }
   };
 
-  Controls.prototype.flyTo = function(position, distance, transitionDuration){
+  Controls.prototype.flyTo = function(position, distance, transitionDuration, anchorToPosition){
     this.isFlying = true;
     this.flyStartTime = new Date().getTime();
     this.flyEndTime = this.flyStartTime + transitionDuration;
     var cameraPosition = this.camera.position;
     this.flyStartPosition = cameraPosition.clone();
+
+    if (!this.isOrbiting) this.lastPreOrbitPosition = cameraPosition.clone();
+    this.anchorToFlyPosition = anchorToPosition ? true : false;
 
     // https://stackoverflow.com/questions/15696963/three-js-set-and-read-camera-look-vector/15697227#15697227
     var lookAtPosition = this.lookAtPosition;
@@ -94,7 +100,6 @@ var Controls = (function() {
       lookAtPosition.applyQuaternion(this.camera.quaternion);
     }
     this.flyStartLookAtPosition = lookAtPosition.clone();
-
     position = new THREE.Vector3(position.x, position.y, position.z);
     this.flyEndLookAtPosition = position.clone();
     // this.flyEndLookAtPosition.applyQuaternion(this.camera.quaternion);
@@ -106,7 +111,6 @@ var Controls = (function() {
       position = cameraPosition.lerp(position, lerpAmount);
     }
     this.flyEndPosition = position.clone();
-
   };
 
   Controls.prototype.load = function(){
@@ -151,24 +155,24 @@ var Controls = (function() {
     });
 
     $doc.keydown(function(e) {
-      switch(e.which) {
-        // case 38: // arrow up
-        case 87: // w
+      switch(e.key) {
+        // case 'ArrowUp': // arrow up
+        case 'w': // w
           _this.moveDirectionY = 1;
           break;
 
-        // case 40: // arrow down
-        case 83: // s
+        // case 'ArrowDown': // arrow down
+        case 's': // s
           _this.moveDirectionY = -1;
           break;
 
-        // case 37: // arrow left
-        case 65: // a
+        // case 'ArrowLeft': // arrow left
+        case 'a': // a
           _this.moveDirectionX = 1;
           break;
 
-        // case 39: // arrow right
-        case 68: // d
+        // case 'ArrowRight': // arrow right
+        case 'd': // d
           _this.moveDirectionX = -1;
           break;
 
@@ -352,6 +356,15 @@ var Controls = (function() {
     this.normalizePointer();
   };
 
+  Controls.prototype.releaseAnchor = function(flyToLastPosition){
+    this.setAnchor(false);
+
+    if (flyToLastPosition && this.lastPreOrbitPosition) {
+      var anchorToPosition = false;
+      this.flyTo(this.lastPreOrbitPosition, 0, this.opt.zoomInTransitionDuration, anchorToPosition);
+    }
+  };
+
   Controls.prototype.setAnchor = function(position){
     this.isOrbiting = false;
     if (position !== false) {
@@ -521,6 +534,7 @@ var Controls = (function() {
     pos = pos.add(anchor);
     camera.position.copy(pos);
     camera.lookAt(anchor);
+    this.lookAtPosition = anchor;
     renderNeeded = true;
   };
 

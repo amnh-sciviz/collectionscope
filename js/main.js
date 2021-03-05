@@ -109,7 +109,7 @@ var MainApp = (function() {
     this.camera.lookAt(new THREE.Vector3(0,0,0));
 
     var view = this.collection.getCurrentView();
-    this.controls = new Controls(_.extend({}, this.collection.ui, {'menus': this.opt.menus, 'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el, 'bounds': view.bounds, 'storyManager': this.collection.storyManager, 'itemManager': this.collection.itemManager}));
+    this.controls = new Controls(_.extend({}, this.collection.ui, {'menus': this.opt.menus, 'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el, 'bounds': view.bounds, 'storyManager': this.collection.storyManager, 'itemManager': this.collection.itemManager, 'zoomInTransitionDuration': this.opt.ui.zoomInTransitionDuration}));
     this.collection.setControls(this.controls);
 
     this.scene.add(this.collection.getThree());
