@@ -10,6 +10,7 @@ var Controls = (function() {
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
+      "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
       "lonRange": [-60, 60] // range of field of view in x-axis
     };
@@ -40,6 +41,7 @@ var Controls = (function() {
     this.lookAtPosition = false;
     this.anchor = false;
     this.orbit = new THREE.Spherical();
+    this.orbitPointerOrigin = new THREE.Vector2();
 
     // for determining what the camera is looking at
     this.pointed = false;
@@ -360,6 +362,7 @@ var Controls = (function() {
       var pos = cameraPos.sub(this.anchor);
       this.orbit.theta = Math.acos(pos.z / this.orbit.radius);
       this.orbit.phi = Math.atan2(pos.y, pos.x);
+      this.orbitPointerOrigin = this.npointer.clone();
     }
   };
 
@@ -502,9 +505,9 @@ var Controls = (function() {
     var orbit = this.orbit;
     var camera = this.camera;
 
-    var sensitivity = 0.1;
-    var deltaTheta = this.npointer.x * sensitivity;
-    var deltaPhi = this.npointer.y * sensitivity;
+    var orbitLookSpeed = this.opt.orbitLookSpeed;
+    var deltaTheta = (this.npointer.x-this.orbitPointerOrigin.x) * orbitLookSpeed;
+    var deltaPhi = (this.npointer.y-this.orbitPointerOrigin.y) * orbitLookSpeed;
     var theta = this.orbit.theta - deltaTheta;
     var phi = this.orbit.phi - deltaPhi;
     var radius = this.orbit.radius;
@@ -518,9 +521,7 @@ var Controls = (function() {
     pos = pos.add(anchor);
     camera.position.copy(pos);
     camera.lookAt(anchor);
-
     renderNeeded = true;
-
   };
 
   return Controls;

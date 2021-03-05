@@ -35,6 +35,7 @@ var ItemDetailManager = (function() {
     var fileItemIndex = itemIndex % this.opt.itemsPerFile;
     var fileUrl = this.opt.itemsPath + fileIndex + ".json";
     this.itemIndex = itemIndex;
+    this.raycaster.activeObjectIndex = itemIndex;
 
     // check to see if already loaded
     var foundIndex = _.indexOf(this.fileIndicesLoaded, fileIndex);

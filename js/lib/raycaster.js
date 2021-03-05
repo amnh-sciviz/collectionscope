@@ -46,6 +46,7 @@ var Raycaster = (function() {
     container.visible = false;
     this.highlighter = container;
 
+    this.activeObjectIndex = -1;
     this.highlightedObjectIndex = -1;
     this.isHidden = false;
   };
@@ -61,8 +62,9 @@ var Raycaster = (function() {
 
     if (intersectionIndex === this.highlightedObjectIndex) return;
     this.highlightedObjectIndex = intersectionIndex;
+    var isCurrentActiveIndex = this.activeObjectIndex === intersectionIndex;
 
-    if (intersectionIndex < 0) {
+    if (intersectionIndex < 0 || isCurrentActiveIndex) {
       this.highlighter.visible = false;
 
     } else {
