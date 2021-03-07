@@ -202,32 +202,6 @@ for key, options in visualizations.items():
     visualizations[key] = options
 outjson["views"] = visualizations
 
-# calculate the eight points that represent the max bounds
-maxWidth = maxHeight = maxDepth = 0
-for key, props in visualizations.items():
-    if "width" in props:
-        maxWidth = max(maxWidth, props["width"])
-    if "height" in props:
-        maxHeight = max(maxHeight, props["height"])
-    if "depth" in props:
-        maxDepth = max(maxDepth, props["depth"])
-x0 = -mu.ceilInt(maxWidth*0.5)
-x1 = mu.ceilInt(maxWidth*0.5)
-y0 = -mu.ceilInt(maxHeight*0.5)
-y1 = mu.ceilInt(maxHeight*0.5)
-z0 = -mu.ceilInt(maxDepth*0.5)
-z1 = mu.ceilInt(maxDepth*0.5)
-outjson["bounds"] = [
-  x0, y0, z0,
-  x0, y1, z0,
-  x1, y0, z0,
-  x1, y1, z0,
-  x0, y0, z1,
-  x0, y1, z1,
-  x1, y0, z1,
-  x1, y1, z1
-]
-
 # Generate UI
 outjson["ui"] = config["animation"]
 

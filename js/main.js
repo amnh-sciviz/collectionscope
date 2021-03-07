@@ -52,7 +52,7 @@ var MainApp = (function() {
     });
 
     $doc.on('click', '.close-story', function(e) {
-      _this.collection && _this.collection.triggerSelectedHotspot(true);
+      _this.collection && _this.collection.triggerStory(true);
     });
 
     $('.start').on('click', function(e){
