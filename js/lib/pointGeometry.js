@@ -14,10 +14,13 @@ var PointGeometry = (function() {
   PointGeometry.prototype.init = function(){
     var geometry = new THREE.BufferGeometry();
     var numPoints = this.opt.itemCount;
+    var bounds = this.opt.bounds;
+    var numBoundPoints = bounds.length/3;
+    var totalPoints = numPoints + numBoundPoints;
     var pointSize = this.opt.fixedCellWidth;
     var positions = this.getPositions(this.opt.positions);
-    var positionArr = new Float32Array( numPoints * 3 );
-    var colorsArr = new Float32Array( numPoints * 3 );
+    var positionArr = new Float32Array( totalPoints * 3 );
+    var colorsArr = new Float32Array( totalPoints * 3 );
     for (var i=0; i<numPoints; i++) {
       var p = positions[i];
       positionArr[ 3 * i ] = p.x;
@@ -25,6 +28,17 @@ var PointGeometry = (function() {
       positionArr[ 3 * i + 2 ] = p.z;
 
       colorsArr[ 3 * i ] = 255;
+      colorsArr[ 3 * i + 1 ] = 0;
+      colorsArr[ 3 * i + 2 ] = 0;
+    }
+    // draw points at each eight corners of the largest bounds
+    // this is necessary for proper raycaster after points are re-positioned
+    for (var i=numPoints; i<totalPoints; i++) {
+      var j = i - numPoints;
+      positionArr[ 3 * i ] = bounds[ 3 * j ];
+      positionArr[ 3 * i + 1 ] = bounds[ 3 * j + 1 ];
+      positionArr[ 3 * i + 2 ] = bounds[ 3 * j + 2 ];
+      colorsArr[ 3 * i ] = 0;
       colorsArr[ 3 * i + 1 ] = 0;
       colorsArr[ 3 * i + 2 ] = 0;
     }
@@ -42,8 +56,8 @@ var PointGeometry = (function() {
     this.threePoints = points;
 
     // keep track of alphas
-    var alphaArr = new Float32Array(numPoints);
-    for (var i=0; i<numPoints; i++) {
+    var alphaArr = new Float32Array(totalPoints);
+    for (var i=0; i<totalPoints; i++) {
       alphaArr[i] = 1.0;
     }
     this.alphaArr = alphaArr;
@@ -79,6 +93,8 @@ var PointGeometry = (function() {
     renderNeeded = true;
 
     this.threePoints.geometry.computeBoundingBox();
+    // this.threePoints.updateMatrix();
+    // this.threePoints.updateMatrixWorld(true);
 
     this.positionArr = positions;
     return positions;

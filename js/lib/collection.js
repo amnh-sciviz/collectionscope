@@ -467,7 +467,8 @@ var Collection = (function() {
     var pointCloud = new PointGeometry({
       'itemCount': _this.metadata.itemCount,
       'positions': _.extend({}, _.pick(currentView, 'width', 'height', 'depth'), _this.positions[currentView.layout]),
-      'indices': _this.opt.sets.default.values.slice()
+      'indices': _this.opt.sets.default.values.slice(),
+      'bounds': _this.opt.bounds
     });
     container.add(pointCloud.getThree());
     this.pointCloud = pointCloud;

@@ -136,72 +136,97 @@ if "stories" in config:
     outjson["stories"] = validStories
 
 # Generate views/visualizations
-if "visualizations" in config:
-    visualizations = config["visualizations"]
-    for key, options in visualizations.items():
+visualizations = config["visualizations"]
+for key, options in visualizations.items():
 
-        options["layout"] = key
+    options["layout"] = key
 
-        # Do some layout calculations based on visualization type
-        if key == "randomSphere":
-            radius = options["radius"]
-            diameter = options["radius"] * 2
-            options["width"] = diameter
-            options["height"] = diameter
-            options["depth"] = diameter
-            options["cameraPosition"] = [0, 0, -radius/8]
-            options["bounds"] = [-radius, radius, -radius, radius]
+    # Do some layout calculations based on visualization type
+    if key == "randomSphere":
+        radius = options["radius"]
+        diameter = options["radius"] * 2
+        options["width"] = diameter
+        options["height"] = diameter
+        options["depth"] = diameter
+        options["cameraPosition"] = [0, 0, -radius/8]
+        options["bounds"] = [-radius, radius, -radius, radius]
 
-        elif key == "timelineTunnel":
-            radius = options["radius"]
-            depthPerYear = options["depthPerYear"]
-            depth = depthPerYear * yearCount
-            options["keys"] = ["years"]
-            options["labels"] = ["years"]
-            options["width"] = radius * 2
-            options["height"] = radius * 2
-            options["depth"] = depth
-            options["cameraPosition"] = [0, 0, -depth/4]
-            options["bounds"] = [-radius, radius, -depth/2, depth/2]
+    elif key == "timelineTunnel":
+        radius = options["radius"]
+        depthPerYear = options["depthPerYear"]
+        depth = depthPerYear * yearCount
+        options["keys"] = ["years"]
+        options["labels"] = ["years"]
+        options["width"] = radius * 2
+        options["height"] = radius * 2
+        options["depth"] = depth
+        options["cameraPosition"] = [0, 0, -depth/4]
+        options["bounds"] = [-radius, radius, -depth/2, depth/2]
 
-        elif key == "geographyBars":
-            options["keys"] = ["map"]
-            options["labels"] = ["countries"]
-            options["width"] = options["mapWidth"]
-            options["height"] = options["barHeight"]
-            options["depth"] = options["mapWidth"] / 2
-            options["cameraPosition"] = [0, options["barHeight"]/8, -options["mapWidth"]/8]
-            options["bounds"] = [-options["width"]/2, options["width"]/2, -options["depth"]/2, options["depth"]/2]
-            options["overlays"] = [{
-              "type": "plane",
-              "width": options["width"], "height": options["depth"],
-              "image": "../../"+config["baseMap"],
-              "offset": [0, -20, 0]
-            }]
+    elif key == "geographyBars":
+        options["keys"] = ["map"]
+        options["labels"] = ["countries"]
+        options["width"] = options["mapWidth"]
+        options["height"] = options["barHeight"]
+        options["depth"] = options["mapWidth"] / 2
+        options["cameraPosition"] = [0, options["barHeight"]/8, -options["mapWidth"]/8]
+        options["bounds"] = [-options["width"]/2, options["width"]/2, -options["depth"]/2, options["depth"]/2]
+        options["overlays"] = [{
+          "type": "plane",
+          "width": options["width"], "height": options["depth"],
+          "image": "../../"+config["baseMap"],
+          "offset": [0, -20, 0]
+        }]
 
-        elif key == "timelineTracks":
-            depthPerYear = options["depthPerYear"]
-            depth = depthPerYear * yearCount
-            width = options["trackWidth"] * categoryCount
-            options["labels"] = ["years", "categoryYears"]
-            options["keys"] = ["years", "categories"]
-            options["width"] = width - options["trackWidth"]
-            options["height"] = options["trackHeight"]
-            options["depth"] = depth
-            options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
-            options["bounds"] = [-width/4, width/4, -depth/2, depth/2]
-            overlayRelativePath = "img/categories.png"
-            overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
-            makeCategoryTrackOverlay(overlayFullPath)
-            options["overlays"] = [{
-                "type": "plane",
-                "width": width, "height": depth,
-                "image": overlayRelativePath,
-                "offset": [0, -options["trackHeight"]/4, 0]
-            }]
+    elif key == "timelineTracks":
+        depthPerYear = options["depthPerYear"]
+        depth = depthPerYear * yearCount
+        width = options["trackWidth"] * categoryCount
+        options["labels"] = ["years", "categoryYears"]
+        options["keys"] = ["years", "categories"]
+        options["width"] = width - options["trackWidth"]
+        options["height"] = options["trackHeight"]
+        options["depth"] = depth
+        options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
+        options["bounds"] = [-width/4, width/4, -depth/2, depth/2]
+        overlayRelativePath = "img/categories.png"
+        overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
+        makeCategoryTrackOverlay(overlayFullPath)
+        options["overlays"] = [{
+            "type": "plane",
+            "width": width, "height": depth,
+            "image": overlayRelativePath,
+            "offset": [0, -options["trackHeight"]/4, 0]
+        }]
 
-        visualizations[key] = options
-    outjson["views"] = visualizations
+    visualizations[key] = options
+outjson["views"] = visualizations
+
+# calculate the eight points that represent the max bounds
+maxWidth = maxHeight = maxDepth = 0
+for key, props in visualizations.items():
+    if "width" in props:
+        maxWidth = max(maxWidth, props["width"])
+    if "height" in props:
+        maxHeight = max(maxHeight, props["height"])
+    if "depth" in props:
+        maxDepth = max(maxDepth, props["depth"])
+x0 = -mu.ceilInt(maxWidth*0.5)
+x1 = mu.ceilInt(maxWidth*0.5)
+y0 = -mu.ceilInt(maxHeight*0.5)
+y1 = mu.ceilInt(maxHeight*0.5)
+z0 = -mu.ceilInt(maxDepth*0.5)
+z1 = mu.ceilInt(maxDepth*0.5)
+outjson["bounds"] = [
+  x0, y0, z0,
+  x0, y1, z0,
+  x1, y0, z0,
+  x1, y1, z0,
+  x0, y0, z1,
+  x0, y1, z1,
+  x1, y0, z1,
+  x1, y1, z1
+]
 
 # Generate UI
 outjson["ui"] = config["animation"]
