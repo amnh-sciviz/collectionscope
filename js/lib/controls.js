@@ -11,6 +11,7 @@ var Controls = (function() {
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
       "zoomInTransitionDuration": 2000,
+      "menuContainer": "#menus-container",
       "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
       "lonRange": [-60, 60] // range of field of view in x-axis
@@ -82,10 +83,11 @@ var Controls = (function() {
       } else {
         this.setAnchor(false);
       }
+      this.onFlyFinished && this.onFlyFinished();
     }
   };
 
-  Controls.prototype.flyTo = function(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition){
+  Controls.prototype.flyTo = function(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition, onFinished){
     this.isFlying = true;
     this.flyStartTime = new Date().getTime();
     this.flyEndTime = this.flyStartTime + transitionDuration;
@@ -102,9 +104,11 @@ var Controls = (function() {
     this.flyStartLookAtPosition = this.lookAtPosition.clone();
     this.flyEndLookAtPosition = targetLookAtPosition.clone();
     this.flyEndPosition = targetPosition.clone();
+
+    this.onFlyFinished = onFinished ? onFinished : false;
   };
 
-  Controls.prototype.flyToOrbit = function(position, radius, transitionDuration, anchorToPosition){
+  Controls.prototype.flyToOrbit = function(position, radius, transitionDuration, anchorToPosition, onFinished){
     var cameraPosition = this.camera.position.clone();
     var targetLookAtPosition = new THREE.Vector3(position.x, position.y, position.z);
     var targetPosition = targetLookAtPosition.clone();
@@ -113,7 +117,7 @@ var Controls = (function() {
       var lerpAmount = 1.0 - (radius/cameraDistance);
       targetPosition = cameraPosition.lerp(targetPosition, lerpAmount);
     }
-    this.flyTo(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition);
+    this.flyTo(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition, onFinished);
   };
 
   Controls.prototype.load = function(){
@@ -292,8 +296,8 @@ var Controls = (function() {
       this.$primaryOptions = $menu.find('input[type="radio"]');
     }
 
-    if (options.parent) {
-      $(options.parent).append($menu);
+    if (this.opt.menuContainer) {
+      $(this.opt.menuContainer).append($menu);
     } else {
       this.$el.append($menu);
     }

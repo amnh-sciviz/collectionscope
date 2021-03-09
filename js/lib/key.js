@@ -3,7 +3,7 @@
 var Key = (function() {
 
   Key.defaultValues = {
-    'parent': '#bottom-right-ui',
+    'parent': '#menus-container',
     'type': 'legend',
     'imageDir': '../../img/',
     'camera': false,

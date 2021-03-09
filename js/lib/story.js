@@ -3,7 +3,7 @@
 var Story = (function() {
 
   Story.defaultValues = {
-    'parent': '#stories',
+    'parent': '#stories-container',
     'imageDir': '',
     'hotspotItemIndex': -1,
     'markerTexture': false

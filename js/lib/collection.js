@@ -225,6 +225,11 @@ var Collection = (function() {
         _this.deselectActiveItem();
       }
     });
+
+    $('.item-metadata-close').on('click', function(e){
+      e.preventDefault()
+      _this.deselectActiveItem();
+    });
   };
 
   Collection.prototype.loadMetadata = function(){
@@ -510,13 +515,16 @@ var Collection = (function() {
   };
 
   Collection.prototype.triggerItem = function(){
+    var _this = this;
     var triggeredItemIndex = this.itemManager.triggerSelectedItem();
 
     if (triggeredItemIndex===false) return;
 
     var position = this.itemManager.itemPositions[triggeredItemIndex];
     var anchorToPosition = true;
-    this.controls && this.controls.flyToOrbit(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition);
+    this.controls.flyToOrbit(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition, function(){
+      _this.itemManager.onFlyFinished(triggeredItemIndex);
+    });
   };
 
   Collection.prototype.triggerStory = function(forceClose){

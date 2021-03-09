@@ -8,6 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="../../css/vendor/normalize.css">
+  <link rel="stylesheet" href="../../css/vars.css">
   <link rel="stylesheet" href="../../css/main.css">
   <link rel="stylesheet" href="css/app.css">
 </head>
@@ -27,15 +28,21 @@
       <button class="move-button" data-direction="-1" aria-label="Move camera backward">⇩</button>
     </nav>
 
-    <div id="top-right-ui" class="top-right-ui"></div>
-    <div class="bottom-ui">
-      <div id="stories" class="bottom-left-ui stories"></div>
-      <div id="bottom-right-ui" class="bottom-right-ui active">
-        <button class="toggle-controls toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button>
-      </div>
+    <div id="legend-container" class="legend-container"></div>
+
+    <div id="stories-container" class="stories-container"></div>
+
+    <div id="menus-container" class="menus-container active">
+      <button class="toggle-controls toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button>
     </div>
 
     <div id="viewer" class="viewer"><div class="viewer-inner"></div></div>
+
+    <div id="item-image-container" class="item-image-container"><img id="item-image" class="item-image" /></div>
+    <div id="item-metadata-container" class="item-metadata-container">
+      <button class="item-metadata-close inverse">×<span class="visuallyHidden"> close</span></button>
+      <div id="item-metadata" class="item-metadata"></div>
+    </div>
 
   </div>
 

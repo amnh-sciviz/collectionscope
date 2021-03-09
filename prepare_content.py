@@ -215,7 +215,6 @@ viewOptions = [
 viewOptions = [view for view in viewOptions if view["value"] in visualizations]
 outjson["menus"] = {
     "viewOptions": {
-      "parent": "#bottom-right-ui",
       "id": "radio-buttons-views",
       "type": "radioItems",
       "label": "Choose your layout",

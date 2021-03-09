@@ -934,7 +934,6 @@ _.extend(CONFIG, {
   },
   "menus": {
     "viewOptions": {
-      "parent": "#bottom-right-ui",
       "id": "radio-buttons-views",
       "type": "radioItems",
       "label": "Choose your layout",

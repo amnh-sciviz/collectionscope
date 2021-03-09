@@ -1,0 +1,12 @@
+:root {
+  --bg-color: black;
+  --bg-light-color: #444;
+  --bg-lighter-color: #666;
+  --bg-lightest-color: #888;
+  --bg-secondary-color: #04556C;
+  --button-bg-color: #004BB4;
+  --button-bg-inverse-color: white;
+  --text-color: white;
+  --text-dark-color: #ddd;
+  --notice-color: #ffe626;
+}
