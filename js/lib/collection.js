@@ -39,7 +39,8 @@ var Collection = (function() {
   Collection.prototype.deselectActiveItem = function(){
     var flyToLastPosition = true;
     this.controls && this.controls.releaseAnchor(flyToLastPosition);
-    this.itemManager.releaseSelectedItem();
+    var itemIndex = this.itemManager.releaseSelectedItem();
+    this.updateItemAlpha(itemIndex, 1, 10); // show the current item
   };
 
   Collection.prototype.filterBySet = function(setKey, transitionDuration){
@@ -523,7 +524,10 @@ var Collection = (function() {
     var position = this.itemManager.itemPositions[triggeredItemIndex];
     var anchorToPosition = true;
     this.controls.flyToOrbit(position, this.opt.zoomInDistance, this.opt.ui.zoomInTransitionDuration, anchorToPosition, function(){
-      _this.itemManager.onFlyFinished(triggeredItemIndex);
+      var finishedLoadingImage = _this.itemManager.onFlyFinished(triggeredItemIndex);
+      $.when(finishedLoadingImage).done(function(){
+        _this.updateItemAlpha(triggeredItemIndex, 0); // hide the current item
+      });
     });
   };
 
@@ -596,6 +600,13 @@ var Collection = (function() {
     });
 
     this.pointCloud.updateAlpha(fromAlpha, toAlpha, transitionDuration)
+  };
+
+  Collection.prototype.updateItemAlpha = function(itemIndex, alpha, transitionDuration){
+    transitionDuration = transitionDuration===undefined ? this.opt.ui.transitionDuration : transitionDuration;
+    var toAlphaValues = this.pointCloud.alphaArr;
+    toAlphaValues[itemIndex] = alpha;
+    this.updateAlpha(false, toAlphaValues, transitionDuration);
   };
 
   Collection.prototype.updatePositions = function(newView, transitionDuration, multiplier) {

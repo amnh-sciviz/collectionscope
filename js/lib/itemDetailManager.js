@@ -88,6 +88,7 @@ var ItemDetailManager = (function() {
     if (itemIndex !== this.itemIndex) return;
 
     var _this = this;
+    var promise = $.Deferred();
     $.when(this.imagePromise).done(function() {
       var w = _this.$img.width();
       var h = _this.$img.height();
@@ -99,7 +100,9 @@ var ItemDetailManager = (function() {
         _this.$img.css('margin-top', '0px');
       }
       _this.$imgContainer.addClass('active');
+      promise.resolve();
     });
+    return promise;
   };
 
   ItemDetailManager.prototype.onImageLoaded = function(){
@@ -107,10 +110,12 @@ var ItemDetailManager = (function() {
   };
 
   ItemDetailManager.prototype.releaseSelectedItem = function(){
+    var releasedItemIndex = this.itemIndex;
     this.itemIndex = -1;
     this.raycaster.activeObjectIndex = -1;
     this.$metadataContainer.removeClass('active');
     this.$imgContainer.removeClass('active');
+    return releasedItemIndex;
   };
 
   ItemDetailManager.prototype.render = function(item, itemIndex) {

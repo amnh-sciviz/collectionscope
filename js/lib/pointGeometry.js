@@ -55,7 +55,17 @@ var PointGeometry = (function() {
   };
 
   PointGeometry.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
-    this.alphaArr = toAlpha;
+    var toIsNumber = !isNaN(toAlpha);
+
+    if (!toIsNumber) {
+      this.alphaArr = toAlpha;
+    } else {
+      var alphaArr = this.alphaArr;
+      for (var i=0; i<this.opt.itemCount; i++) {
+        alphaArr[i] = toAlpha;
+      }
+    }
+
   };
 
   PointGeometry.prototype.updatePositions = function(positionOptions, transitionDuration, multiplier){
