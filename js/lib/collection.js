@@ -432,10 +432,15 @@ var Collection = (function() {
     if (openedStoryKey !== false) return;
 
     // trigger an item if user did not click on story
+    var previousItemIndex = this.itemManager.itemIndex;
     var triggeredItemIndex = this.triggerItem();
 
     // triggered item; end here
-    if (triggeredItemIndex !== false) return;
+    if (triggeredItemIndex !== false) {
+      // show previous item
+      this.updateItemAlpha(previousItemIndex, 1, 10);
+      return;
+    }
 
     // deselect active item
     this.deselectActiveItem();
