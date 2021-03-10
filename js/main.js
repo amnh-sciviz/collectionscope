@@ -91,12 +91,14 @@ var MainApp = (function() {
     var newBounds = newView.bounds;
 
     // don't change current X/Z if within new bounds
-    if (newViewKey != 'map') {
+    if (newViewKey != 'geographyBars') {
       if (currentP.x >= newBounds[0] && currentP.x <= newBounds[1]) newP[0] = currentP.x;
       if (currentP.z >= newBounds[2] && currentP.z <= newBounds[3]) newP[2] = currentP.z;
     }
 
-    this.transitionCameraPosition(new THREE.Vector3(newP[0], newP[1], newP[2]));
+    var targetPosition = new THREE.Vector3(newP[0], newP[1], newP[2]);
+    var targetLookAtPosition = false;
+    this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration);
   };
 
   MainApp.prototype.onLoadEnd = function(){
@@ -105,8 +107,8 @@ var MainApp = (function() {
     this.$el.removeClass('is-loading');
 
     // init camera positio
-    this.camera.position.copy(this.collection.getDefaultCameraPosition());
-    this.camera.lookAt(new THREE.Vector3(0,0,0));
+    // this.camera.position.copy(this.collection.getDefaultCameraPosition());
+    // this.camera.lookAt(new THREE.Vector3(0,0,0));
 
     var view = this.collection.getCurrentView();
     this.controls = new Controls(_.extend({}, this.collection.ui, {'menus': this.opt.menus, 'camera': this.camera, 'renderer': this.renderer, 'el': this.opt.el, 'bounds': view.bounds, 'storyManager': this.collection.storyManager, 'itemManager': this.collection.itemManager, 'zoomInTransitionDuration': this.opt.ui.zoomInTransitionDuration}));
@@ -152,8 +154,10 @@ var MainApp = (function() {
 
     $('#instructions').removeClass('active');
 
-    // $(document).trigger('change-view', ['timeline', this.opt.ui.startTransitionDuration]);
-    this.transitionCameraPosition(_this.collection.getDefaultCameraPosition(), _this.opt.ui.startTransitionDuration);
+    var p = this.collection.getDefaultCameraPosition();
+    var targetPosition = new THREE.Vector3(p.x, p.y, p.z);
+    var targetLookAtPosition = false;
+    this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration);
 
     setTimeout(function(){
       _this.$el.addClass('loaded');
@@ -182,7 +186,6 @@ var MainApp = (function() {
     if (this.clock === false) {
       this.clock = new THREE.Clock();
     }
-
 
     this.update(now);
     this.controls && this.controls.update(now, this.clock.getDelta());

@@ -35,6 +35,10 @@ var globalRandomSeeder = new Math.seedrandom();
     }
   };
 
+  MathUtil.radToDeg = function (rad) {
+    return rad * 180 / Math.PI;
+  };
+
   MathUtil.randomBetween = function(a, b){
     var delta = b - a;
     if (delta <= 0) return 0;

@@ -40,10 +40,11 @@ var Controls = (function() {
     this.camera = this.opt.camera;
     this.mode = this.opt.mode;
     this.loaded = false;
-    this.lookAtPosition = false;
+    this.lookAtPosition = new THREE.Vector3();
     this.anchor = false;
     this.orbit = new THREE.Spherical();
     this.orbitPointerOrigin = new THREE.Vector2();
+    this.cameraIsLocked = false;
 
     // for determining what the camera is looking at
     this.pointed = false;
@@ -69,22 +70,29 @@ var Controls = (function() {
 
     var cameraPosition = this.flyStartPosition.clone();
     cameraPosition = cameraPosition.lerp(this.flyEndPosition, percent);
-    var lookAt = this.flyStartLookAtPosition.clone();
-    lookAt = lookAt.lerp(this.flyEndLookAtPosition, percent);
+
+    var lookAt = false;
+    if (this.flyEndLookAtPosition !== false) {
+      var lookAt = this.flyStartLookAtPosition.clone();
+      lookAt = lookAt.lerp(this.flyEndLookAtPosition, percent);
+    }
 
     this.camera.position.copy(cameraPosition);
-    this.camera.lookAt(lookAt);
+    if (lookAt !== false) this.camera.lookAt(lookAt);
 
     if (percent >= 1.0){
       this.isFlying = false;
-      this.lookAtPosition = lookAt.clone();
-      if (this.anchorToFlyPosition) {
+      if (lookAt !== false) this.lookAtPosition = lookAt.clone();
+      if (this.anchorToFlyPosition && lookAt !== false) {
         this.setAnchor(lookAt.clone());
       } else {
         this.setAnchor(false);
       }
       this.onFlyFinished && this.onFlyFinished();
+      this.cameraIsLocked = false;
     }
+
+    renderNeeded = true;
   };
 
   Controls.prototype.flyTo = function(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition, onFinished){
@@ -102,8 +110,10 @@ var Controls = (function() {
 
     this.flyStartPosition = cameraPosition.clone();
     this.flyStartLookAtPosition = this.lookAtPosition.clone();
-    this.flyEndLookAtPosition = targetLookAtPosition.clone();
+    this.flyEndLookAtPosition = targetLookAtPosition ? targetLookAtPosition.clone() : false;
     this.flyEndPosition = targetPosition.clone();
+
+    this.cameraIsLocked = (this.flyEndLookAtPosition !== false);
 
     this.onFlyFinished = onFinished ? onFinished : false;
   };
@@ -429,25 +439,28 @@ var Controls = (function() {
     // check if we're flying
     if (this.isFlying) {
       this.fly(now);
-      renderNeeded = true;
-      return;
+      if (this.cameraIsLocked) return;
     }
 
     // check if we're orbiting an object
-    if (this.isOrbiting) {
+    if (this.isOrbiting && !this.isFlying) {
       this.updateOrbit(now, delta);
       return;
     }
 
     // move camera direction based on pointer
-    if (this.pointed !== false && delta > 0) {
+    if (this.pointed !== false && delta > 0 && !this.cameraIsLocked) {
       var x = this.pointer.x - this.viewHalfX;
       var y = this.pointer.y - this.viewHalfY;
       var prevLat = this.lat;
       var prevLon = this.lon;
       var actualLookSpeed = delta * this.opt.lookSpeed;
-      this.lon -= x * actualLookSpeed;
-      this.lat -= y * actualLookSpeed;
+      var maxDelta = 0.5;
+      var deltaX = MathUtil.clamp(x * actualLookSpeed, -maxDelta, maxDelta);
+      var deltaY = MathUtil.clamp(y * actualLookSpeed, -maxDelta, maxDelta);
+      // if (Math.abs(deltaX) > maxDelta || Math.abs(deltaY) > maxDelta) console.log(deltaX, deltaY);
+      this.lon -= deltaX;
+      this.lat -= deltaY;
       this.lat = MathUtil.clamp(this.lat, this.opt.latRange[0], this.opt.latRange[1]);
       this.lon = MathUtil.clamp(this.lon, this.opt.lonRange[0], this.opt.lonRange[1]);
 
@@ -463,8 +476,10 @@ var Controls = (function() {
       this.lookAtPosition = targetPosition;
     }
 
-    this.updateAxis('X');
-    this.updateAxis('Y');
+    if (!this.isOrbiting && !this.isFlying) {
+      this.updateAxis('X');
+      this.updateAxis('Y');
+    }
 
     renderNeeded = true;
   };

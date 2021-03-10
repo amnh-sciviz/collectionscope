@@ -82,7 +82,7 @@ var Raycaster = (function() {
   };
 
   Raycaster.prototype.getActiveItemIndex = function(){
-    if (!this.highlighter.visible) return false;
+    if (!this.highlighter.visible) return -1;
     return this.highlightedObjectIndex;
   };
 

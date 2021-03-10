@@ -93,7 +93,7 @@ button.inverse {
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
-  align-items: flex-end;
+  align-items: flex-start;
 }
 .stories-container {
   margin-right: 10px;
