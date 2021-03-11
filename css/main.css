@@ -95,6 +95,9 @@ button.inverse {
   justify-content: flex-end;
   align-items: flex-start;
 }
+.app.is-loading .menus-container {
+  display: none;
+}
 .stories-container {
   margin-right: 10px;
   flex-grow: 1;
@@ -514,6 +517,42 @@ input[type="radio"]:checked ~ .checked-bg {
   opacity: 1;
   transform: scale3d(1.05, 1.05, 1.05);
   z-index: 10000;
+}
+
+.touchpad {
+  width: 180px;
+  height: 180px;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  z-index: 9999;
+  border-radius: 50%;
+  background: rgba(255,255,255, 0.4);
+  border: 1px solid rgba(255,255,255, 0.6);
+  transition: background-color 1s ease-in-out;
+  display: block;
+}
+.app.is-loading .touchpad {
+  display: none;
+}
+.touchpad-handle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--button-bg-color);
+  border: 1px solid rgba(0,0,0.0.8);
+  margin-left: -20px;
+  margin-top: -20px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  cursor: grab;
+}
+.touchpad.active {
+  background: rgba(255,255,255, 0.6);
+}
+.touchpad.active .touchpad-handle {
+  cursor: grabbing;
 }
 
 @keyframes fadeIn {
