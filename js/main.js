@@ -56,6 +56,14 @@ var MainApp = (function() {
       _this.collection && _this.collection.triggerStory(true);
     });
 
+    $doc.on('mousemove', '.key', function(e) {
+      _this.collection && _this.collection.onHoverOverKey($(this), e);
+    });
+
+    $doc.on('click', '.key', function(e) {
+      _this.collection && _this.collection.onClickKey($(this), e);
+    });
+
     $('.start').on('click', function(e){
       _this.onUserStart();
     });

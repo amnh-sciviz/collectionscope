@@ -141,7 +141,7 @@ var Collection = (function() {
     var _this = this;
     var keys = {};
     _.each(this.opt.keys, function(keyOptions, keyValue){
-      var key = new Key(_.extend({}, keyOptions, {camera: _this.camera}));
+      var key = new Key(_.extend({id: keyValue}, keyOptions, {camera: _this.camera}));
       keys[keyValue] = key;
     });
 
@@ -472,10 +472,49 @@ var Collection = (function() {
     this.deselectActiveItem();
   };
 
+  Collection.prototype.onClickKey = function($key, e){
+    if (this.controls && this.controls.isFlying) return;
+    var id = $key.attr('data-id');
+    if (!_.has(this.keys, id)) return;
+
+    var key = this.keys[id];
+    var type = key.opt.type;
+    var bounds = key.bounds;
+
+    if ((type != "map" && type != "timeline") || !bounds) return;
+
+    var p = Util.getRelativePoint($key, e);
+
+    var originPosition = this.camera.position.clone();
+    var targetPosition = originPosition.clone();
+
+    if (type == "timeline") {
+      targetPosition.z = MathUtil.lerp(bounds[2], bounds[3], p.x);
+    } else if (type == "map") {
+      targetPosition.x = MathUtil.lerp(bounds[1], bounds[0], p.x);
+      targetPosition.z = MathUtil.lerp(bounds[3], bounds[2], p.y);
+    }
+
+    var distance = originPosition.distanceTo(targetPosition);
+    var unitsPerSecond = 1000;
+    var duration = parseInt(distance / unitsPerSecond * 1000);
+
+    var targetLookAtPosition = false;
+    this.controls.flyTo(targetPosition, targetLookAtPosition, duration);
+  };
+
   Collection.prototype.onFinishedStart = function(){
     _.each(this.soundSets, function(soundSet, key){
       soundSet.active = true;
     });
+  };
+
+  Collection.prototype.onHoverOverKey = function($key, e){
+    var id = $key.attr('data-id');
+    if (!_.has(this.keys, id)) return;
+
+    var p = Util.getRelativePoint($key, e);
+    this.keys[id].onHover(p.x, p.y);
   };
 
   Collection.prototype.onReady = function(){
