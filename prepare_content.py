@@ -98,7 +98,7 @@ keys["years"] = {
 # Category key
 keys["categories"] = {
     "type": "legend",
-    "parent": "#top-right-ui",
+    "parent": "#legend-container",
     "items": categories
 }
 outjson["keys"] = keys

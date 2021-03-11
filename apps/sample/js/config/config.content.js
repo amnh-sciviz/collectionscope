@@ -671,7 +671,7 @@ _.extend(CONFIG, {
     },
     "categories": {
       "type": "legend",
-      "parent": "#top-right-ui",
+      "parent": "#legend-container",
       "items": [
         {
           "text": "Mexico And Central America",

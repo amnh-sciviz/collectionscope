@@ -8,7 +8,7 @@ var Raycaster = (function() {
       highlightThickness: 2,
       highlightColor: 0xf57542,
       near: 0.001,
-      far: 400,
+      far: 1000, // increase this to hit objects farther away
       points: false, // required!
       camera: false // required!
     };
