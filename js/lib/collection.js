@@ -7,6 +7,7 @@ var Collection = (function() {
       'onLoadEnd': function(){ console.log('Loading finished'); },
       'onLoadProgress': function(){ console.log('Loading progress...') },
       'zoomInDistance': 30, // how far away camera should be when it zooms into an item
+      "menuContainer": "#menus-container",
       'seedString': 'museum' // seed for randomizing positions
     };
     this.opt = _.extend({}, defaults, config);
@@ -18,6 +19,7 @@ var Collection = (function() {
     this.listener = this.opt.listener;
     this.controls = false;
     this.currentViewKey = 'randomSphere';
+    this.isViewTransitioning = false;
     this.minAlpha = this.opt.ui.minAlpha;
 
     this.ui = this.opt.ui;
@@ -118,6 +120,7 @@ var Collection = (function() {
     var _this = this;
 
     this.loadKeys();
+    this.loadMenus();
 
     $.when(
       this.loadLabels(),
@@ -219,21 +222,12 @@ var Collection = (function() {
     return deferred;
   };
 
-  Collection.prototype.loadListeners = function(){
+  Collection.prototype.loadMenus = function(){
     var _this = this;
-    var $doc = $(document);
 
-    $doc.keypress(function(e){
-      if (e.key === 'x') {
-        e.preventDefault()
-        _this.deselectActiveItem();
-      }
-    });
-
-    $('.item-metadata-close').on('click', function(e){
-      e.preventDefault()
-      _this.deselectActiveItem();
-    });
+    if (_.has(this.opt.menus, 'viewOptions')) {
+      _this.loadViewMenu(this.opt.menus.viewOptions);
+    }
   };
 
   Collection.prototype.loadMetadata = function(){
@@ -422,6 +416,36 @@ var Collection = (function() {
     return deferred;
   };
 
+  Collection.prototype.loadViewMenu = function(options){
+    var html = '';
+    var currentViewIndex = 0;
+    var currentViewKey = this.currentViewKey;
+    html += '<div id="'+options.id+'" class="'+options.className+' menu">';
+      if (options.label) {
+        html += '<h2>'+options.label+':</h2>';
+      }
+      html += '<form class="radio-button-form">';
+      _.each(options.radioItems, function(item, i){
+        var type = options.parseType || 'string';
+        var id = item.name + (i+1);
+        var checked = item.checked ? 'checked' : '';
+        var isPrimary = options.default ? '1' : '0';
+        if (item.checked) {
+          currentViewIndex = i;
+          currentViewKey = item.value;
+        }
+        html += '<label for="'+id+'"><input id="'+id+'" class="view-option" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+type+'" data-index="'+i+'" data-primary="'+isPrimary+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
+      });
+      html += '</form>';
+    html += '</div>';
+    var $menu = $(html);
+
+    this.currentViewIndex = currentViewIndex;
+    this.currentViewKey = currentViewKey;
+    this.$viewOptions = $menu.find('.view-option');
+    $(this.opt.menuContainer).append($menu);
+  };
+
   Collection.prototype.onClickCanvas = function(pointer, npointer){
     var now = new Date().getTime();
     this.storyManager.update(now, npointer, this.camera);
@@ -517,8 +541,18 @@ var Collection = (function() {
     container.add(hotspotGroup);
 
     this.container = container;
+  };
 
-    this.loadListeners();
+  Collection.prototype.onViewOptionChange = function($input){
+    if (this.isViewTransitioning) return false;
+    var name = $input.attr('name');
+    var value = $input.val();
+    var index = parseInt($input.attr('data-index'));
+    if (this.currentViewIndex===index) return false;
+
+    this.currentViewIndex = index;
+    $(document).trigger('change-view', value);
+    return true;
   };
 
   Collection.prototype.resetFilters = function(transitionDuration){
@@ -528,6 +562,31 @@ var Collection = (function() {
 
   Collection.prototype.setControls = function(controls){
     this.controls = controls;
+  };
+
+  Collection.prototype.stepViewOption = function(step){
+    if (!this.$viewOptions || !this.$viewOptions.length || this.isViewTransitioning) return;
+
+    var currentViewIndex = this.currentViewIndex + step;
+    if (currentViewIndex < 0) currentViewIndex = this.$viewOptions.length-1;
+    else if (currentViewIndex >= this.$viewOptions.length) currentViewIndex = 0;
+
+    this.$viewOptions.eq(currentViewIndex).prop('checked', true);
+    this.$viewOptions.eq(currentViewIndex).focus();
+    this.onViewOptionChange(this.$viewOptions.eq(currentViewIndex));
+  };
+
+  Collection.prototype.toggleMenus = function($button){
+    $button.toggleClass('active');
+    var isActive = $button.hasClass('active');
+
+    var newText = isActive ? $button.attr('data-on') : $button.attr('data-off');
+    var $parent = $button.parent();
+
+    $button.text(newText);
+
+    if (isActive) $parent.addClass('active');
+    else $parent.removeClass('active');
   };
 
   Collection.prototype.triggerItem = function(){
@@ -606,6 +665,10 @@ var Collection = (function() {
 
     this.storyManager.update(now, pointerPosition, this.camera);
     this.itemManager.update(now, pointerPosition);
+
+    if (this.isViewTransitioning && now >= this.transitionViewEnd) {
+      this.isViewTransitioning = false;
+    }
   };
 
   Collection.prototype.updateAlpha = function(fromAlpha, toAlpha, transitionDuration){
@@ -651,6 +714,10 @@ var Collection = (function() {
   Collection.prototype.updateView = function(newValue, transitionDuration){
     if (newValue === this.currentViewKey) return;
     transitionDuration = transitionDuration || this.opt.ui.transitionDuration;
+
+    var now = new Date().getTime();
+    this.isViewTransitioning = true;
+    this.transitionViewEnd = now + transitionDuration;
 
     if (this.changeViewComponentsTimeout) clearTimeout(this.changeViewComponentsTimeout);
 

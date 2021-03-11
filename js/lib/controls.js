@@ -11,7 +11,6 @@ var Controls = (function() {
       "bounds": [-256, 256, -32768, 32768],
       "lookSpeed": 0.05,
       "zoomInTransitionDuration": 2000,
-      "menuContainer": "#menus-container",
       "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
       "lonRange": [-60, 60] // range of field of view in x-axis
@@ -131,7 +130,6 @@ var Controls = (function() {
   };
 
   Controls.prototype.load = function(){
-    this.loadMenus();
     this.loadListeners();
     this.loaded = true;
     this.update();
@@ -141,14 +139,6 @@ var Controls = (function() {
     var _this = this;
     var isTouch = this.isTouch;
     var $doc = $(document);
-
-    $('input[type="radio"]').on('click', function(e) {
-      var result = _this.onRadioMenuChange($(this));
-      if (result === false) {
-        e.preventDefault();
-        return false;
-      }
-    });
 
     $('.move-button').each(function(){
       var el = $(this)[0];
@@ -162,13 +152,6 @@ var Controls = (function() {
       mc.on("pressup", function(e){
         _this.moveDirectionY = 0;
       });
-    });
-
-    $doc.keypress(function(e){
-      if (e.key === ' ' || e.key === 'Spacebar') {
-        e.preventDefault()
-        _this.stepOption(1);
-      }
     });
 
     $doc.keydown(function(e) {
@@ -265,98 +248,11 @@ var Controls = (function() {
         _this.centerPointer();
       });
     }
-
-    $('.toggle-controls').on('click', function(){
-      _this.toggleControls($(this));
-    });
-  };
-
-  Controls.prototype.loadMenus = function(){
-    var _this = this;
-
-    _.each(this.opt.menus, function(menu, key){
-      if (_.has(menu, 'radioItems')) _this.loadRadioMenu(menu);
-      else if (_.has(menu, 'slider')) _this.loadSliderMenu(menu);
-    });
-  };
-
-  Controls.prototype.loadRadioMenu = function(options){
-    var html = '';
-    var currentOptionIndex = 0;
-    html += '<div id="'+options.id+'" class="'+options.className+' menu">';
-      if (options.label) {
-        html += '<h2>'+options.label+':</h2>';
-      }
-      html += '<form class="radio-button-form">';
-      _.each(options.radioItems, function(item, i){
-        var type = options.parseType || 'string';
-        var id = item.name + (i+1);
-        var checked = item.checked ? 'checked' : '';
-        var isPrimary = options.default ? '1' : '0';
-        if (item.checked) currentOptionIndex = i;
-        html += '<label for="'+id+'"><input id="'+id+'" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+type+'" data-index="'+i+'" data-primary="'+isPrimary+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
-      });
-      html += '</form>';
-    html += '</div>';
-    var $menu = $(html);
-
-    // the first menu is the default menu
-    if (options.default) {
-      this.currentOptionIndex = currentOptionIndex;
-      this.$primaryOptions = $menu.find('input[type="radio"]');
-    }
-
-    if (this.opt.menuContainer) {
-      $(this.opt.menuContainer).append($menu);
-    } else {
-      this.$el.append($menu);
-    }
-  };
-
-  Controls.prototype.loadSliderMenu = function(options){
-
   };
 
   Controls.prototype.normalizePointer = function(){
     this.npointer.x = ( this.pointer.x / window.innerWidth ) * 2 - 1;
     this.npointer.y = -( this.pointer.y / window.innerHeight ) * 2 + 1;
-  };
-
-  Controls.prototype.onRadioMenuChange = function($input){
-    var now = new Date().getTime();
-    if (this.lastRadioChangeTime) {
-      var delta = now - this.lastRadioChangeTime;
-      if (delta < (this.opt.transitionDuration+this.opt.componentTransitionDuration)) {
-        console.log('Requesting change too soon');
-        return false;
-      }
-    }
-    this.lastRadioChangeTime = now;
-
-    var name = $input.attr('name');
-    var value = $input.val();
-    var parseType = $input.attr('data-type');
-    var index = parseInt($input.attr('data-index'));
-    var isPrimary = parseInt($input.attr('data-primary'));
-
-    if (isPrimary > 0) {
-      this.currentOptionIndex = index;
-    }
-
-    if (parseType==='int') value = parseInt(value);
-    else if (parseType==='float') value = parseFloat(value);
-
-    value = [value];
-
-    if (name.indexOf('filter-') === 0) {
-      var parts = name.split('-', 2);
-      name = 'filter-property';
-      value.unshift(parts[1]);
-    }
-
-    // console.log('Triggering event "change-'+name+'" with value "'+value+'"');
-    $(document).trigger(name, value);
-    return true;
   };
 
   Controls.prototype.onResize = function(){
@@ -398,41 +294,6 @@ var Controls = (function() {
     this.opt.bounds = bounds;
   };
 
-  Controls.prototype.stepOption = function(step){
-    if (!this.$primaryOptions || !this.$primaryOptions.length) return;
-
-    var currentOptionIndex = this.currentOptionIndex + step;
-    if (currentOptionIndex < 0) currentOptionIndex = this.$primaryOptions.length-1;
-    else if (currentOptionIndex >= this.$primaryOptions.length) currentOptionIndex = 0;
-
-    // this.currentOptionIndex = currentOptionIndex;
-    // this.isManualOptionChange = true;
-
-    // console.log('Step to option:' + currentOptionIndex);
-    // this.$primaryOptions.each(function(i){
-    //   if (i===currentOptionIndex) $(this).prop('checked', true);
-    //   else $(this).prop('checked', false);
-    // });
-    this.$primaryOptions.eq(currentOptionIndex).prop('checked', true);
-    this.$primaryOptions.eq(currentOptionIndex).focus();
-    this.onRadioMenuChange(this.$primaryOptions.eq(currentOptionIndex));
-
-    // this.$primaryOptions.eq(currentOptionIndex).trigger('change');
-  };
-
-  Controls.prototype.toggleControls = function($button){
-    $button.toggleClass('active');
-    var isActive = $button.hasClass('active');
-
-    var newText = isActive ? $button.attr('data-on') : $button.attr('data-off');
-    var $parent = $button.parent();
-
-    $button.text(newText);
-
-    if (isActive) $parent.addClass('active');
-    else $parent.removeClass('active');
-  };
-
   Controls.prototype.update = function(now, delta){
     if (!this.loaded) return;
 
@@ -455,7 +316,7 @@ var Controls = (function() {
       var prevLat = this.lat;
       var prevLon = this.lon;
       var actualLookSpeed = delta * this.opt.lookSpeed;
-      var maxDelta = 0.5;
+      var maxDelta = 1;
       var deltaX = MathUtil.clamp(x * actualLookSpeed, -maxDelta, maxDelta);
       var deltaY = MathUtil.clamp(y * actualLookSpeed, -maxDelta, maxDelta);
       // if (Math.abs(deltaX) > maxDelta || Math.abs(deltaY) > maxDelta) console.log(deltaX, deltaY);

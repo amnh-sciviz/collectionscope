@@ -59,6 +59,34 @@ var MainApp = (function() {
     $('.start').on('click', function(e){
       _this.onUserStart();
     });
+
+    $doc.keypress(function(e){
+      if (e.key === 'x') {
+        e.preventDefault()
+        _this.collection.deselectActiveItem();
+      }
+    });
+
+    $doc.on('click', '.view-option', function(e) {
+      var result = _this.collection.onViewOptionChange($(this));
+      if (!result) e.preventDefault();
+    });
+
+    $doc.keypress(function(e){
+      if (e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault()
+        _this.collection.stepViewOption(1);
+      }
+    });
+
+    $('.item-metadata-close').on('click', function(e){
+      e.preventDefault()
+      _this.collection.deselectActiveItem();
+    });
+
+    $('.toggle-menus').on('click', function(){
+      _this.collection.toggleMenus($(this));
+    });
   };
 
   MainApp.prototype.loadScene = function(){
@@ -166,6 +194,18 @@ var MainApp = (function() {
     this.$el.addClass('is-loading');
   };
 
+  MainApp.prototype.onResize = function(){
+    var w = window.innerWidth;
+    var h = window.innerHeight;
+    this.camera.aspect = w / h;
+    this.camera.updateProjectionMatrix();
+    this.renderer.setSize(w, h);
+
+    this.controls && this.controls.onResize();
+
+    renderNeeded = true;
+  };
+
   MainApp.prototype.onUserStart = function(){
     var _this = this;
 
@@ -182,18 +222,6 @@ var MainApp = (function() {
       _this.collection.onFinishedStart();
       _this.$el.removeClass('is-loading');
     }, 100);
-  };
-
-  MainApp.prototype.onResize = function(){
-    var w = window.innerWidth;
-    var h = window.innerHeight;
-    this.camera.aspect = w / h;
-    this.camera.updateProjectionMatrix();
-    this.renderer.setSize(w, h);
-
-    this.controls && this.controls.onResize();
-
-    renderNeeded = true;
   };
 
   MainApp.prototype.render = function(){
