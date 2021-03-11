@@ -64,6 +64,13 @@ var Collection = (function() {
     this.updateAlpha(false, toAlphaValues, transitionDuration);
   };
 
+  Collection.prototype.getCurrentItemIndex = function(){
+    var index = -1;
+    if (this.itemManager) index = this.itemManager.itemIndex;
+    if (index === false || index === undefined) index = -1;
+    return index;
+  };
+
   Collection.prototype.getCurrentView = function(key){
     key = key || this.currentViewKey;
     var view = _.has(this.views, key) ? this.views[key] : this.views[_.first(_.keys(this.views))];
@@ -215,11 +222,6 @@ var Collection = (function() {
   Collection.prototype.loadListeners = function(){
     var _this = this;
     var $doc = $(document);
-
-    $doc.on('change-view', function(e, newValue, duration) {
-      console.log("Changing view to "+newValue);
-      _this.updateView(newValue, duration);
-    });
 
     $doc.keypress(function(e){
       if (e.key === 'x') {

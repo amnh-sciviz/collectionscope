@@ -43,7 +43,8 @@ var MainApp = (function() {
       _this.onResize();
     });
 
-    $doc.on('change-view', function(e, newValue, duration) {
+    $doc.on('change-view', function(e, newValue) {
+      console.log('Change view to: '+newValue)
       _this.onChangeView(newValue);
     });
 
@@ -83,8 +84,24 @@ var MainApp = (function() {
   MainApp.prototype.onChangeView = function(newViewKey){
     this.globalSound.playSoundFromFile("sand.mp3");
 
+    var duration = this.opt.ui.transitionDuration;
+    this.collection.updateView(newViewKey, duration);
+
     var newView = this.collection.getCurrentView(newViewKey);
     this.controls.setBounds(newView.bounds);
+
+    // check if we're orbiting an item; fly with the item
+    if (this.controls.isOrbiting) {
+      var currentItemIndex = this.collection.getCurrentItemIndex();
+      if (currentItemIndex >= 0) {
+        var newPositions = this.collection.itemManager.itemPositions;
+        var targetPosition = newPositions[currentItemIndex];
+        var anchorToPosition = true;
+        // console.log(targetPosition, this.collection.opt.zoomInDistance, duration)
+        this.controls.flyToOrbit(targetPosition, this.collection.opt.zoomInDistance, duration, anchorToPosition);
+        return;
+      }
+    }
 
     var currentP = this.camera.position;
     var newP = newView.cameraPosition;
@@ -156,7 +173,7 @@ var MainApp = (function() {
 
     var p = this.collection.getDefaultCameraPosition();
     var targetPosition = new THREE.Vector3(p.x, p.y, p.z);
-    var targetLookAtPosition = false;
+    var targetLookAtPosition = new THREE.Vector3(0, 0, 0);
     this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration);
 
     setTimeout(function(){
