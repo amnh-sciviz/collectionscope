@@ -344,7 +344,7 @@ var Controls = (function() {
       this.lat = MathUtil.lerp(this.opt.latRange[0], this.opt.latRange[1], ny);
       this.lon = MathUtil.lerp(this.opt.lonRange[1], this.opt.lonRange[0], nx);
 
-      if (prevLat === this.lat && prevLon === this.lon) return;
+      // if (prevLat === this.lat && prevLon === this.lon && this.isAttached) return;
 
       //console.log(this.lat, this.lon, this.npointer.x, this.npointer.y);
 
