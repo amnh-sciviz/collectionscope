@@ -44,6 +44,11 @@ var Controls = (function() {
     this.orbit = new THREE.Spherical();
     this.orbitPointerOrigin = new THREE.Vector2();
     this.cameraIsLocked = false;
+    this.isAttached = true;
+
+    this.lookSpeedNormal = this.opt.lookSpeed;
+    this.lookSpeedFast = this.opt.lookSpeed * 5;
+    this.lookSpeed = this.lookSpeedNormal;
 
     // for determining what the camera is looking at
     this.pointed = false;
@@ -54,6 +59,13 @@ var Controls = (function() {
     this.lat = 0;
     this.lon = 0;
     this.onResize();
+  };
+
+  Controls.prototype.attachCursor = function(isAttached) {
+    this.isAttached = isAttached;
+
+    if (isAttached) this.lookSpeed = this.lookSpeedNormal;
+    else this.lookSpeed = this.lookSpeedFast;
   };
 
   Controls.prototype.centerPointer = function(){
@@ -230,7 +242,10 @@ var Controls = (function() {
 
     $doc.on("mousemove", function(e){
       if (isTouch) return;
+      if (e.target.id !== 'mainCanvas') _this.attachCursor(false);
+      else _this.attachCursor(true);
       _this.onPointChange(e.pageX, e.pageY);
+
     });
 
     $doc.on('click', 'canvas', function(e) {
@@ -252,21 +267,27 @@ var Controls = (function() {
   };
 
   Controls.prototype.normalizePointer = function(){
-    var nx = this.pointer.x / window.innerWidth;
-    var ny = this.pointer.y / window.innerHeight;
+    var nx = this.pointer.x / this.viewW;
+    var ny = this.pointer.y / this.viewH;
     this.npointer.x = nx * 2 - 1;
     this.npointer.y = -ny * 2 + 1;
   };
 
   Controls.prototype.onResize = function(){
-    this.viewHalfX = window.innerWidth / 2;
-    this.viewHalfY = window.innerHeight / 2;
+    this.viewW = window.innerWidth;
+    this.viewH = window.innerHeight;
+    this.viewHalfX = this.viewW / 2;
+    this.viewHalfY = this.viewH / 2;
   };
 
   Controls.prototype.onPointChange = function(x, y){
     this.pointed = true;
     // this.pointerDelta.x = x - this.pointer.x;
     // this.pointerDelta.y = y - this.pointer.y;
+    if (!this.isAttached) {
+      x = this.viewW * 0.5;
+      y = this.viewH * 0.5;
+    }
     this.pointer.x = x;
     this.pointer.y = y;
     this.normalizePointer();
@@ -402,7 +423,7 @@ var Controls = (function() {
     }
 
     // have the look vector trail a little behind the cursor
-    this.npointerLook.lerp(this.npointer, this.opt.lookSpeed);
+    this.npointerLook.lerp(this.npointer, this.lookSpeed);
   };
 
   Controls.prototype.updateOrbit = function(now, delta){

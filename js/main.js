@@ -104,6 +104,7 @@ var MainApp = (function() {
     var scene = new THREE.Scene();
     var camera = new THREE.PerspectiveCamera( 75, w / h, 1, 8000 );
     var renderer = new THREE.WebGLRenderer();
+    renderer.domElement.id = 'mainCanvas';
     renderer.setSize(w, h);
     $el.append(renderer.domElement);
 
