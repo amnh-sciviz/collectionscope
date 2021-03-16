@@ -9,7 +9,7 @@ var Controls = (function() {
       "maxVelocity": 20,
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
-      "lookSpeed": 0.05,
+      "lookSpeed": 0.01,
       "zoomInTransitionDuration": 2000,
       "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
@@ -49,6 +49,7 @@ var Controls = (function() {
     this.pointed = false;
     this.pointer = new THREE.Vector2();
     this.npointer = new THREE.Vector2();
+    this.npointerLook = new THREE.Vector2(); // a vector that is delayed, follows npointer
     // this.pointerDelta = new THREE.Vector2();
     this.lat = 0;
     this.lon = 0;
@@ -251,8 +252,10 @@ var Controls = (function() {
   };
 
   Controls.prototype.normalizePointer = function(){
-    this.npointer.x = ( this.pointer.x / window.innerWidth ) * 2 - 1;
-    this.npointer.y = -( this.pointer.y / window.innerHeight ) * 2 + 1;
+    var nx = this.pointer.x / window.innerWidth;
+    var ny = this.pointer.y / window.innerHeight;
+    this.npointer.x = nx * 2 - 1;
+    this.npointer.y = -ny * 2 + 1;
   };
 
   Controls.prototype.onResize = function(){
@@ -311,21 +314,18 @@ var Controls = (function() {
 
     // move camera direction based on pointer
     if (this.pointed !== false && delta > 0 && !this.cameraIsLocked) {
-      var x = this.pointer.x - this.viewHalfX;
-      var y = this.pointer.y - this.viewHalfY;
+      this.updateLookPointer();
       var prevLat = this.lat;
       var prevLon = this.lon;
-      var actualLookSpeed = delta * this.opt.lookSpeed;
-      var maxDelta = 1;
-      var deltaX = MathUtil.clamp(x * actualLookSpeed, -maxDelta, maxDelta);
-      var deltaY = MathUtil.clamp(y * actualLookSpeed, -maxDelta, maxDelta);
-      // if (Math.abs(deltaX) > maxDelta || Math.abs(deltaY) > maxDelta) console.log(deltaX, deltaY);
-      this.lon -= deltaX;
-      this.lat -= deltaY;
-      this.lat = MathUtil.clamp(this.lat, this.opt.latRange[0], this.opt.latRange[1]);
-      this.lon = MathUtil.clamp(this.lon, this.opt.lonRange[0], this.opt.lonRange[1]);
+
+      var nx = MathUtil.norm(this.npointerLook.x, -1, 1);
+      var ny = MathUtil.norm(this.npointerLook.y, -1, 1);
+      this.lat = MathUtil.lerp(this.opt.latRange[0], this.opt.latRange[1], ny);
+      this.lon = MathUtil.lerp(this.opt.lonRange[1], this.opt.lonRange[0], nx);
 
       if (prevLat === this.lat && prevLon === this.lon) return;
+
+      //console.log(this.lat, this.lon, this.npointer.x, this.npointer.y);
 
       var phi = MathUtil.degToRad(90 - this.lat);
       var theta = MathUtil.degToRad(this.lon);
@@ -390,6 +390,19 @@ var Controls = (function() {
 
       renderNeeded = true;
     }
+  };
+
+  Controls.prototype.updateLookPointer = function(){
+    var distance = this.npointerLook.distanceTo(this.npointer);
+    if (distance <= 0) return;
+
+    if (distance < 0.00001) {
+      this.npointerLook.copy(this.npointer);
+      return;
+    }
+
+    // have the look vector trail a little behind the cursor
+    this.npointerLook.lerp(this.npointer, this.opt.lookSpeed);
   };
 
   Controls.prototype.updateOrbit = function(now, delta){
