@@ -5,6 +5,7 @@ var Controls = (function() {
   function Controls(config) {
     var defaults = {
       "el": "#app",
+      "canvasEl": "#mainCanvas",
       "mode": "firstPerson", // mode: firstPerson or railcar
       "maxVelocity": 20,
       "acceleration": 0.2,
@@ -30,6 +31,7 @@ var Controls = (function() {
 
   Controls.prototype.init = function(){
     this.$el = $(this.opt.el);
+    this.$canvas = $(this.opt.canvasEl)
     this.isTouch = isTouchDevice();
     this.isXR = false;
     this.moveDirectionX = 0;
@@ -69,8 +71,8 @@ var Controls = (function() {
   };
 
   Controls.prototype.centerPointer = function(){
-    var x = this.$el.width() * 0.5;
-    var y = this.$el.height() * 0.5;
+    var x = this.viewW * 0.5;
+    var y = this.viewH * 0.5;
 
     this.onPointChange(x, y);
   };
@@ -236,7 +238,7 @@ var Controls = (function() {
     //   _this.moveDirectionY = 0;
     // });
 
-    $doc.on('contextmenu', 'canvas', function(e) {
+    this.$canvas.on('contextmenu', function(e) {
       e.preventDefault();
     });
 
@@ -248,21 +250,21 @@ var Controls = (function() {
 
     });
 
-    $doc.on('click', 'canvas', function(e) {
+    this.$canvas.on('click', function(e) {
       _this.onPointChange(e.pageX, e.pageY);
       $(document).trigger('canvas-click', [_this.pointer, _this.npointer]);
     });
 
     if (isTouch) {
-      var el = this.$el[0];
+      var el = this.$canvas[0];
       var mc = new Hammer(el);
       mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
       mc.on("panstart panmove press", function(e) {
         _this.onPointChange(e.center.x, e.center.y);
       });
-      mc.on("panend pancancel pressup", function(e){
-        _this.centerPointer();
-      });
+      // mc.on("panend pancancel pressup", function(e){
+      //   _this.centerPointer();
+      // });
     }
   };
 
@@ -284,7 +286,7 @@ var Controls = (function() {
     this.pointed = true;
     // this.pointerDelta.x = x - this.pointer.x;
     // this.pointerDelta.y = y - this.pointer.y;
-    if (!this.isAttached) {
+    if (!this.isAttached && !this.isOrbiting) {
       x = this.viewW * 0.5;
       y = this.viewH * 0.5;
     }
