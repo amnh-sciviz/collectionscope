@@ -483,7 +483,7 @@ var Collection = (function() {
 
     if ((type != "map" && type != "timeline") || !bounds) return;
 
-    var p = Util.getRelativePoint($key, e);
+    var p = Util.getRelativePoint($key, e.pageX, e.pageY);
 
     var originPosition = this.camera.position.clone();
     var targetPosition = originPosition.clone();
@@ -513,7 +513,7 @@ var Collection = (function() {
     var id = $key.attr('data-id');
     if (!_.has(this.keys, id)) return;
 
-    var p = Util.getRelativePoint($key, e);
+    var p = Util.getRelativePoint($key, e.pageX, e.pageY);
     this.keys[id].onHover(p.x, p.y);
   };
 

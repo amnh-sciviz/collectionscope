@@ -146,6 +146,7 @@ var Controls = (function() {
 
   Controls.prototype.load = function(){
     this.loadListeners();
+    this.loadTouchpad();
     this.loaded = true;
     this.update();
   };
@@ -268,6 +269,26 @@ var Controls = (function() {
     }
   };
 
+  Controls.prototype.loadTouchpad = function(){
+    var _this = this;
+    var $touchpad = $('#touchpad');
+    if (!$touchpad.length) return;
+
+    this.$touchpad = $touchpad;
+    this.$touchpadHandle = $touchpad.find('.touchpad-handle').first();
+
+    var touchpadEl = $touchpad[0];
+    var touchPad = new Hammer(touchpadEl);
+    touchPad.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+    touchPad.on("panstart panmove press", function(e) {
+      var p = Util.getRelativePoint($touchpad, e.center.x, e.center.y);
+      _this.onTouchpadChange(p.x, p.y);
+    });
+    touchPad.on("panend", function(e) {
+      _this.onTouchpadEnd();
+    });
+  };
+
   Controls.prototype.normalizePointer = function(){
     var nx = this.pointer.x / this.viewW;
     var ny = this.pointer.y / this.viewH;
@@ -293,6 +314,55 @@ var Controls = (function() {
     this.pointer.x = x;
     this.pointer.y = y;
     this.normalizePointer();
+  };
+
+  Controls.prototype.onTouchpadChange = function(nx, ny){
+    // console.log(nx, ny);
+    this.$touchpad.addClass('active');
+
+    // compare touch coordinates to circle center
+    var distanceX = nx - 0.5;
+    var distanceY = ny - 0.5;
+
+    //determine distance from center and use as velocity magnitude
+    var r = 0.5;
+    var mag = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)); // distance formula
+    var nMag = (mag > r) ? 1 : mag / r; // normalized magnitude with max magnitude = 1;
+
+    // determine final direction so velocity is such that -1 >= velocity >= 1
+    var direction = new THREE.Vector2();
+    direction.x = (mag === 0) ? 0 : (Math.cos(Math.acos(distanceX / mag))) * nMag;
+    direction.y = (mag === 0) ? 0 : (Math.sin(Math.asin(distanceY / mag))) * nMag;
+
+    // console.log(`direction X: ${direction.x} direction Y: ${direction.y}`);
+
+    // create a small circle to visualize direction
+    var handleX = 0.5 + (r * direction.x);
+    var handleY = 0.5 + (r * direction.y);
+    this.$touchpadHandle.css({
+      left: (handleX*100) + '%',
+      top: (handleY*100) + '%'
+    });
+
+    var threshold = 0.25;
+
+    if (handleX < 0.5-threshold) this.moveDirectionX = 1;
+    else if (handleX > 0.5+threshold ) this.moveDirectionX = -1;
+    else this.moveDirectionX = 0;
+    if (handleY < 0.5-threshold) this.moveDirectionY = 1;
+    else if (handleY > 0.5+threshold ) this.moveDirectionY = -1;
+    else this.moveDirectionY = 0;
+
+  };
+
+  Controls.prototype.onTouchpadEnd = function(){
+    this.$touchpad.removeClass('active');
+    this.$touchpadHandle.css({
+      left: '50%',
+      top: '50%'
+    });
+    this.moveDirectionX = 0;
+    this.moveDirectionY = 0;
   };
 
   Controls.prototype.releaseAnchor = function(flyToLastPosition){
