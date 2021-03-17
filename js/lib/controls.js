@@ -344,15 +344,15 @@ var Controls = (function() {
       top: (handleY*100) + '%'
     });
 
-    var threshold = 0.25;
+    var threshold = 0.1;
+    var nx = MathUtil.lerp(1, -1, handleX);
+    var ny = MathUtil.lerp(1, -1, handleY);
 
-    if (handleX < 0.5-threshold) this.moveDirectionX = 1;
-    else if (handleX > 0.5+threshold ) this.moveDirectionX = -1;
-    else this.moveDirectionX = 0;
-    if (handleY < 0.5-threshold) this.moveDirectionY = 1;
-    else if (handleY > 0.5+threshold ) this.moveDirectionY = -1;
-    else this.moveDirectionY = 0;
+    if (Math.abs(nx) < threshold) nx = 0;
+    if (Math.abs(ny) < threshold) ny = 0;
 
+    this.moveDirectionX = nx;
+    this.moveDirectionY = ny;
   };
 
   Controls.prototype.onTouchpadEnd = function(){
