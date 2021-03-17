@@ -50,6 +50,7 @@ var Controls = (function() {
 
     this.autoAttach = true;
     this.isAttached = true;
+    this.attachTimeout = false;
 
     this.lookSpeedNormal = this.opt.lookSpeed;
     this.lookSpeedFast = this.opt.lookSpeed * 5;
@@ -68,6 +69,7 @@ var Controls = (function() {
 
   Controls.prototype.attachCursor = function(isAttached, centerPointer) {
     this.isAttached = isAttached;
+    this.attachTimeout = false;
 
     if (centerPointer) {
       this.centerPointer();
@@ -75,6 +77,13 @@ var Controls = (function() {
 
     if (isAttached) this.lookSpeed = this.lookSpeedNormal;
     else this.lookSpeed = this.lookSpeedFast;
+  };
+
+  Controls.prototype.attachCursorWithDelay = function(ms){
+    if (this.attachTimeout) return;
+
+    var _this = this;
+    this.attachTimeout = setTimeout(function(){ _this.attachCursor(true); }, ms);
   };
 
   Controls.prototype.centerPointer = function(){
@@ -232,27 +241,6 @@ var Controls = (function() {
       }
     });
 
-    // $doc.on('mousedown', 'canvas', function(e) {
-    //   if (isTouch) return;
-    //   switch (e.which) {
-    //     // left mouse
-    //     case 1:
-    //       _this.moveDirectionY = 1;
-    //       break;
-    //     // right mouse
-    //     case 3:
-    //       e.preventDefault();
-    //       _this.moveDirectionY = -1;
-    //       break;
-    //     default:
-    //       break;
-    //   }
-    // });
-    // $doc.on('mouseup', 'canvas', function(e) {
-    //   if (isTouch) return;
-    //   _this.moveDirectionY = 0;
-    // });
-
     this.$canvas.on('contextmenu', function(e) {
       e.preventDefault();
     });
@@ -261,7 +249,7 @@ var Controls = (function() {
       if (isTouch || _this.isUsingTrackpad) return;
       if (_this.autoAttach && !_this.isOrbiting) {
         if (e.target.id !== 'mainCanvas') _this.attachCursor(false, true);
-        else _this.attachCursor(true);
+        else _this.attachCursorWithDelay(500);
       }
       if (_this.isAttached) {
         _this.onPointChange(e.pageX, e.pageY);
