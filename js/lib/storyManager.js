@@ -38,7 +38,7 @@ var StoryManager = (function() {
     var _this = this;
     var stories = {};
 
-    var markerTexture = new THREE.TextureLoader().load("../../img/compass_red.png");
+    var markerTexture = new THREE.TextureLoader().load("../../img/indicator_star.png");
     var hotspots = [];
 
     _.each(this.opt.stories, function(content, contentKey){

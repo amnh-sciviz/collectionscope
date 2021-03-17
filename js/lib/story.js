@@ -6,6 +6,10 @@ var Story = (function() {
     'parent': '#stories-container',
     'imageDir': '',
     'hotspotItemIndex': -1,
+    'minOpacity': 0.8,
+    'scaleFrom': 50,
+    'scaleTo': 80,
+    'pulseDuration': 2000,
     'markerTexture': false
   };
 
@@ -27,12 +31,13 @@ var Story = (function() {
 
   Story.prototype.deselectHotspot = function(){
     this.isSelected = false;
-    this.hotspot.material.opacity = 0.5;
+    this.hotspot.material.opacity = this.opt.minOpacity;
   };
 
   Story.prototype.hide = function(){
     this.$el.removeClass('active');
     this.visible = false;
+    this.hotspot.object.visible = true;
   };
 
   Story.prototype.hideHotspot = function(){
@@ -47,7 +52,7 @@ var Story = (function() {
 
     var spriteMaterial = new THREE.SpriteMaterial({ map: this.opt.markerTexture });
     spriteMaterial.transparent = true;
-    spriteMaterial.opacity = 0.5;
+    spriteMaterial.opacity = this.opt.minOpacity;
     var sprite = new THREE.Sprite(spriteMaterial);
     // var w = options.width;
     // var h = options.height;
@@ -58,7 +63,7 @@ var Story = (function() {
     // console.log(x, y, z);
     // sprite.position.set(x, y, z);
     sprite.visible = false;
-    sprite.scale.set(200, 200, 1);
+    sprite.scale.set(this.opt.scaleFrom, this.opt.scaleFrom, 1);
     this.hotspot = {
       object: sprite,
       material: spriteMaterial
@@ -92,7 +97,7 @@ var Story = (function() {
       this.isSelected = true;
     } else {
       // hotspot.material.color.set(0xffffff);
-      hotspot.material.opacity = 0.5;
+      hotspot.material.opacity = this.opt.minOpacity;
       this.isSelected = false;
     }
   };
@@ -100,15 +105,25 @@ var Story = (function() {
   Story.prototype.show = function(){
     this.$el.addClass('active');
     this.visible = true;
+    this.hideHotspot();
   };
 
   Story.prototype.update = function(now){
-    if (!this.isTransitioning) return;
 
-    if (now >= this.transitionEnd) {
+    if (this.isTransitioning && now >= this.transitionEnd) {
       this.isTransitioning = false;
-      this.hotspot.material.opacity = 0.5;
     }
+
+    if (this.isTransitioning || this.isSelected) return;
+
+    // pulse scale and opacity
+    var progress = now % this.opt.pulseDuration;
+    var t = MathUtil.clamp(progress / this.opt.pulseDuration, 0, 1);
+    t = MathUtil.easeBell(t);
+    var scale = MathUtil.lerp(this.opt.scaleFrom, this.opt.scaleTo, t);
+    var opacity = MathUtil.lerp(this.opt.minOpacity, 1, t);
+    this.hotspot.object.scale.set(scale, scale, 1);
+    this.hotspot.material.opacity = opacity;
   };
 
   Story.prototype.updatePositions = function(newPositions, transitionDuration){
@@ -117,7 +132,9 @@ var Story = (function() {
     var newPosition = newPositions[this.hotspotItemIndex];
     if (newPosition === undefined) return;
 
-    this.hotspot.object.position.set(newPosition.x, newPosition.y, newPosition.z);
+    // move the z slightly so it doesn't clip the item
+    var z = newPosition.z + 1;
+    this.hotspot.object.position.set(newPosition.x, newPosition.y, z);
     this.hotspot.material.opacity = 0;
 
     this.isTransitioning = true;

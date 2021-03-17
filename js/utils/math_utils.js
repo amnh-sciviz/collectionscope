@@ -18,6 +18,10 @@ var globalRandomSeeder = new Math.seedrandom();
     return (Math.sin((n+1.5)*Math.PI)+1.0) / 2.0;
   };
 
+  MathUtil.easeBell = function(n){
+    return (Math.sin((2.0*n+1.5)*Math.PI)+1.0) / 2.0;
+  };
+
   MathUtil.hypot = function(a, b){
     return Math.sqrt(a*a + b*b);
   };
