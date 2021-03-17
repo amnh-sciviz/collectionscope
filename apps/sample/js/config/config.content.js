@@ -808,6 +808,7 @@ _.extend(CONFIG, {
       "width": 16384,
       "height": 16384,
       "depth": 16384,
+      "mode": "firstPerson",
       "cameraPosition": [
         0,
         0,
@@ -833,14 +834,15 @@ _.extend(CONFIG, {
       "width": 512,
       "height": 512,
       "depth": 66000,
+      "mode": "railcar",
       "cameraPosition": [
         0,
         0,
         -16500.0
       ],
       "bounds": [
-        -256,
-        256,
+        0,
+        0,
         -33000.0,
         33000.0
       ]
@@ -863,6 +865,7 @@ _.extend(CONFIG, {
         256.0,
         -1024.0
       ],
+      "mode": "firstPerson",
       "bounds": [
         -4096.0,
         4096.0,
@@ -904,9 +907,10 @@ _.extend(CONFIG, {
         256.0,
         -16500.0
       ],
+      "mode": "railcar",
       "bounds": [
-        -270.0,
-        270.0,
+        -135.0,
+        135.0,
         -33000.0,
         33000.0
       ],

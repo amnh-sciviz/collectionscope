@@ -127,6 +127,7 @@ var MainApp = (function() {
 
     var newView = this.collection.getCurrentView(newViewKey);
     this.controls.setBounds(newView.bounds);
+    this.controls.setMode(newView.mode);
 
     // check if we're orbiting an item; fly with the item
     if (this.controls.isOrbiting) {

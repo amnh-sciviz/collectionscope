@@ -148,6 +148,7 @@ for key, options in visualizations.items():
         options["width"] = diameter
         options["height"] = diameter
         options["depth"] = diameter
+        options["mode"] = "firstPerson"
         options["cameraPosition"] = [0, 0, -radius/8]
         options["bounds"] = [-radius, radius, -radius, radius]
 
@@ -160,8 +161,9 @@ for key, options in visualizations.items():
         options["width"] = radius * 2
         options["height"] = radius * 2
         options["depth"] = depth
+        options["mode"] = "railcar"
         options["cameraPosition"] = [0, 0, -depth/4]
-        options["bounds"] = [-radius, radius, -depth/2, depth/2]
+        options["bounds"] = [0, 0, -depth/2, depth/2]
 
     elif key == "geographyBars":
         options["keys"] = ["map"]
@@ -170,6 +172,7 @@ for key, options in visualizations.items():
         options["height"] = options["barHeight"]
         options["depth"] = options["mapWidth"] / 2
         options["cameraPosition"] = [0, options["barHeight"]/8, -options["mapWidth"]/8]
+        options["mode"] = "firstPerson"
         options["bounds"] = [-options["width"]/2, options["width"]/2, -options["depth"]/2, options["depth"]/2]
         options["overlays"] = [{
           "type": "plane",
@@ -188,7 +191,8 @@ for key, options in visualizations.items():
         options["height"] = options["trackHeight"]
         options["depth"] = depth
         options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
-        options["bounds"] = [-width/4, width/4, -depth/2, depth/2]
+        options["mode"] = "railcar"
+        options["bounds"] = [-width/8, width/8, -depth/2, depth/2]
         overlayRelativePath = "img/categories.png"
         overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
         makeCategoryTrackOverlay(overlayFullPath)
