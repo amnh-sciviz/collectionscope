@@ -46,6 +46,9 @@ var Controls = (function() {
     this.orbit = new THREE.Spherical();
     this.orbitPointerOrigin = new THREE.Vector2();
     this.cameraIsLocked = false;
+    this.isUsingTrackpad = false;
+
+    this.autoAttach = true;
     this.isAttached = true;
 
     this.lookSpeedNormal = this.opt.lookSpeed;
@@ -63,8 +66,12 @@ var Controls = (function() {
     this.onResize();
   };
 
-  Controls.prototype.attachCursor = function(isAttached) {
+  Controls.prototype.attachCursor = function(isAttached, centerPointer) {
     this.isAttached = isAttached;
+
+    if (centerPointer) {
+      this.centerPointer();
+    }
 
     if (isAttached) this.lookSpeed = this.lookSpeedNormal;
     else this.lookSpeed = this.lookSpeedFast;
@@ -192,6 +199,13 @@ var Controls = (function() {
           _this.moveDirectionX = -1;
           break;
 
+        // detach cursor when click escape
+        case 'Escape':
+          e.preventDefault();
+          _this.autoAttach = false;
+          _this.attachCursor(false);
+          break;
+
         default:
           break;
       }
@@ -244,15 +258,23 @@ var Controls = (function() {
     });
 
     $doc.on("mousemove", function(e){
-      if (isTouch) return;
-      if (e.target.id !== 'mainCanvas') _this.attachCursor(false);
-      else _this.attachCursor(true);
-      _this.onPointChange(e.pageX, e.pageY);
-
+      if (isTouch || _this.isUsingTrackpad) return;
+      if (_this.autoAttach && !_this.isOrbiting) {
+        if (e.target.id !== 'mainCanvas') _this.attachCursor(false, true);
+        else _this.attachCursor(true);
+      }
+      if (_this.isAttached) {
+        _this.onPointChange(e.pageX, e.pageY);
+      }
     });
 
     this.$canvas.on('click', function(e) {
+      if (!_this.autoAttach && !_this.isAttached) {
+        _this.autoAttach = true;
+        _this.attachCursor(true);
+      }
       _this.onPointChange(e.pageX, e.pageY);
+
       $(document).trigger('canvas-click', [_this.pointer, _this.npointer]);
     });
 
@@ -307,10 +329,6 @@ var Controls = (function() {
     this.pointed = true;
     // this.pointerDelta.x = x - this.pointer.x;
     // this.pointerDelta.y = y - this.pointer.y;
-    if (!this.isAttached && !this.isOrbiting) {
-      x = this.viewW * 0.5;
-      y = this.viewH * 0.5;
-    }
     this.pointer.x = x;
     this.pointer.y = y;
     this.normalizePointer();
@@ -325,7 +343,7 @@ var Controls = (function() {
     var distanceY = ny - 0.5;
 
     //determine distance from center and use as velocity magnitude
-    var r = 0.5;
+    var r = 0.4;
     var mag = Math.sqrt((distanceX * distanceX) + (distanceY * distanceY)); // distance formula
     var nMag = (mag > r) ? 1 : mag / r; // normalized magnitude with max magnitude = 1;
 
@@ -353,6 +371,7 @@ var Controls = (function() {
 
     this.moveDirectionX = nx;
     this.moveDirectionY = ny;
+    this.isUsingTrackpad = true;
   };
 
   Controls.prototype.onTouchpadEnd = function(){
@@ -363,6 +382,7 @@ var Controls = (function() {
     });
     this.moveDirectionX = 0;
     this.moveDirectionY = 0;
+    this.isUsingTrackpad = false;
   };
 
   Controls.prototype.releaseAnchor = function(flyToLastPosition){
