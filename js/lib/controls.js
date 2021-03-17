@@ -188,23 +188,27 @@ var Controls = (function() {
 
     $doc.keydown(function(e) {
       switch(e.key) {
-        // case 'ArrowUp': // arrow up
+        case 'ArrowUp': // arrow up
         case 'w': // w
+          e.preventDefault();
           _this.moveDirectionY = 1;
           break;
 
-        // case 'ArrowDown': // arrow down
+        case 'ArrowDown': // arrow down
         case 's': // s
+          e.preventDefault();
           _this.moveDirectionY = -1;
           break;
 
-        // case 'ArrowLeft': // arrow left
+        case 'ArrowLeft': // arrow left
         case 'a': // a
+          e.preventDefault();
           _this.moveDirectionX = 1;
           break;
 
-        // case 'ArrowRight': // arrow right
+        case 'ArrowRight': // arrow right
         case 'd': // d
+          e.preventDefault();
           _this.moveDirectionX = -1;
           break;
 
@@ -221,18 +225,20 @@ var Controls = (function() {
     });
 
     $doc.keyup(function(e) {
-      switch(e.which) {
-        // case 38: // arrow up
-        case 87: // w
-        // case 40: // arrow down
-        case 83: // s
+      switch(e.key) {
+        case 'ArrowUp': // arrow up
+        case 'w': // w
+        case 'ArrowDown': // arrow down
+        case 's': // s
+          e.preventDefault();
           _this.moveDirectionY = 0;
           break;
 
-        // case 37: // arrow left
-        case 65: // a
-        // case 39: // arrow right
-        case 68: // d
+        case 'ArrowLeft': // arrow left
+        case 'a': // a
+        case 'ArrowRight': // arrow right
+        case 'd': // d
+          e.preventDefault();
           _this.moveDirectionX = 0;
           break;
 
