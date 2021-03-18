@@ -11,6 +11,7 @@ import lib.io_utils as io
 import lib.list_utils as lu
 import lib.item_utils as tu
 import lib.math_utils as mu
+import lib.string_utils as su
 
 # input
 parser = argparse.ArgumentParser()
@@ -227,5 +228,27 @@ outjson["menus"] = {
       "radioItems": viewOptions
     }
 }
+
+# Update HTML template
+src = "apps/template"
+dest = "apps/%s" % config["name"]
+indexFilenameTemplate = src + "/index.html"
+indexFilename = dest + "/index.html"
+
+# Check for footer content
+footerContent = '<div class="intro-footer">'
+if "credits" in config:
+    footerContent += '<div class="credits">'
+    if not isinstance(config["credits"], list):
+        config["credits"] = [config["credits"]]
+    for credit in config["credits"]:
+        footerContent += f'<a href="{credit["url"]}" target="_blank"><img src="{credit["image"]}" alt="{credit["name"]}" /></a>'
+    footerContent += '</div>'
+if "creditText" in config:
+    footerContent += f'\n<p>{config["creditText"]}</p>'
+footerContent += '</div>'
+config["footerContent"] = footerContent
+
+su.formatTextFile(indexFilenameTemplate, indexFilename, config)
 
 io.writeJSON(OUTPUT_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")

@@ -3,8 +3,19 @@ name: sample
 
 # Site metadta to be used in the meta tags and introduction screen
 title: CollectionScope
+titleFormatted: Collection<strong>Scope</strong> # May contain HTML
 logo: img/logo.png  # this path is relative to your /apps/{your project}/index.html file
-description: Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+description: Explore the Museum’s collections across time and space.
+introductionText: There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! # May contain HTML
+creditText: This project is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a> # May contain HTML
+credits:
+  - name: American Museum of Natural History
+    url: https://amnh.org/
+    image: img/amnh_logo.png # this path is relative to your /apps/{your project}/index.html file
+
+  - name: Knight Foundation
+    url: https://knightfoundation.org/
+    image: img/knight_logo.png
 
 #################################
 # Define your meta data source

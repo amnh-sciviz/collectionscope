@@ -16,12 +16,35 @@
 <body>
 
   <div id="app" class="app is-loading">
-    <div class="loading">
-      <h2>Loading assets and data...</h2>
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
-        <div class="loading-text">0%</div>
+
+    <div class="intro">
+      <div>
+        
+        <h1>{titleFormatted}</h1>
+        <h2>{description}</h2>
+        <p>{introductionText}</p>
+
+        <div class="loading">
+          <div class="loading-circle"></div>
+          <p>Loading</p>
+          <p class="loading-text">0%</p>
+        </div>
+
+        <div class="intro-buttons">
+          <button class="intro-button tour-start">
+            <img class="icon" src="../../img/ico-tour.png" alt="Start guided tour icon" />
+            Start guided tour
+          </button>
+          <button class="intro-button explore-start">
+            <img class="icon" src="../../img/ico-explore.png" alt="Explore freely icon" />
+            Explore freely
+          </button>
+        </div>
+
+        {footerContent}
+
       </div>
+
     </div>
 
     <div id="legend-container" class="legend-container"></div>

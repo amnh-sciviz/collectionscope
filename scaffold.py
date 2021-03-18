@@ -20,13 +20,11 @@ appName = config["name"]
 
 src = "apps/template"
 dest = "apps/%s" % appName
-indexFilenameTemplate = src + "/index.html"
-indexFilename = dest + "/index.html"
-
+# indexFilenameTemplate = src + "/index.html"
+# indexFilename = dest + "/index.html"
+#
 if os.path.isdir(dest) and not a.OVERWRITE:
-    print("%s already exists. Delete manually or run with -ovewrite flag. Exiting." % dest)
-    # add meta content to index file
-    su.formatTextFile(indexFilenameTemplate, indexFilename, config)
+    print("%s already exists. Delete manually or run with -ovewrite flag. Overwriting will remove all assets and changes you made to the app folder." % dest)
     sys.exit()
 
 if os.path.isdir(dest):

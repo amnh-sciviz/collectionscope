@@ -65,8 +65,12 @@ var MainApp = (function() {
       _this.collection && _this.collection.onClickKey($(this), e);
     });
 
-    $('.start').on('click', function(e){
-      _this.onUserStart();
+    $('.explore-start').on('click', function(e){
+      _this.onExploreStart();
+    });
+
+    $('.tour-start').on('click', function(e){
+      _this.onTourStart();
     });
 
     $doc.keypress(function(e){
@@ -157,9 +161,14 @@ var MainApp = (function() {
     this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration);
   };
 
+  MainApp.prototype.onExploreStart = function(){
+    this.onUserStart();
+  };
+
   MainApp.prototype.onLoadEnd = function(){
     var _this = this;
     console.log("Loaded everything.");
+
     this.$el.removeClass('is-loading');
 
     // init camera positio
@@ -173,7 +182,7 @@ var MainApp = (function() {
     this.scene.add(this.collection.getThree());
 
     this.loadListeners();
-    $('#instructions').addClass('active');
+    // $('#instructions').addClass('active');
 
     var renderPromise = $.Deferred();
     setTimeout(function(){
@@ -194,13 +203,13 @@ var MainApp = (function() {
     var percentFinished = this.totalLoaded / this.totalToLoad;
     percentFinished = Math.round(percentFinished * 100) + '%';
     this.$loadingText.text(percentFinished);
-    this.$loadingProgress.css('width', percentFinished);
+    // this.$loadingProgress.css('width', percentFinished);
   };
 
   MainApp.prototype.onLoadStart = function(){
     this.totalLoaded = 0;
     this.totalToLoad = this.collection.getTotalToLoad();
-    this.$loadingProgress = $('.loading-progress');
+    // this.$loadingProgress = $('.loading-progress');
     this.$loadingText = $('.loading-text');
     this.$el.addClass('is-loading');
   };
@@ -217,10 +226,14 @@ var MainApp = (function() {
     renderNeeded = true;
   };
 
+  MainApp.prototype.onTourStart = function(){
+    this.onUserStart();
+  };
+
   MainApp.prototype.onUserStart = function(){
     var _this = this;
 
-    $('#instructions').removeClass('active');
+    // $('#instructions').removeClass('active');
 
     var p = this.collection.getDefaultCameraPosition();
     var targetPosition = new THREE.Vector3(p.x, p.y, p.z);

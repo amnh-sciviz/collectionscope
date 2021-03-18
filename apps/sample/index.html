@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <title>CollectionScope</title>
-  <meta name="description" content="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.">
+  <meta name="description" content="Explore the Museum’s collections across time and space.">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
   <link rel="stylesheet" href="../../css/vendor/normalize.css">
@@ -16,12 +16,36 @@
 <body>
 
   <div id="app" class="app is-loading">
-    <div class="loading">
-      <h2>Loading assets and data...</h2>
-      <div class="loading-bar">
-        <div class="loading-progress"></div>
-        <div class="loading-text">0%</div>
+
+    <div class="intro">
+      <div>
+        
+        <h1>Collection<strong>Scope</strong></h1>
+        <h2>Explore the Museum’s collections across time and space.</h2>
+        <p>There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections!</p>
+
+        <div class="loading">
+          <div class="loading-circle"></div>
+          <p>Loading</p>
+          <p class="loading-text">0%</p>
+        </div>
+
+        <div class="intro-buttons">
+          <button class="intro-button tour-start">
+            <img class="icon" src="../../img/ico-tour.png" alt="Start guided tour icon" />
+            Start guided tour
+          </button>
+          <button class="intro-button explore-start">
+            <img class="icon" src="../../img/ico-explore.png" alt="Explore freely icon" />
+            Explore freely
+          </button>
+        </div>
+
+        <div class="intro-footer"><div class="credits"><a href="https://amnh.org/" target="_blank"><img src="img/amnh_logo.png" alt="American Museum of Natural History" /></a><a href="https://knightfoundation.org/" target="_blank"><img src="img/knight_logo.png" alt="Knight Foundation" /></a></div>
+<p>This project is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a></p></div>
+
       </div>
+
     </div>
 
     <div id="legend-container" class="legend-container"></div>
@@ -47,7 +71,7 @@
   <div id="instructions" class="instructions">
     <div>
       <h1>CollectionScope</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+      <p>Explore the Museum’s collections across time and space.</p>
       <ul>
         <li>Press <strong>w/a/s/d keys</strong> to move forward/left/backward/right</li>
         <li>Use <strong>cursor</strong> to look around</li>
