@@ -19,6 +19,8 @@ var MainApp = (function() {
     this.cameraTransitionStart = false;
     this.cameraTransitionEnd = false;
 
+    this.$intro = $('.intro');
+
     this.loadScene();
 
     this.globalListener = new THREE.AudioListener();
@@ -71,6 +73,10 @@ var MainApp = (function() {
 
     $('.tour-start').on('click', function(e){
       _this.onTourStart();
+    });
+
+    $('.show-menu').on('click', function(){
+      _this.$intro.addClass('active');
     });
 
     $doc.keypress(function(e){
@@ -182,7 +188,6 @@ var MainApp = (function() {
     this.scene.add(this.collection.getThree());
 
     this.loadListeners();
-    // $('#instructions').addClass('active');
 
     var renderPromise = $.Deferred();
     setTimeout(function(){
@@ -233,7 +238,11 @@ var MainApp = (function() {
   MainApp.prototype.onUserStart = function(){
     var _this = this;
 
-    // $('#instructions').removeClass('active');
+    this.$intro.removeClass('active');
+    if (this.started) return;
+    this.started = true;
+
+    this.controls.instructionsShow();
 
     var p = this.collection.getDefaultCameraPosition();
     var targetPosition = new THREE.Vector3(p.x, p.y, p.z);

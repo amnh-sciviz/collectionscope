@@ -17,9 +17,9 @@
 
   <div id="app" class="app is-loading">
 
-    <div class="intro">
+    <div class="intro active">
       <div>
-        
+
         <h1>{titleFormatted}</h1>
         <h2>{description}</h2>
         <p>{introductionText}</p>
@@ -57,6 +57,13 @@
 
     <div id="viewer" class="viewer"><div class="viewer-inner"></div></div>
 
+    <nav class="main-nav">
+      <ul class="icon-list">
+        <li><button class="show-menu"><img src="../../img/ico-menu.png" alt="Menu icon" title="View menu" /></button></li>
+        <li><button class="show-instructions"><img src="../../img/ico-info.png" alt="Information icon" title="View instructions" /></button></li>
+      </ul>
+    </nav>
+
     <div id="touchpad" class="touchpad"><div class="touchpad-handle"></div></div>
 
     <div id="item-image-container" class="item-image-container"><img id="item-image" class="item-image" /></div>
@@ -69,14 +76,44 @@
 
   <div id="instructions" class="instructions">
     <div>
-      <h1>{title}</h1>
-      <p>{description}</p>
-      <ul>
-        <li>Press <strong>w/a/s/d keys</strong> to move forward/left/backward/right</li>
-        <li>Use <strong>cursor</strong> to look around</li>
-        <li>Press <strong>spacebar</strong> to change layout</li>
-      </ul>
-      <p><button class="start">Start</button></p>
+      <button class="instructions-close close-x">×<span class="visuallyHidden"> close</span></button>
+      <div class="keyboard-instructions device-instructions">
+        <h1>Controls</h1>
+        <ul>
+          <li>move your mouse to <strong>look around</strong></li>
+          <li>W-A-S-D or arrow keys to <strong>move around</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-WASD.png" alt="WASD Keys Icon" />
+            </div>
+            <div class="image-container">
+              <img src="../../img/ico-arrowkeys.png" alt="Arrow Keys Icon" />
+            </div>
+          </li>
+          <li>Space bar to <strong>change layout</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-spacebar.png" alt="Space Bar Icon" class="space-icon" />
+            </div>
+          </li>
+        </ul>
+        <button class="instructions-close large">Okay</button>
+        <p><small>Using a touch device? <a href="?device=touch">Tap here to load touch mode.</a></small></p>
+      </div>
+      <div class="touch-instructions device-instructions">
+        <h1>Controls</h1>
+        <ul>
+          <li>Drag to <strong>look around</strong></li>
+          <li>Use trackpad on bottom right to <strong>move around</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-trackpad.png" alt="Trackpad icon" class="trackpad-icon" />
+            </div>
+          </li>
+        </ul>
+        <button class="instructions-close large">Okay</button>
+        <p><small>Using a keyboard and mouse? <a href="?device=keyboard">Tap here to load keyboard mode.</a></small></p>
+      </div>
     </div>
   </div>
 

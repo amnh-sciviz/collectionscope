@@ -6,6 +6,7 @@ var Controls = (function() {
     var defaults = {
       "el": "#app",
       "canvasEl": "#mainCanvas",
+      "device": "auto",
       "mode": "firstPerson", // mode: firstPerson or railcar
       "maxVelocity": 20,
       "acceleration": 0.2,
@@ -16,7 +17,8 @@ var Controls = (function() {
       "latRange": [-85, 85],  // range of field of view in y-axis
       "lonRange": [-60, 60] // range of field of view in x-axis
     };
-    this.opt = _.extend({}, defaults, config);
+    var q = Util.queryParams();
+    this.opt = _.extend({}, defaults, config, q);
     this.init();
   }
 
@@ -31,8 +33,10 @@ var Controls = (function() {
 
   Controls.prototype.init = function(){
     this.$el = $(this.opt.el);
-    this.$canvas = $(this.opt.canvasEl)
-    this.isTouch = isTouchDevice();
+    this.$canvas = $(this.opt.canvasEl);
+    this.$instructions = $('#instructions');
+    this.isTouch = isTouchDevice() || this.opt.device === "touch";
+    if (this.opt.device === "keyboard") this.isTouch = false;
     this.isXR = false;
     this.moveDirectionX = 0;
     this.moveDirectionY = 0;
@@ -64,6 +68,9 @@ var Controls = (function() {
     // this.pointerDelta = new THREE.Vector2();
     this.lat = 0;
     this.lon = 0;
+
+    this.loadUI();
+
     this.onResize();
   };
 
@@ -158,6 +165,14 @@ var Controls = (function() {
       targetPosition = cameraPosition.lerp(targetPosition, lerpAmount);
     }
     this.flyTo(targetPosition, targetLookAtPosition, transitionDuration, anchorToPosition, onFinished);
+  };
+
+  Controls.prototype.instructionsHide = function(){
+    this.$instructions.removeClass('active');
+  };
+
+  Controls.prototype.instructionsShow = function(){
+    this.$instructions.addClass('active');
   };
 
   Controls.prototype.load = function(){
@@ -283,13 +298,23 @@ var Controls = (function() {
       //   _this.centerPointer();
       // });
     }
+
+    $('.instructions-close').on('click', function(){
+      _this.instructionsHide();
+    });
+
+    $('.show-instructions').on('click', function(){
+      _this.instructionsShow();
+    });
   };
 
   Controls.prototype.loadTouchpad = function(){
+
     var _this = this;
     var $touchpad = $('#touchpad');
-    if (!$touchpad.length) return;
+    if (!$touchpad.length || !this.isTouch) return;
 
+    $touchpad.addClass('active');
     this.$touchpad = $touchpad;
     this.$touchpadHandle = $touchpad.find('.touchpad-handle').first();
 
@@ -303,6 +328,11 @@ var Controls = (function() {
     touchPad.on("panend", function(e) {
       _this.onTouchpadEnd();
     });
+  };
+
+  Controls.prototype.loadUI = function(){
+    if (this.isTouch) $('.touch-instructions').addClass('active');
+    else $('.keyboard-instructions').addClass('active');
   };
 
   Controls.prototype.normalizePointer = function(){
