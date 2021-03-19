@@ -63,6 +63,11 @@ button.inverse {
 button:hover {
   background: var(--button-bg-hover-color);
 }
+.button.inverse:hover,
+button.inverse:hover {
+  color: var(--button-bg-inverse-color);
+  background: var(--bg-color);
+}
 
 .intro {
   position: absolute;
