@@ -656,30 +656,103 @@ button.inverse:hover {
   animation-fill-mode: both;
 } */
 
+.item-container {
+  width: 336px;
+  height: 336px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-left: -168px;
+  margin-top: -168px;
+  transform: scale3d(1, 1, 1) translateY(0);
+  transform-origin: 50% 0;
+  z-index: -1;
+  opacity: 0;
+  /* transition: opacity 1s ease-in-out, transform 1s ease-in-out; */
+  background: black;
+}
+.item-container.active {
+  z-index: 10000;
+  animation: itemIn 2s ease-in-out;
+  animation-fill-mode: forwards;
+}
+@keyframes itemIn {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+    transform: scale3d(1, 1, 1) translateY(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale3d(1.05, 1.05, 1.05) translateY(-40%);
+  }
+}
+.item-container img {
+  display: block;
+  width: auto;
+  height: auto;
+  margin: auto;
+  max-width: 100%;
+  max-height: 100%;
+}
+
+.item-title {
+  background: var(--bg-secondary-color);
+  padding: 0 1rem;
+  box-sizing: border-box;
+  position: absolute;
+  top: -48px;
+  left: -24px;
+  display: none;
+  height: 48px;
+  line-height: 48px;
+}
+.item-title.active {
+  display: block;
+}
+.item-title h2 {
+  margin: 0;
+  padding: 0;
+  white-space: nowrap;
+}
+button.item-close {
+  font-size: 3rem;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  position: absolute;
+  right: 5px;
+  top: 5px;
+  margin: 0;
+  background: none;
+  color: var(--text-color);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+button.item-close:hover {
+  background: none;
+}
 .item-metadata-container {
   position: absolute;
-  width: 300px;
-  height: 100%;
-  top: 0;
-  right: -300px;
+  width: 100%;
+  height: auto;
+  top: 336px;
+  left: 0;
   z-index: 10000;
-  transition: right 1s ease-in-out;
   background: var(--bg-secondary-color);
   box-sizing: border-box;
   padding: 1rem;
 }
-.item-metadata-container.active {
-  right: 0;
-}
 .item-metadata-container .button-group {
   text-align: right;
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
 }
 .item-metadata-container .button-group .button {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   margin: 0 0 0 10px;
+}
+.item-metadata-container dl {
+  font-size: 1rem;
 }
 .item-metadata-container dl > div {
   margin-top: 0.667rem;
@@ -692,48 +765,6 @@ button.inverse:hover {
 .item-metadata-container dd {
   display: inline-block;
   margin: 0;
-}
-.item-metadata-close {
-  font-size: 3rem;
-  width: 40px;
-  height: 40px;
-  line-height: 40px;
-  position: absolute;
-  right: 1rem;
-  top: 1rem;
-  margin: 0;
-}
-.item-metadata {
-  margin-top: 50px;
-}
-
-.item-image-container {
-  width: 336px;
-  height: 336px;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  margin-left: -168px;
-  margin-top: -168px;
-  transform: scale3d(1, 1, 1);
-  transform-origin: 50% 0;
-  z-index: -1;
-  opacity: 0;
-  transition: opacity 1s ease-in-out, transform 1s ease-in-out;
-  background: black;
-}
-.item-image-container img {
-  display: block;
-  width: auto;
-  height: auto;
-  margin: auto;
-  max-width: 100%;
-  max-height: 100%;
-}
-.item-image-container.active {
-  opacity: 1;
-  transform: scale3d(1.05, 1.05, 1.05);
-  z-index: 10000;
 }
 
 .touchpad {

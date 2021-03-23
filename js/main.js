@@ -98,7 +98,7 @@ var MainApp = (function() {
       }
     });
 
-    $('.item-metadata-close').on('click', function(e){
+    $('.item-close').on('click', function(e){
       e.preventDefault()
       _this.collection.deselectActiveItem();
     });

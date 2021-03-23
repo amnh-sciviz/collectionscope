@@ -22,8 +22,9 @@ var ItemDetailManager = (function() {
     this.raycaster = false;
     this.itemPositions = [];
 
-    this.$imgContainer = $('#item-image-container');
+    this.$container = $('#item-container');
     this.$img = $('#item-image');
+    this.$title = $('#item-title');
     this.$metadataContainer = $('#item-metadata-container');
     this.$metadata = $('#item-metadata');
   };
@@ -93,13 +94,13 @@ var ItemDetailManager = (function() {
       var w = _this.$img.width();
       var h = _this.$img.height();
       if (w > h) {
-        var ch = _this.$imgContainer.height();
+        var ch = _this.$container.height();
         var marginTop = (ch - h) * 0.5;
         _this.$img.css('margin-top', marginTop+'px');
       } else {
         _this.$img.css('margin-top', '0px');
       }
-      _this.$imgContainer.addClass('active');
+      _this.$container.addClass('active');
       promise.resolve();
     });
     return promise;
@@ -113,16 +114,13 @@ var ItemDetailManager = (function() {
     var releasedItemIndex = this.itemIndex;
     this.itemIndex = -1;
     this.raycaster.activeObjectIndex = -1;
-    this.$metadataContainer.removeClass('active');
-    this.$imgContainer.removeClass('active');
+    this.$container.removeClass('active');
     return releasedItemIndex;
   };
 
   ItemDetailManager.prototype.render = function(item, itemIndex) {
     var _this = this;
-    var $imgContainer = this.$imgContainer;
     var $img = this.$img;
-    var $metadataContainer = this.$metadataContainer;
     var $metadata = this.$metadata;
 
     var title = _.findWhere(item, {isTitle: true});
@@ -130,8 +128,15 @@ var ItemDetailManager = (function() {
     var links = _.filter(item, {isLink: true});
     var fields = _.reject(item, function(item){ return (item.isTitle || item.isImage || item.isLink); });
 
+    if (title) {
+      var titleHtml = '<h2>' + title.value + '</h2>';
+      this.$title.html(titleHtml);
+      this.$title.addClass('active');
+    } else {
+      this.$title.removeClass('active');
+    }
+
     var html = '';
-    if (title) html += '<h2>' + title.value + '</h2>';
     html += '<dl>';
     _.each(fields, function(field){
       html += '<div>';
@@ -148,7 +153,6 @@ var ItemDetailManager = (function() {
       html += '</div>';
     }
     $metadata.html(html);
-    $metadataContainer.addClass('active');
 
     if (image) {
       var img = $img[0];
@@ -170,7 +174,7 @@ var ItemDetailManager = (function() {
   ItemDetailManager.prototype.triggerSelectedItem = function(){
     if (this.highlightedItemIndex < 0 || this.highlightedItemIndex===this.itemIndex) return false;
 
-    this.$imgContainer.removeClass('active');
+    this.$container.removeClass('active');
     this.loadItem(this.highlightedItemIndex);
 
     return this.highlightedItemIndex;
