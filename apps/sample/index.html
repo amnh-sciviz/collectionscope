@@ -50,10 +50,59 @@
 
     <div id="legend-container" class="legend-container"></div>
 
+    <div id="keys-container" class="keys-container"></div>
+
     <div id="stories-container" class="stories-container"></div>
 
     <div id="menus-container" class="menus-container active">
-      <button class="toggle-menus toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button>
+      <!-- <button class="toggle-menus toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button> -->
+
+      <div id="radio-buttons-views" class="radio-buttons radio-buttons-views menu">
+        <h2>Choose your layout</h2>
+        <form class="radio-button-form">
+          <label for="view-randomSphere">
+            <input id="view-randomSphere" class="view-option" type="radio" name="change-view" value="randomSphere" data-type="string" data-index="0" data-primary="1" checked="">
+            <svg version="1.1" id="ico-sphere" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M362.7,294.6c-1.5,20.9-5.1,41.6-10.6,61.8h54.8c11.9-18.8,19.7-39.8,23.1-61.8H362.7z M279.9,294.6v61.8h48
+              	c6-20.2,9.8-40.8,11.4-61.8H279.9z M279.9,379.8v51.8c5.3-0.3,10.6-0.9,15.7-1.7l0,0c9.6-15.9,17.9-32.7,24.6-50.1H279.9z
+              	 M344.8,379.8c-5,14.4-11,28.3-17.9,41.8c23.7-8.9,44.9-23.2,62-41.8H344.8z M191.5,379.8h-40.7c16,17.4,35.7,31.1,57.6,40.1
+              	C202,406.9,196.3,393.5,191.5,379.8L191.5,379.8z M173.7,294.6h-63.8c3.4,22,11.2,43,23.1,61.8h51.3
+              	C178.7,336.2,175.2,315.5,173.7,294.6z M197.2,294.6c1.6,20.9,5.5,41.6,11.4,61.8h47.9v-61.8H197.2z M216.7,379.8
+              	c6.5,17.1,14.3,33.7,23.5,49.4c5.3,1,10.7,1.7,16.1,2.2v-51.8L216.7,379.8z M420.3,209.4h-62.5c3.9,20.3,5.9,41,5.9,61.8H432
+              	c0-0.4,0-0.8,0-1.3C432,249.2,428.1,228.6,420.3,209.4z M294,109.7c-4.5-0.8-9.2-1.3-14.1-1.3V186h47.9
+              	C319.9,159.2,308.6,133.5,294,109.7z M202.6,209.4c-4.3,20.3-6.4,41-6.3,61.8h60.3v-61.8H202.6z M119.5,209.4
+              	c-7.7,19.2-11.6,39.8-11.5,60.5c0,0.4,0,0.8,0,1.3h64.8c0-20.8,2-41.4,6-61.8L119.5,209.4L119.5,209.4z M131.3,185.9h53
+              	c6.3-23,15-45.4,25.9-66.7C177.4,132.3,149.7,155.8,131.3,185.9L131.3,185.9z M333.6,209.4h-53.6v61.8h60.3
+              	c0-20.8-2.2-41.5-6.5-61.8H333.6z M242.1,110.3c-14.4,23.7-25.6,49.1-33.5,75.7h47.9v-77.5C251.6,108.9,246.8,109.5,242.1,110.3z
+              	 M325.4,117.8c11.3,21.7,20.3,44.6,26.8,68.4h56.5C389.5,154.6,360.1,130.5,325.4,117.8z"/>
+            </svg>
+            <p>Sphere</p>
+          </label>
+          <label for="view-timelineTunnel">
+            <input id="view-timelineTunnel" class="view-option" type="radio" name="change-view" value="timelineTunnel" data-type="string" data-index="1" data-primary="1">
+            <svg version="1.1" id="ico-tunnel" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M340.2 340.8c-3.3 0-6-2.7-6-6v-84.1c0-35.4-28.8-64.2-64.2-64.2s-64.2 28.8-64.2 64.2v84.1c0 3.3-2.7 6-6 6s-6-2.7-6-6v-84.1c0-42 34.2-76.2 76.2-76.2s76.2 34.2 76.2 76.2v84.1c0 3.3-2.7 6-6 6z"/>
+              <path class="menu-icon-path" d="M401.3 369.8c-16.5 0-29.8-13.4-29.8-29.8v-91.8c0-56.4-45.3-102.4-101-102.6-27.2-.1-52.7 10.4-71.9 29.6s-29.8 44.7-29.8 71.8v93c0 16.5-13.4 29.8-29.8 29.8-3.3 0-6-2.7-6-6s2.7-6 6-6c9.8 0 17.8-8 17.8-17.8v-93c0-30.4 11.8-58.9 33.4-80.3 21.5-21.4 50.1-33.2 80.4-33.1 62.3.2 113 51.6 113 114.6V340c0 9.8 8 17.8 17.8 17.8 3.3 0 6 2.7 6 6s-2.8 6-6.1 6z"/>
+            </svg>
+            <p>Tunnel</p>
+          </label>
+          <label for="view-geographyBars">
+            <input id="view-geographyBars" class="view-option" type="radio" name="change-view" value="geographyBars" data-type="string" data-index="2" data-primary="1">
+            <svg version="1.1" id="ico-map" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M195.3 376l-60-30V164.7l60 30zM265.4 164.7l-60 30V376l60-30zM302.5 279.1c0 7.5 5.2 18.7 5.8 19.9l26.8 52.4V376l-60-30V164.7l60 30V242c-18.4 2.4-32.6 18.1-32.6 37.1zM404.7 164.7V346l-60 30v-23.8l26.9-52.9.1-.1c.6-1.3 5.8-12.5 5.8-20 0-19-14.3-34.8-32.7-37.2v-47.3l59.9-30z"/>
+              <path class="menu-icon-path" d="M367.4 279.1c0 4-2.9 11.7-4.8 15.7l-17.9 35.3-4.7 9.2-5-9.7-17.8-34.8c-1.9-4-4.8-11.7-4.8-15.6 0-13.5 9.8-24.7 22.6-27 1.6-.3 3.2-.5 4.9-.5 1.6 0 3.2.1 4.7.4 12.9 2.2 22.8 13.5 22.8 27z"/>
+            </svg>
+            <p>Map</p>
+          </label>
+          <label for="view-timelineTracks">
+            <input id="view-timelineTracks" class="view-option" type="radio" name="change-view" value="timelineTracks" data-type="string" data-index="3" data-primary="1">
+            <svg version="1.1" id="ico-racetracks" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" width="60px" height="60px" xml:space="preserve">
+              <path class="menu-icon-path" d="M192.5 328.1V149c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v179.1h44zM148.6 334.9V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7v-47.1h-44zM259.4 281.2V149c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v132.2h44zM215.5 288v94c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7v-94h-44zM325.4 217.9v-69c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v69h44zM281.5 224.7V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7V224.7h-44zM391.3 169.5V149c0-2.6-2.1-4.7-4.7-4.7H352c-2.6 0-4.7 2.1-4.7 4.7v20.6h44zM347.4 176.4V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7V176.4h-44z"/>
+            </svg>
+            <p>Racetracks</p>
+          </label>
+        </form>
+    </div>
     </div>
 
     <div id="viewer" class="viewer"><div class="viewer-inner"></div></div>
@@ -125,7 +174,7 @@
         <h1>Controls</h1>
         <ul>
           <li>Drag to <strong>look around</strong></li>
-          <li>Use trackpad on bottom right to <strong>move around</strong></li>
+          <li>Use trackpad to <strong>move around</strong></li>
           <li class="image-row">
             <div class="image-container">
               <img src="../../img/ico-trackpad.png" alt="Trackpad icon" class="trackpad-icon" />

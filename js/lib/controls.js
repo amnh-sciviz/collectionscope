@@ -360,7 +360,7 @@ var Controls = (function() {
 
   Controls.prototype.onTouchpadChange = function(nx, ny){
     // console.log(nx, ny);
-    this.$touchpad.addClass('active');
+    this.$touchpad.addClass('touching');
 
     // compare touch coordinates to circle center
     var distanceX = nx - 0.5;
@@ -399,7 +399,7 @@ var Controls = (function() {
   };
 
   Controls.prototype.onTouchpadEnd = function(){
-    this.$touchpad.removeClass('active');
+    this.$touchpad.removeClass('touching');
     this.$touchpadHandle.css({
       left: '50%',
       top: '50%'

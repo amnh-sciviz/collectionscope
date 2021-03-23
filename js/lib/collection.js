@@ -417,33 +417,15 @@ var Collection = (function() {
   };
 
   Collection.prototype.loadViewMenu = function(options){
-    var html = '';
     var currentViewIndex = 0;
-    var currentViewKey = this.currentViewKey;
-    html += '<div id="'+options.id+'" class="'+options.className+' menu">';
-      if (options.label) {
-        html += '<h2>'+options.label+':</h2>';
-      }
-      html += '<form class="radio-button-form">';
-      _.each(options.radioItems, function(item, i){
-        var type = options.parseType || 'string';
-        var id = item.name + (i+1);
-        var checked = item.checked ? 'checked' : '';
-        var isPrimary = options.default ? '1' : '0';
-        if (item.checked) {
-          currentViewIndex = i;
-          currentViewKey = item.value;
-        }
-        html += '<label for="'+id+'"><input id="'+id+'" class="view-option" type="radio" name="'+item.name+'" value="'+item.value+'" data-type="'+type+'" data-index="'+i+'" data-primary="'+isPrimary+'" '+checked+' /><div class="checked-bg"></div> <span>'+item.label+'</span></label>';
-      });
-      html += '</form>';
-    html += '</div>';
-    var $menu = $(html);
+
+    _.each(options.radioItems, function(item, i){
+      var id = 'view-'+item.value;
+      $('#'+id).closest('label').addClass('active');
+    });
 
     this.currentViewIndex = currentViewIndex;
-    this.currentViewKey = currentViewKey;
-    this.$viewOptions = $menu.find('.view-option');
-    $(this.opt.menuContainer).append($menu);
+    this.$viewOptions = $('.view-option');
   };
 
   Collection.prototype.onClickCanvas = function(pointer, npointer){
