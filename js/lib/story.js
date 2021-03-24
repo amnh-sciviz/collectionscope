@@ -133,7 +133,7 @@ var Story = (function() {
     if (newPosition === undefined) return;
 
     // move the z slightly so it doesn't clip the item
-    var z = newPosition.z + 1;
+    var z = newPosition.z - 1;
     this.hotspot.object.position.set(newPosition.x, newPosition.y, z);
     this.hotspot.material.opacity = 0;
 

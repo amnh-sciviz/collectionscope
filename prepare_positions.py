@@ -20,6 +20,7 @@ a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
 configViews = config["visualizations"]
+configStories = config["stories"]
 layouts = configViews.keys()
 
 PRECISION = 5
@@ -38,9 +39,22 @@ items, categories = tu.getItems(config)
 itemCount = len(items)
 dimensions = 3
 
+# Check for story ids
+itemIdsWithStory = []
+for key, story in configStories.items():
+    if "itemId" in story:
+        itemIdsWithStory.append(str(story["itemId"]))
+itemIdsWithStory = set(itemIdsWithStory)
+
 if len(items) < 1:
     print("No items found")
     sys.exit()
+
+def itemHasStory(item):
+    global itemIdsWithStory
+    if item["_id"] in itemIdsWithStory:
+        return True
+    return False
 
 def getTimelineTunnelLayout(userOptions={}):
     global items
@@ -65,6 +79,8 @@ def getTimelineTunnelLayout(userOptions={}):
     groups = lu.groupList(items, yearCol) # group by year
     groups = sorted(groups, key=lambda group: group[yearCol])
     nThickness = options["thickness"]
+    minDistance = 0.5-nThickness
+    maxDistance = 0.5
     count = 0
     values = np.zeros(len(items) * dimensions)
 
@@ -77,7 +93,11 @@ def getTimelineTunnelLayout(userOptions={}):
             z = mu.randomUniform(minZ, maxZ, seed=count+5)
             # angle =  mu.randomUniform(0, 360, seed=count+7)
             angle =  mu.randomUniform(-240, 60, seed=count+7)
-            distance =  mu.randomUniform(0.5-nThickness, 0.5, seed=count+9)
+
+            distance =  mu.randomUniform(minDistance, maxDistance, seed=count+9)
+            # ensure story items are visible
+            if itemHasStory(item):
+                distance = minDistance * 0.8
             x, y =  mu.translatePoint(x, y, distance, angle)
             values[index*dimensions] = round(x, PRECISION)
             values[index*dimensions+1] = round(y, PRECISION)
@@ -137,8 +157,12 @@ def getSphereCategoryTimelineLayout(userOptions={}):
                 y = mu.lerp((0.01, 1.0), y)
                 for catItem in subgroup["items"]:
                     itemIndex = catItem["index"]
+                    cy = y
+                    # a bit of a hack to ensure highighted items are visible
+                    if itemHasStory(catItem):
+                        cy = y + 1.25
                     values[itemIndex*dimensions] = round(x, PRECISION)
-                    values[itemIndex*dimensions+1] = round(y, PRECISION)
+                    values[itemIndex*dimensions+1] = round(cy, PRECISION)
                     values[itemIndex*dimensions+2] = round(z, PRECISION)
 
     values = values.tolist()
@@ -177,8 +201,12 @@ def getGeographyBarsLayout(userOptions={}):
             itemIndex = item["index"]
             x = 1.0 - mu.norm(item[lonCol], lonRange)
             z = 1.0 - mu.norm(item[latCol], latRange)
+            itemY = y
+            # a bit of a hack to ensure highighted items are visible
+            if itemHasStory(item):
+                itemY = y + 1.05
             values[itemIndex*dimensions] = round(x, PRECISION)
-            values[itemIndex*dimensions+1] = round(y, PRECISION)
+            values[itemIndex*dimensions+1] = round(itemY, PRECISION)
             values[itemIndex*dimensions+2] = round(z, PRECISION)
 
     values = values.tolist()

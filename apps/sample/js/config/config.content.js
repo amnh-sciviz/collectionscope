@@ -709,7 +709,7 @@ _.extend(CONFIG, {
   "stories": {
     "laufer": {
       "query": "Donor CONTAINS Laufer AND Country CONTAINS China AND Acquisition Year < 1910",
-      "itemId": "70 / 2628",
+      "itemId": "70 /10005",
       "images": [
         {
           "url": "img/content/laufer/laufer_29130.jpg",
@@ -754,11 +754,11 @@ _.extend(CONFIG, {
       ],
       "title": "Laufer China Expedition",
       "html": "<p>Berthold Laufer led an expedition to China between 1901 and 1904. Over 6,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>",
-      "hotspotItemIndex": 119687
+      "hotspotItemIndex": 126414
     },
     "lumholtz": {
-      "query": "Donor CONTAINS Lumholtz AND Country CONTAINS Mexico AND Acquisition Year < 1902",
-      "itemId": "30 / 1873",
+      "query": "Donor CONTAINS Emmons AND Country CONTAINS Canada AND Acquisition Year < 1899",
+      "itemId": "E/ 2462",
       "images": [
         {
           "url": "img/content/lumholtz/lumholtz_18793.jpg",
@@ -798,7 +798,7 @@ _.extend(CONFIG, {
       ],
       "title": "Lumholtz Mexico Expeditions",
       "html": "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. Over 5,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>",
-      "hotspotItemIndex": 13559
+      "hotspotItemIndex": 215885
     }
   },
   "views": {

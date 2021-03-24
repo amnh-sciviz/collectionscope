@@ -164,25 +164,43 @@ var Geometry = (function() {
       var y = MathUtil.lerp(canvasHeight/2, -canvasHeight/2, allPositions[index][1]);
       var z = positionSize > 2 ? MathUtil.lerp(-canvasDepth/2, canvasDepth/2, allPositions[index][2]): 0;
       // var z = positionSize > 2 ? allPositions[index][2] * canvasDepth : 0;
+      var ny = allPositions[index][1];
+      var isHighlighted = ny > 1; // a bit of a hack
 
       // random point in sphere if sphere layout
       if (layout === 'spheres') {
-        var radius = MathUtil.lerp(canvasHeight/20, canvasHeight/2, allPositions[index][1]) * multiplier;
+        var minRad = canvasHeight/20;
+        var maxRad = canvasHeight/2;
+        var radius = MathUtil.lerp(minRad, maxRad, ny) * multiplier;
         var newPoint = MathUtil.randomPointInSphere([x, z, 0], radius);
-        x = newPoint[0];
-        z = newPoint[1];
-        y = newPoint[2];
+        // if highlighted, place point above sphere
+        if (isHighlighted) {
+          y = MathUtil.lerp(minRad, maxRad, ny-1) * multiplier;
+        } else {
+          x = newPoint[0];
+          z = newPoint[1];
+          y = newPoint[2];
+        }
 
       // random point in cylinder if bar layout
       } else if (layout === 'bars') {
         var minRadius = Math.max(canvasHeight/120, 1);
+        var maxRadius = canvasHeight/6;
         var minHeight = Math.max(canvasHeight/60, 1);
-        var radius = MathUtil.lerp(minRadius, canvasHeight/6, allPositions[index][1]) * multiplier;
-        var height = MathUtil.lerp(minHeight, canvasHeight, allPositions[index][1]);
-        var newPoint = MathUtil.randomPointInCylinder([x, z, 0], radius, height);
-        x = newPoint[0];
-        z = newPoint[1];
-        y = newPoint[2];
+
+        // if is highlighted, place it above the cylinder
+        if (isHighlighted) {
+          y = MathUtil.lerp(minHeight, canvasHeight, ny-1);
+
+        } else {
+          var radius = MathUtil.lerp(minRadius, maxRadius, ny) * multiplier;
+          var height = MathUtil.lerp(minHeight, canvasHeight, ny);
+          var newPoint = MathUtil.randomPointInCylinder([x, z, 0], radius, height);
+          x = newPoint[0];
+          z = newPoint[1];
+          y = newPoint[2];
+        }
+
       }
 
       return {
