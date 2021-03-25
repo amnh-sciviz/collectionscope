@@ -4,10 +4,14 @@ import glob
 import json
 import os
 import pickle
+import shutil
 import yaml
 from yaml import Loader
 
 import lib.math_utils as mu
+
+def copyFile(fromFile, toFile):
+    shutil.copyfile(fromFile, toFile)
 
 def makeDirectories(filenames):
     if not isinstance(filenames, list):

@@ -1,0 +1,49 @@
+body {
+  font-size: 18px;
+  color: black;
+  overflow: auto;
+  overflow-x: hidden;
+}
+
+.viewer {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  background: black;
+  color: white;
+  overflow: hidden;
+}
+
+.main {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  cursor: move;
+}
+.main.loading::after {
+  content: " ";
+  display: block;
+  width: 10vh;
+  height: 10vh;
+  background: $red;
+  transform-origin: 50% 50%;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -5vh;
+  margin-top: -5vh;
+  animation: rotating 2s linear infinite;
+}
+
+@keyframes rotating {
+  from {
+    transform: rotate3d(0, 0, 1, 0deg);
+  }
+  to {
+    transform: rotate3d(0, 0, 1, 360deg);
+  }
+}

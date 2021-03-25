@@ -250,5 +250,6 @@ footerContent += '</div>'
 config["footerContent"] = footerContent
 
 su.formatTextFile(indexFilenameTemplate, indexFilename, config)
+io.copyFile(src + "/viewer.html", dest + "/viewer.html")
 
 io.writeJSON(OUTPUT_FILE, outjson, pretty=True, prepend="_.extend(CONFIG, ", append=");")
