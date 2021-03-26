@@ -45,9 +45,10 @@ button {
   margin: 0 10px 0 0;
   padding: 0.2rem 0.4rem;
   color: var(--text-color);
-  border: none;
+  border: 2px solid transparent;
   text-decoration: none;
   cursor: pointer;
+  box-sizing: border-box;
 }
 .button.large,
 button.large {
@@ -67,6 +68,13 @@ button:hover {
 button.inverse:hover {
   color: var(--button-bg-inverse-color);
   background: var(--bg-color);
+}
+.button:active,
+button:active,
+.button:focus,
+button:focus {
+  outline: none;
+  border-color: var(--text-color);
 }
 
 .intro {
@@ -663,6 +671,7 @@ button.inverse:hover {
   justify-content: center;
   align-items: center;
   align-content: center;
+  position: relative;
 }
 .slide .media-container img {
   width: auto;
@@ -739,6 +748,28 @@ button.toggle-button {
 button.toggle-button:hover {
   background: none;
   color: var(--bg-color);
+}
+button.toggle-audio {
+  display: block;
+  border-radius: 50%;
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  line-height: 60px;
+  text-align: center;
+}
+button.toggle-audio::before {
+  content: "▶"
+}
+button.toggle-audio.active::before {
+  content: "❚❚"
+}
+.media-container .toggle-audio {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  margin-left: -30px;
+  margin-top: -30px;
 }
 
 .viewer {

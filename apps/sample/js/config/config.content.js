@@ -729,7 +729,7 @@ _.extend(CONFIG, {
         {
           "image": "img/content/laufer/laufer_field_notes_0233_moon_guitar.jpg",
           "imageAltText": "A piece of paper with hand-written inventory of items collected with a row highlighted and an image of a wooden guitar under it",
-          "html": "<p>One of these items is a wooden instrument called a <a href=\"https://anthro.amnh.org/anthropology/databases/common/public_access.cfm?object_list=70%20%20%2F10005\" target=\"_blank\">Moon Guitar</a</p>\n"
+          "html": "<p>One of these items is a wooden instrument called a <a href=\"https://anthro.amnh.org/anthropology/databases/common/public_access.cfm?object_list=70%20%20%2F10005\" target=\"_blank\">Moon Guitar</a></p>\n"
         },
         {
           "image": "img/content/laufer/moon_guitar.jpg",

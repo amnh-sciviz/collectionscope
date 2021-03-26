@@ -81,7 +81,7 @@ var Story = (function() {
         var hasContent = (slide.image || slide.audio || slide.object) ? ' has-content' : '';
         html += '<div class="slide'+active+hasContent+'" data-index="'+i+'">';
           if (slide.image && slide.audio) {
-            html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /><button class="play-audio" data-src="'+slide.audio+'"><span class="visuallyHidden">Toggle audio</span></button></div>';
+            html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /><button class="toggle-audio" data-src="'+slide.audio+'"><span class="visuallyHidden">Toggle audio</span></button></div>';
           } else if (slide.image) {
             html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /></div>';
           } else if (slide.audio) {

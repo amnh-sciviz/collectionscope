@@ -118,6 +118,10 @@ var MainApp = (function() {
     $doc.on('click', '.slide-next', function(e){
       _this.collection && _this.collection.storyManager.onClickNextButton($(this));
     });
+
+    $doc.on('click', '.toggle-audio', function(e){
+      _this.globalSound && _this.globalSound.onClickToggleAudio($(this));
+    });
   };
 
   MainApp.prototype.loadScene = function(){
