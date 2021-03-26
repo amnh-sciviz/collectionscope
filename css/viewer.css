@@ -29,7 +29,7 @@ body {
   display: block;
   width: 10vh;
   height: 10vh;
-  background: $red;
+  background: #ccc;
   transform-origin: 50% 50%;
   position: absolute;
   left: 50%;
@@ -37,6 +37,7 @@ body {
   margin-left: -5vh;
   margin-top: -5vh;
   animation: rotating 2s linear infinite;
+  z-index: 1000;
 }
 
 @keyframes rotating {

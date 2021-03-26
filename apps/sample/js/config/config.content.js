@@ -710,94 +710,65 @@ _.extend(CONFIG, {
     "laufer": {
       "query": "Donor CONTAINS Laufer AND Country CONTAINS China AND Acquisition Year < 1910",
       "itemId": "70 /10005",
-      "images": [
+      "title": "1901-1904 Expedition to China",
+      "slides": [
         {
-          "url": "img/content/laufer/laufer_29130.jpg",
-          "caption": "Sacred dance of five lamas, China",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29130"
+          "html": "<p>This expedition led by Berthold Laufer collected everyday objects to understand the life of contemporary Chinese people.</p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_40283.jpg",
-          "caption": "Mask, papier mache, Tibet",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/40283"
+          "html": "<p>How many objects were collected?</p> <p><strong>7,500</strong></p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_29058.jpg",
-          "caption": "Eating rice, China",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29058"
+          "html": "<p>How many objects are currently exhibited?</p> <p><strong>196</strong></p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_44325.jpg",
-          "caption": "Chinese shadow puppet, White Snake, character from Buddhist play series",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/44325"
+          "image": "img/content/laufer/laufer_field_notes_0233.jpg",
+          "imageAltText": "A piece of paper with hand-written inventory of items collected",
+          "html": "<p>Laufer's <a href=\"https://anthro.amnh.org/anthropology/databases/common/field_page.cfm?catno=70%20%20%2F10005\" target=\"_blank\">field notes</a> are one record of what was collected.</p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_44493.jpg",
-          "caption": "Mask, Tibetan, collected by Berthold Laufer in China, 1903",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/44493"
+          "image": "img/content/laufer/laufer_field_notes_0233_moon_guitar.jpg",
+          "imageAltText": "A piece of paper with hand-written inventory of items collected with a row highlighted and an image of a wooden guitar under it",
+          "html": "<p>One of these items is a wooden instrument called a <a href=\"https://anthro.amnh.org/anthropology/databases/common/public_access.cfm?object_list=70%20%20%2F10005\" target=\"_blank\">Moon Guitar</a</p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_29128.jpg",
-          "caption": "Stairs to Temple of Heaven, Peking, China",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29128"
+          "image": "img/content/laufer/moon_guitar.jpg",
+          "imageAltText": "A small wooden circular guitar",
+          "audio": "audio/content/laufer/moon_lute.mp3",
+          "html": "<p>Click on the icon above to hear a recording of a Moon Guitar</p> <p>Audio credit: <a href=\"https://www.amnh.org/explore/ology/anthropology/sounds-of-the-silk-road2/play-music\" target=\"_blank\">AMNH Ology</a></p>\n"
         },
         {
-          "url": "img/content/laufer/laufer_29117.jpg",
-          "caption": "Actors in costume, China",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29117"
-        },
-        {
-          "url": "img/content/laufer/laufer_29056.jpg",
-          "caption": "Barber braiding queue, China",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/29056"
+          "image": "img/content/laufer/silk_road_exhibition.jpg",
+          "imageAltText": "Museum visitors interacting with buttons on a label deck in an exhibit",
+          "html": "<p>This moon guitar is exhibited in the museum\u2019s traveling exhibition, <a href=\"https://www.amnh.org/exhibitions/traveling-the-silk-road\" target=\"_blank\">\u201cTraveling the Silk Road: Ancient Pathway to the Modern World,\u201d</a> which originated at the museum in 2009.</p>\n"
         }
       ],
-      "title": "Laufer China Expedition",
-      "html": "<p>Berthold Laufer led an expedition to China between 1901 and 1904. Over 6,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/laufer_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Laufer+China+Expedition+%281901-1904%29\">Browse more photos from this expedition</a>.</p>",
       "hotspotItemIndex": 126414
     },
-    "lumholtz": {
-      "query": "Donor CONTAINS Emmons AND Country CONTAINS Canada AND Acquisition Year < 1899",
+    "haida": {
+      "query": "Regions CONTAINS NORTHWEST AND Region CONTAINS North America",
       "itemId": "E/ 2462",
-      "images": [
+      "title": "Northwest Coast Hall",
+      "slides": [
         {
-          "url": "img/content/lumholtz/lumholtz_18793.jpg",
-          "caption": "Tarahumara women, Guadalupe, Chihuahua, 1892",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/18793"
+          "html": "<p>Beginning in 1896, the Museum\u2019s anthropology collection was divided into different halls by geography.</p> <p>The first was the <a href=\"https://www.amnh.org/exhibitions/permanent/northwest-coast\" target=\"_blank\">Northwest Coast Hall</a> which displayed objects from Indigenous peoples of the Pacific Northwest.</p>\n"
         },
         {
-          "url": "img/content/lumholtz/lumholtz_39342.jpg",
-          "caption": "Pseudo-cloisonne style jar, ceramic, Hacienda Estanzuela, West Mexico",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/39342"
+          "image": "img/content/northwest/bracelet.jpg",
+          "imageAltText": "A silver bracelet with a decorative engraving of a beaver",
+          "html": "<p>One of these items is that has been exhibited is <a href=\"https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno=%20%20%20E%2F%202462\" target=\"_blank\">an engraved silver bracelet</a>. These types of bracelets became popular in Northwest Coast communities in the late 1800s.</p>\n"
         },
         {
-          "url": "img/content/lumholtz/lumholtz_27127.jpg",
-          "caption": "Pima men, Mexico, 1890-1898",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/27127"
+          "image": "img/content/northwest/bracelet_today.jpg",
+          "imageAltText": "Arms of women wearing decorative engraved bracelets",
+          "text": "And they are still worn today."
         },
         {
-          "url": "img/content/lumholtz/lumholtz_55575.jpg",
-          "caption": "Men travelling on donkeys and horseback, Mexico, [1890-1898]",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/55575"
-        },
-        {
-          "url": "img/content/lumholtz/lumholtz_30190.jpg",
-          "caption": "Tarahumara man, Mexico, 1890-1898",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/30190"
-        },
-        {
-          "url": "img/content/lumholtz/lumholtz_27237.jpg",
-          "caption": "Shield, cane and yarn, Mexico, 1890-1898",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/27237"
-        },
-        {
-          "url": "img/content/lumholtz/lumholtz_26190.jpg",
-          "caption": "Stone disc with design, Mexico",
-          "captionUrl": "https://lbry-web-007.amnh.org/digital/items/show/26190"
+          "object": "obj/content/haida/bracelet.obj",
+          "imageAltText": "A 3D representation of a silver engraved bracelet",
+          "text": "Take a closer look by interacting with a 3D model of the bracelet above"
         }
       ],
-      "title": "Lumholtz Mexico Expeditions",
-      "html": "<p>Carl Lumholtz led an expedition to Mexico between 1890 and 1897. Over 5,500 objects from the expedition are accessible online. <a href=\"https://anthro.amnh.org/lumholtz_collection\">Read more</a> or <a href=\"https://lbry-web-007.amnh.org/digital/items/browse?advanced%5B0%5D%5Belement_id%5D=49&advanced%5B0%5D%5Btype%5D=is+exactly&advanced%5B0%5D%5Bterms%5D=Lumholtz+Expeditions+to+Mexico+%281890-1898%29+\">Browse more photos from this expedition</a>.</p>",
       "hotspotItemIndex": 215885
     }
   },

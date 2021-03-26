@@ -72,18 +72,60 @@ var Story = (function() {
 
   Story.prototype.loadUI = function(){
     var html = '';
-    html += '<div class="story">';
-    if (this.opt.title) html += '<h3>'+this.opt.title+'</h3>';
-    if (this.opt.html) html += this.opt.html;
-    if (this.opt.images) {
-      html += '<div class="images">';
-      _.each(this.opt.images, function(img){
-        html += '<a href="'+img.captionUrl+'" class="image" target="_blank"><img src="'+img.url+'" alt="'+img.caption+'" title="'+img.caption+'" /></a>';
+    var slideCount = this.opt.slides ? this.opt.slides.length : 0;
+    html += '<div class="story" data-index="0" data-count="'+slideCount+'">';
+    if (this.opt.slides) {
+      html += '<div class="media-slides">';
+      _.each(this.opt.slides, function(slide, i){
+        var active = i === 0 ? ' active' : '';
+        var hasContent = (slide.image || slide.audio || slide.object) ? ' has-content' : '';
+        html += '<div class="slide'+active+hasContent+'" data-index="'+i+'">';
+          if (slide.image && slide.audio) {
+            html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /><button class="play-audio" data-src="'+slide.audio+'"><span class="visuallyHidden">Toggle audio</span></button></div>';
+          } else if (slide.image) {
+            html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /></div>';
+          } else if (slide.audio) {
+            html += '<div class="media-container audio-container"><audio src="'+slide.audio+'" controls></audio></div>';
+          } else if (slide.object) {
+            html += '<div class="media-container obj-container"><iframe class="obj-viewer" src="viewer.html?obj='+slide.object+'"></iframe></div>';
+          }
+        html += '</div>'; // end .slide
       });
-      html += '</div>';
+      html += '</div>'; // end .media-slides
+
+      html += '<div class="story-content">';
+        html += '<button class="close-story toggle-button">×<span class="visuallyHidden"> close</span></button>';
+
+        if (this.opt.title) html += '<h3>'+this.opt.title+'</h3>';
+        html += '<div class="text-slides">';
+        _.each(this.opt.slides, function(slide, i){
+          var active = i === 0 ? ' active' : '';
+          html += '<div class="slide'+active+' text-slide" data-index="'+i+'">';
+            if (slide.text) html += '<p>'+slide.text+'</p>';
+            else if (slide.html) html += slide.html;
+          html += '</div>'; // end .slide
+        });
+        html += '</div>'; // end .text-slides
+
+        html += '<nav class="slides-nav"><ul>';
+        _.each(this.opt.slides, function(slide, i){
+          var active = i === 0 ? ' active' : '';
+          html += '<li><button class="slide-nav-button'+active+'" data-index="'+i+'"><span class="visuallyHidden"> Go to slide '+(i+1)+'</span></button></li>';
+        });
+        html += '</ul></nav>'; // end .slides-nav
+
+        var nextActive = slideCount > 1 ? ' active' : '';
+        var finishActive = slideCount === 1 ? ' active' : '';
+        html += '<div class="slides-buttons">';
+          html += '<button class="slide-prev">Previous</button>';
+          html += '<button class="slide-next'+nextActive+'">Next</button>';
+          html += '<button class="slide-finish close-story '+finishActive+'">Finish</button>';
+        html += '</div>'; // end .slides-buttons
+
+      html += '</div>'; // end .story-content
     }
-    html += '<button class="close-story toggle-button">Close</button>';
-    html += '</div>';
+
+    html += '</div>'; // end .slide
     this.$el = $(html);
     this.$parent.append(this.$el);
   };

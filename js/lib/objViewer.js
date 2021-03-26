@@ -22,7 +22,6 @@ var ObjViewer = (function() {
     this.width = this.$el.width();
     this.height = this.$el.height();
     this.aspectRatio = this.width / this.height;
-    console.log(this.opt.obj, this.opt.mtl);
     this.loadScene();
   };
 

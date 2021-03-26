@@ -21,6 +21,7 @@ var Collection = (function() {
     this.currentViewKey = 'randomSphere';
     this.isViewTransitioning = false;
     this.minAlpha = this.opt.ui.minAlpha;
+    this.$el = $(this.opt.el);
 
     this.ui = this.opt.ui;
 
@@ -659,6 +660,9 @@ var Collection = (function() {
       // show hotspots
       this.storyManager.updateView(view.key)
     }
+
+    if (this.storyManager.hasOpenStory()) this.$el.addClass('story-is-open');
+    else this.$el.removeClass('story-is-open');
 
     return openedStoryKey;
   };

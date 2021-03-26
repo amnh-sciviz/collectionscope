@@ -55,10 +55,6 @@ var MainApp = (function() {
       _this.collection && _this.collection.onClickCanvas(pointer, npointer);
     });
 
-    $doc.on('click', '.close-story', function(e) {
-      _this.collection && _this.collection.triggerStory(true);
-    });
-
     $doc.on('mousemove', '.key', function(e) {
       _this.collection && _this.collection.onHoverOverKey($(this), e);
     });
@@ -105,6 +101,22 @@ var MainApp = (function() {
 
     $('.toggle-menus').on('click', function(){
       _this.collection.toggleMenus($(this));
+    });
+
+    $doc.on('click', '.close-story', function(e) {
+      _this.collection && _this.collection.triggerStory(true);
+    });
+
+    $doc.on('click', '.slide-nav-button', function(e){
+      _this.collection && _this.collection.storyManager.onClickNavButton($(this));
+    });
+
+    $doc.on('click', '.slide-prev', function(e){
+      _this.collection && _this.collection.storyManager.onClickPrevButton($(this));
+    });
+
+    $doc.on('click', '.slide-next', function(e){
+      _this.collection && _this.collection.storyManager.onClickNextButton($(this));
     });
   };
 

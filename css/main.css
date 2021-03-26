@@ -183,13 +183,10 @@ button.inverse:hover {
   font-size: 1rem;
   margin-top: 0.3rem;
 }
-
-.stories-container,
 .legend-container,
 .menus-container {
   position: absolute;
 }
-.stories-container,
 .menus-container {
   bottom: 10px;
   left: 10px;
@@ -209,17 +206,9 @@ button.inverse:hover {
   justify-content: flex-end;
   align-items: flex-start;
 }
-.app.is-loading .menus-container {
+.app.is-loading .menus-container,
+.app.story-is-open .menus-container {
   display: none;
-}
-.stories-container {
-  margin-right: 10px;
-  flex-grow: 1;
-  width: auto;
-  left: 10px;
-  bottom: auto;
-  top: 40px;
-  margin-left: 60px;
 }
 .toggle-button {
   padding: 0 0.4rem;
@@ -463,6 +452,9 @@ button.inverse:hover {
   bottom: 10px;
   right: 10px;
 }
+.app.story-is-open .keys-container {
+  display: none;
+}
 .key {
   z-index: 100;
   display: none;
@@ -601,38 +593,152 @@ button.inverse:hover {
 }
 
 .story {
+  position: absolute;
+  z-index: 1000;
+  width: 800px;
+  margin-left: -450px;
+  left: 50%;
+  bottom: 1rem;
   display: none;
   opacity: 0;
+  flex-direction: column;
   animation: fadeIn ease 2s;
   animation-fill-mode: forwards;
+}
+@media screen and (max-width: 860px) {
+  .story {
+    width: auto;
+    left: 1rem;
+    right: 1rem;
+  }
+}
+.story.active {
+  display: flex;
+}
+.story.has-media {
+  top: 1rem;
+}
+.story-content {
   background: rgba(0,0,0,0.9);
-  padding: 5px;
+  padding: 0 0 3rem;
   border: 2px solid var(--bg-lighter-color);
   box-sizing: border-box;
   color: var(--text-dark-color);
+  width: 100%;
+  height: auto;
   position: relative;
 }
-.story.active {
+.story-content h3 {
+  color: var(--text-color);
+  background: var(--bg-secondary-color);
+  margin: 0;
+  padding: 1rem;
+}
+.slide {
+  display: none;
+  opacity: 0;
+  animation: fadeIn ease 1s;
+  animation-fill-mode: forwards;
+}
+.slide.active {
   display: block;
 }
-.story h3,
-.story p {
-  margin: 0 0 10px;
-  line-height: 1.4;
-}
-.story a {
-  color: var(--text-color);
-  text-decoration: underline;
-}
-.story .images {
+.media-slides {
+  width: 100%;
+  flex-grow: 1;
   display: flex;
-  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
 }
-.story img {
-  height: auto;
+.media-slides .slide.active {
+  display: none;
+}
+.media-slides .slide.active.has-content {
+  display: block;
+  width: 100%;
+}
+.slide .media-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+}
+.slide .media-container img {
   width: auto;
-  max-height: 100px;
-  margin: 0 10px 0 0;
+  height: auto;
+  max-height: 70vh;
+  max-width: 100%;
+}
+.slide .media-container iframe {
+  width: 100%;
+  height: 50vh;
+  border: none;
+}
+.slide .media-container audio {
+  display: block;
+  width: 100%;
+}
+.text-slide {
+  padding: 0 1rem;
+}
+.slides-nav {
+
+}
+.slides-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-content: center;
+}
+.slides-nav ul li {
+  margin: 0 0.2rem;
+}
+.slides-nav ul li button.slide-nav-button {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--text-color);
+}
+.slides-nav ul li button.slide-nav-button:hover,
+.slides-nav ul li button.slide-nav-button.active {
+  background: var(--bg-secondary-light-color);
+}
+.slides-buttons {
+
+}
+.slides-buttons button {
+  position: absolute;
+  bottom: 0;
+  display: none;
+  font-size: 1.5rem;
+  margin: 0;
+}
+.slides-buttons button.active {
+  display: block;
+}
+.slides-buttons button.slide-prev {
+  left: 0;
+}
+.slides-buttons button.slide-next,
+.slides-buttons button.slide-finish {
+  right: 0;
+}
+button.toggle-button {
+  position: absolute;
+  left: auto;
+  top: 10px;
+  right: 10px;
+  font-size: 3rem;
+  background: none;
+  color: var(--text-color);
+  text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+}
+button.toggle-button:hover {
+  background: none;
+  color: var(--bg-color);
 }
 
 .viewer {
@@ -790,7 +896,9 @@ button.item-close:hover {
   display: block;
 }
 .app.is-loading .touchpad,
-.app.is-loading .touchpad.active {
+.app.is-loading .touchpad.active,
+.app.story-is-open .touchpad,
+.app.story-is-open .touchpad.active {
   display: none;
 }
 .touchpad-handle {

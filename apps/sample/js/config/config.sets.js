@@ -3,8 +3,8 @@ _.extend(CONFIG, {
     "laufer": {
       "src": "data/sets/laufer.json"
     },
-    "lumholtz": {
-      "src": "data/sets/lumholtz.json"
+    "haida": {
+      "src": "data/sets/haida.json"
     }
   }
 });

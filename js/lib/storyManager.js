@@ -25,6 +25,37 @@ var StoryManager = (function() {
     });
   };
 
+  StoryManager.prototype.goToSlide = function(slideIndex, $story){
+    var slideCount = parseInt($story.attr('data-count'));
+    slideIndex = MathUtil.clamp(slideIndex, 0, slideCount-1);
+
+    $story.attr('data-index', slideIndex);
+
+    $story.find('.slide').removeClass('active');
+    $story.find('.slide-nav-button').removeClass('active');
+    $story.find('.slide[data-index="'+slideIndex+'"]').addClass('active');
+    $story.find('.slide-nav-button[data-index="'+slideIndex+'"]').addClass('active');
+
+    if ($story.find('.media-slides .slide.active').hasClass('has-content')) $story.addClass('has-media');
+    else $story.removeClass('has-media');
+
+    if (slideIndex === 0) $story.find('.slide-prev').removeClass('active');
+    else $story.find('.slide-prev').addClass('active');
+
+    if (slideIndex >= slideCount-1) {
+      $story.find('.slide-next').removeClass('active');
+      $story.find('.slide-finish').addClass('active');
+    } else {
+      $story.find('.slide-next').addClass('active');
+      $story.find('.slide-finish').removeClass('active');
+    }
+  };
+
+  StoryManager.prototype.hasOpenStory = function(){
+    var foundStory = _.find(this.stories, function(story){ return story.visible; });
+    return (foundStory !== undefined);
+  };
+
   StoryManager.prototype.loadListeners = function(){
     var _this = this;
 
@@ -53,6 +84,23 @@ var StoryManager = (function() {
     console.log('Loaded stories.');
   };
 
+  StoryManager.prototype.onClickNavButton = function($button){
+    var slideIndex = parseInt($button.attr('data-index'));
+    this.goToSlide(slideIndex, $button.closest('.story'));
+  };
+
+  StoryManager.prototype.onClickNextButton = function($button){
+    var $story = $button.closest('.story');
+    var slideIndex = parseInt($story.attr('data-index')) + 1;
+    this.goToSlide(slideIndex, $story);
+  };
+
+  StoryManager.prototype.onClickPrevButton = function($button){
+    var $story = $button.closest('.story');
+    var slideIndex = parseInt($story.attr('data-index')) - 1;
+    this.goToSlide(slideIndex, $story);
+  };
+
   StoryManager.prototype.selectHotspot = function(uuid){
     console.log('Select hotspot: '+uuid);
     _.each(this.stories, function(story, contentKey){
@@ -79,11 +127,11 @@ var StoryManager = (function() {
         return;
       }
       // hide a story
-      // if (!story.isSelected && story.visible) {
-      //   story.hide();
-      //   if (closedStoryKey === false) closedStoryKey = contentKey;
-      //   return;
-      // }
+      if (!story.isSelected && story.visible) {
+        story.hide();
+        if (closedStoryKey === false) closedStoryKey = contentKey;
+        return;
+      }
     });
 
     return {
