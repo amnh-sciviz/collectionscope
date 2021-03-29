@@ -371,6 +371,27 @@ button:focus {
   display: none;
 }
 
+.main-nav .toggle-fullscreen .minimize,
+.main-nav .toggle-sound .sound-off{
+  display: none;
+}
+.main-nav .toggle-fullscreen.active .minimize,
+.main-nav .toggle-sound.active .sound-off{
+  display: block;
+}
+.main-nav .toggle-fullscreen.active .maximize,
+.main-nav .toggle-sound.active .sound-on{
+  display: none;
+}
+
+.main-nav .collapsible {
+  display: none;
+}
+.main-nav.active .collapsible {
+  display: block;
+}
+
+
 .instructions {
   display: none;
   position: absolute;

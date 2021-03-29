@@ -12,6 +12,10 @@ var MainApp = (function() {
     this.init();
   }
 
+  function isFullScreen(){
+    return (document.fullscreenElement || document.mozFullScreenElement || document.webkitFullscreenElement || document.msFullscreenElement);
+  }
+
   MainApp.prototype.init = function(){
     var _this = this;
 
@@ -71,7 +75,11 @@ var MainApp = (function() {
       _this.onTourStart();
     });
 
-    $('.show-menu').on('click', function(){
+    $('.toggle-menu').on('click', function(){
+      $('.main-nav').toggleClass('active');
+    });
+
+    $('.show-information').on('click', function(){
       _this.$intro.addClass('active');
     });
 
@@ -121,6 +129,20 @@ var MainApp = (function() {
 
     $doc.on('click', '.toggle-audio', function(e){
       _this.globalSound && _this.globalSound.onClickToggleAudio($(this));
+    });
+
+    $('.toggle-fullscreen').on('click', function(){
+      _this.onToggleFullscreen();
+    });
+
+    $('.toggle-sound').on('click', function(){
+      var $el = $(this);
+      $el.toggleClass('active');
+      _this.onToggleSound($el.hasClass('active'));
+    });
+
+    $doc.on("fullscreenchange", function(){
+      _this.onFullscreenChange();
     });
   };
 
@@ -187,6 +209,15 @@ var MainApp = (function() {
     this.onUserStart();
   };
 
+  MainApp.prototype.onFullscreenChange = function(){
+    // if is full screen
+    if (isFullScreen()) {
+      $('.toggle-fullscreen').addClass('active');
+    } else {
+      $('.toggle-fullscreen').removeClass('active');
+    }
+  };
+
   MainApp.prototype.onLoadEnd = function(){
     var _this = this;
     console.log("Loaded everything.");
@@ -245,6 +276,35 @@ var MainApp = (function() {
     this.controls && this.controls.onResize();
 
     renderNeeded = true;
+  };
+
+  MainApp.prototype.onToggleFullscreen = function() {
+    if (!isFullScreen()) {  // current working methods
+      if (document.documentElement.requestFullscreen) {
+        document.documentElement.requestFullscreen();
+      } else if (document.documentElement.msRequestFullscreen) { // IE11
+        document.documentElement.msRequestFullscreen();
+      } else if (document.documentElement.mozRequestFullScreen) { // Firefox
+        document.documentElement.mozRequestFullScreen();
+      } else if (document.documentElement.webkitRequestFullscreen) { // Safari
+        document.documentElement.webkitRequestFullscreen(Element.ALLOW_KEYBOARD_INPUT);
+      }
+    } else {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.msExitFullscreen) { // IE11
+        document.msExitFullscreen();
+      } else if (document.mozCancelFullScreen) { // Firefox
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) { // Safari
+        document.webkitExitFullscreen();
+      }
+    }
+  };
+
+  MainApp.prototype.onToggleSound = function(isActive){
+    var volume = isActive ? 0 : 1;
+    this.globalListener.setMasterVolume(volume);
   };
 
   MainApp.prototype.onTourStart = function(){
