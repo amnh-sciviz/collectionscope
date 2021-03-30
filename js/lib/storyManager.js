@@ -68,7 +68,6 @@ var StoryManager = (function() {
     var _this = this;
 
     $(document).on('select-hotspot', function(e, uuid){
-
       _this.selectHotspot(uuid);
     });
   };
@@ -113,6 +112,13 @@ var StoryManager = (function() {
     console.log('Select hotspot: '+uuid);
     _.each(this.stories, function(story, contentKey){
       story.selectHotspot(uuid);
+    });
+  };
+
+  StoryManager.prototype.selectStory = function(storyId){
+    this.deselectHotspots();
+    _.each(this.stories, function(story, contentKey){
+      if (contentKey==storyId) story.selectHotspot(story.hotspot.object.uuid);
     });
   };
 

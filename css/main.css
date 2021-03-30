@@ -747,12 +747,20 @@ button:focus {
   margin: 0;
   background: transparent;
 }
+.slides-buttons button:active,
+.slides-buttons button:focus {
+  border: none;
+}
 .slides-buttons .arrow-icon {
   width: 40px;
   height: 40px;
 }
 .slides-buttons .arrow-icon path {
   fill: var(--text-color);
+}
+.slides-buttons button:active .arrow-icon path,
+.slides-buttons button:focus .arrow-icon path {
+  fill: var(--bg-secondary-light-color);
 }
 .slides-buttons button:hover {
   background: transparent;

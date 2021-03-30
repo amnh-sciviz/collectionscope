@@ -117,6 +117,30 @@ var Collection = (function() {
     return totalToLoad;
   };
 
+  Collection.prototype.jumpToStory = function(storyId){
+    if (!this.controls) return;
+    var currentView = this.views[this.currentViewKey];
+
+    var story = this.storyManager.stories[storyId];
+    if (!story || !story.hotspot || !story.hotspot.object) return;
+
+    var currentPosition = this.camera.position.clone();
+    var targetLookAtPosition = story.hotspot.object.position.clone();
+    var targetPosition = currentPosition.clone();
+    var transitionDuration = this.opt.ui.transitionDuration;
+
+    var xMin = currentView.bounds[0];
+    var xMax = currentView.bounds[1];
+    var zMin = currentView.bounds[2];
+    var zMax = currentView.bounds[3];
+    var zDelta = Math.min((zMax - zMin) * 0.25, 1500);
+    targetPosition.z = targetLookAtPosition.z - zDelta;
+    targetPosition.x = MathUtil.clamp(targetLookAtPosition.x, xMin, xMax);
+    targetLookAtPosition.y = this.controls.lookAtPosition.y;
+
+    this.controls.flyTo(targetPosition, targetLookAtPosition, transitionDuration);
+  };
+
   Collection.prototype.load = function(){
     var _this = this;
 
@@ -668,6 +692,12 @@ var Collection = (function() {
     else this.$el.removeClass('story-is-open');
 
     return openedStoryKey;
+  };
+
+  Collection.prototype.triggerStoryById = function(storyId){
+    this.storyManager.selectStory(storyId);
+    this.triggerStory();
+    this.jumpToStory(storyId);
   };
 
   Collection.prototype.update = function(now, pointerPosition){

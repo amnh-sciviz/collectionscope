@@ -56,7 +56,7 @@ var MainApp = (function() {
     });
 
     $doc.on('jump-to-item', function(e, itemIndex) {
-      console.log('Jump to: '+itemIndex);
+      console.log('Jump to item: '+itemIndex);
       _this.collection && _this.collection.triggerItem(itemIndex);
     });
 
@@ -143,6 +143,23 @@ var MainApp = (function() {
     $doc.on('click', '.toggle-object', function(e){
       $(this).toggleClass('active');
     });
+
+    $doc.on('click', '.story-link', function(e) {
+      var storyId = $(this).attr('data-story');
+      console.log('Jump to story: '+storyId);
+      _this.collection && _this.collection.triggerStoryById(storyId);
+    });
+
+    // $doc.keydown(function(e) {
+    //   switch(e.key) {
+    //     case 'f':
+    //       e.preventDefault();
+    //       _this.collection.triggerStoryById('laufer');
+    //       break;
+    //     default:
+    //       break;
+    //   }
+    // });
 
     $('.toggle-fullscreen').on('click', function(){
       _this.onToggleFullscreen();
