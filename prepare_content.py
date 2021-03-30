@@ -128,6 +128,11 @@ if "stories" in config:
             if len(storyItems) > 0:
                 hotspotItemIndex = storyItems[0]["index"]
 
+        if "slides" in story:
+            for j, slide in enumerate(story["slides"]):
+                if "itemId" in slide:
+                    story["slides"][j]["itemIndex"] = itemLookup[slide["itemId"]]["index"]
+
         if hotspotItemIndex >= 0:
             story['hotspotItemIndex'] = hotspotItemIndex
             validStories[key] = story

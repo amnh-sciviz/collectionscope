@@ -55,6 +55,15 @@ var MainApp = (function() {
       _this.onChangeView(newValue);
     });
 
+    $doc.on('jump-to-item', function(e, itemIndex) {
+      console.log('Jump to: '+itemIndex);
+      _this.collection && _this.collection.triggerItem(itemIndex);
+    });
+
+    $doc.on('close-active-item', function(e) {
+      _this.collection && _this.collection.deselectActiveItem();
+    });
+
     $doc.on('canvas-click', function(e, pointer, npointer) {
       _this.collection && _this.collection.onClickCanvas(pointer, npointer);
     });
@@ -129,6 +138,10 @@ var MainApp = (function() {
 
     $doc.on('click', '.toggle-audio', function(e){
       _this.globalSound && _this.globalSound.onClickToggleAudio($(this));
+    });
+
+    $doc.on('click', '.toggle-object', function(e){
+      $(this).toggleClass('active');
     });
 
     $('.toggle-fullscreen').on('click', function(){

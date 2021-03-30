@@ -611,11 +611,14 @@ var Collection = (function() {
     else $parent.removeClass('active');
   };
 
-  Collection.prototype.triggerItem = function(){
+  Collection.prototype.triggerItem = function(itemIndex){
     var _this = this;
-    var triggeredItemIndex = this.itemManager.triggerSelectedItem();
 
-    if (triggeredItemIndex===false) return false;
+    var triggeredItemIndex = itemIndex !== undefined ? itemIndex : false;
+    if (triggeredItemIndex===false) triggeredItemIndex = this.itemManager.triggerSelectedItem();
+    else triggeredItemIndex = this.itemManager.triggerItem(triggeredItemIndex);
+
+    if (triggeredItemIndex===false || triggeredItemIndex===undefined) return false;
 
     var position = this.itemManager.itemPositions[triggeredItemIndex];
     var anchorToPosition = true;

@@ -39,6 +39,14 @@ var StoryManager = (function() {
     if ($story.find('.media-slides .slide.active').hasClass('has-content')) $story.addClass('has-media');
     else $story.removeClass('has-media');
 
+    // check to see if this slide is about an item
+    var itemIndex = $story.find('.media-slides .slide.active').attr('data-itemindex');
+    if (itemIndex.length > 0) {
+      $(document).trigger('jump-to-item', [parseInt(itemIndex)]);
+    } else {
+      $(document).trigger('close-active-item', [true]);
+    }
+
     if (slideIndex === 0) $story.find('.slide-prev').removeClass('active');
     else $story.find('.slide-prev').addClass('active');
 

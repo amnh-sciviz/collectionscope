@@ -732,10 +732,10 @@ _.extend(CONFIG, {
           "html": "<p>One of these items is a wooden instrument called a <a href=\"https://anthro.amnh.org/anthropology/databases/common/public_access.cfm?object_list=70%20%20%2F10005\" target=\"_blank\">Moon Guitar</a></p>\n"
         },
         {
-          "image": "img/content/laufer/moon_guitar.jpg",
-          "imageAltText": "A small wooden circular guitar",
+          "itemId": "70 /10005",
           "audio": "audio/content/laufer/moon_lute.mp3",
-          "html": "<p>Click on the icon above to hear a recording of a Moon Guitar</p> <p>Audio credit: <a href=\"https://www.amnh.org/explore/ology/anthropology/sounds-of-the-silk-road2/play-music\" target=\"_blank\">AMNH Ology</a></p>\n"
+          "html": "<p>Click on the icon above to hear a recording of a Moon Guitar</p> <p>Audio credit: <a href=\"https://www.amnh.org/explore/ology/anthropology/sounds-of-the-silk-road2/play-music\" target=\"_blank\">AMNH Ology</a></p>\n",
+          "itemIndex": 126414
         },
         {
           "image": "img/content/laufer/silk_road_exhibition.jpg",
@@ -745,7 +745,7 @@ _.extend(CONFIG, {
       ],
       "hotspotItemIndex": 126414
     },
-    "haida": {
+    "northwest": {
       "query": "Regions CONTAINS NORTHWEST AND Region CONTAINS North America",
       "itemId": "E/ 2462",
       "title": "Northwest Coast Hall",
@@ -754,19 +754,15 @@ _.extend(CONFIG, {
           "html": "<p>Beginning in 1896, the Museum\u2019s anthropology collection was divided into different halls by geography.</p> <p>The first was the <a href=\"https://www.amnh.org/exhibitions/permanent/northwest-coast\" target=\"_blank\">Northwest Coast Hall</a> which displayed objects from Indigenous peoples of the Pacific Northwest.</p>\n"
         },
         {
-          "image": "img/content/northwest/bracelet.jpg",
-          "imageAltText": "A silver bracelet with a decorative engraving of a beaver",
-          "html": "<p>One of these items is that has been exhibited is <a href=\"https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno=%20%20%20E%2F%202462\" target=\"_blank\">an engraved silver bracelet</a>. These types of bracelets became popular in Northwest Coast communities in the late 1800s.</p>\n"
+          "itemId": "E/ 2462",
+          "object": "obj/content/haida/bracelet.obj",
+          "html": "<p>One of these items is that has been exhibited is <a href=\"https://anthro.amnh.org/anthropology/databases/common/image_dup.cfm?catno=%20%20%20E%2F%202462\" target=\"_blank\">an engraved silver bracelet</a>. These types of bracelets became popular in Northwest Coast communities in the late 1800s. Click on the icon to interact with the object.</p>\n",
+          "itemIndex": 215885
         },
         {
           "image": "img/content/northwest/bracelet_today.jpg",
           "imageAltText": "Arms of women wearing decorative engraved bracelets",
           "text": "And they are still worn today."
-        },
-        {
-          "object": "obj/content/haida/bracelet.obj",
-          "imageAltText": "A 3D representation of a silver engraved bracelet",
-          "text": "Take a closer look by interacting with a 3D model of the bracelet above"
         }
       ],
       "hotspotItemIndex": 215885

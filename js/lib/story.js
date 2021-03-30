@@ -77,10 +77,14 @@ var Story = (function() {
     if (this.opt.slides) {
       html += '<div class="media-slides">';
       _.each(this.opt.slides, function(slide, i){
-        var active = i === 0 ? ' active' : '';
-        var hasContent = (slide.image || slide.audio || slide.object) ? ' has-content' : '';
-        html += '<div class="slide'+active+hasContent+'" data-index="'+i+'">';
-          if (slide.image && slide.audio) {
+        var className = 'slide';
+        if (i===0) className += ' active';
+        if ((slide.image || slide.audio || slide.object) && !slide.itemId) className += ' has-content';
+        var itemIndex = _.has(slide, 'itemIndex') ? slide.itemIndex : '';
+        html += '<div class="'+className+'" data-index="'+i+'" data-itemindex="'+itemIndex+'">';
+          if (itemIndex.length) {
+            // skip media; item detail will be shown instead
+          } else if (slide.image && slide.audio) {
             html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /><button class="toggle-audio" data-src="'+slide.audio+'"><span class="visuallyHidden">Toggle audio</span></button></div>';
           } else if (slide.image) {
             html += '<div class="media-container image-container"><img src="'+slide.image+'" alt="'+slide.imageAltText+'" /></div>';

@@ -36,6 +36,17 @@ io.removeFiles(OUTPUT_FILE + "*.json")
 items, categories = tu.getItems(config)
 itemCount = len(items)
 
+# Add item slides from stories to item metadata
+storyItems = {}
+if "stories" in config:
+    stories = config["stories"]
+    for key, story in stories.items():
+        for slide in story["slides"]:
+            if "itemId" in slide:
+                slideMeta = slide.copy()
+                slideMeta.pop("itemId", None)
+                storyItems[str(slide["itemId"])] = slideMeta
+
 itemsPerFile = a.ITEMS_PER_FILE
 if itemsPerFile < 1:
     targetFiles = 1000
@@ -63,6 +74,33 @@ for i, item in enumerate(items):
         fieldOut.pop("column", None)
 
         itemOut.append(fieldOut)
+
+    # Add story metadata if it exists
+    if item["_id"] in storyItems:
+        storyItem = storyItems[item["_id"]]
+        if "html" in storyItem:
+            itemOut.append({
+                "isHTML": True,
+                "isDescription": True,
+                "value": storyItem["html"]
+            })
+        if "text" in storyItem:
+            itemOut.append({
+                "isHTML": True,
+                "isDescription": True,
+                "value": "<p>" + storyItem["text"] + "</p>"
+            })
+        if "audio" in storyItem:
+            itemOut.append({
+                "isAudio": True,
+                "value": storyItem["audio"]
+            })
+        if "object" in storyItem:
+            itemOut.append({
+                "isObject": True,
+                "value": storyItem["object"]
+            })
+        print(f'Story item: {OUTPUT_FILE}{fileIndex}.json <{len(fileItems)}>')
 
     fileItems.append(itemOut)
     if len(fileItems) >= itemsPerFile or i >= (itemCount-1):

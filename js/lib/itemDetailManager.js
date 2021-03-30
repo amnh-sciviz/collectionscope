@@ -23,6 +23,7 @@ var ItemDetailManager = (function() {
     this.itemPositions = [];
 
     this.$container = $('#item-container');
+    this.$mediaContainer = $('#item-media-container');
     this.$img = $('#item-image');
     this.$title = $('#item-title');
     this.$metadataContainer = $('#item-metadata-container');
@@ -125,8 +126,29 @@ var ItemDetailManager = (function() {
 
     var title = _.findWhere(item, {isTitle: true});
     var image = _.findWhere(item, {isImage: true});
+    var description = _.findWhere(item, {isDescription: true});
+    var audio = _.findWhere(item, {isAudio: true});
+    var object = _.findWhere(item, {isObject: true});
+    var image = _.findWhere(item, {isImage: true});
+
     var links = _.filter(item, {isLink: true});
-    var fields = _.reject(item, function(item){ return (item.isTitle || item.isImage || item.isLink); });
+    var fields = _.reject(item, function(item){ return (item.isTitle || item.isImage || item.isLink || item.isDescription || item.isAudio || item.isObject); });
+
+    // check for audio
+    if (audio) {
+      this.$mediaContainer.addClass('has-audio');
+      this.$mediaContainer.find('.toggle-audio').attr('data-src', audio.value);
+    } else {
+      this.$mediaContainer.removeClass('has-audio');
+    }
+
+    // check for 3D object
+    if (object) {
+      this.$mediaContainer.addClass('has-object');
+      this.$mediaContainer.find('.item-object').attr('src', 'viewer.html?obj='+object.value);
+    } else {
+      this.$mediaContainer.removeClass('has-object');
+    }
 
     if (title) {
       var titleHtml = '<h2>' + title.value + '</h2>';
@@ -137,6 +159,12 @@ var ItemDetailManager = (function() {
     }
 
     var html = '';
+
+    // if (description) {
+    //   if (description.isHTML) html += description.value;
+    //   else html += '<p>'+description.value+'</p>';
+    // }
+
     html += '<dl>';
     _.each(fields, function(field){
       html += '<div>';
@@ -169,6 +197,15 @@ var ItemDetailManager = (function() {
 
   ItemDetailManager.prototype.setRaycaster = function(raycaster){
     this.raycaster = raycaster;
+  };
+
+  ItemDetailManager.prototype.triggerItem = function(itemIndex){
+    this.highlightedItemIndex = itemIndex;
+
+    this.$container.removeClass('active');
+    this.loadItem(this.highlightedItemIndex);
+
+    return this.highlightedItemIndex;
   };
 
   ItemDetailManager.prototype.triggerSelectedItem = function(){
