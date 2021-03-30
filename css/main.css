@@ -741,10 +741,21 @@ button:focus {
 }
 .slides-buttons button {
   position: absolute;
-  bottom: 0;
+  bottom: 12%;
   display: none;
   font-size: 1.5rem;
   margin: 0;
+  background: transparent;
+}
+.slides-buttons .arrow-icon {
+  width: 40px;
+  height: 40px;
+}
+.slides-buttons .arrow-icon path {
+  fill: var(--text-color);
+}
+.slides-buttons button:hover {
+  background: transparent;
 }
 .slides-buttons button.active {
   display: block;
@@ -752,9 +763,15 @@ button:focus {
 .slides-buttons button.slide-prev {
   left: 0;
 }
+.slides-buttons button.slide-prev .arrow-icon {
+  transform: scale3d(-1, 1, 1);
+}
 .slides-buttons button.slide-next,
 .slides-buttons button.slide-finish {
   right: 0;
+}
+.slides-buttons button.slide-finish {
+  font-size: 3rem;
 }
 button.toggle-button {
   position: absolute;

@@ -118,12 +118,13 @@ var Story = (function() {
         });
         html += '</ul></nav>'; // end .slides-nav
 
+        var svgArrow = '<svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28.5,117.9c2.8,2.8,7.4,2.8,10.3,0c0,0,0,0,0,0l52.7-52.7c2.8-2.8,2.8-7.4,0-10.3c0,0,0,0,0,0L38.8,2.1c-2.8-2.8-7.4-2.8-10.3,0s-2.8,7.4,0,10.3L76.1,60l-47.6,47.6C25.7,110.4,25.6,115,28.5,117.9C28.5,117.9,28.5,117.9,28.5,117.9z"/></svg>';
         var nextActive = slideCount > 1 ? ' active' : '';
         var finishActive = slideCount === 1 ? ' active' : '';
         html += '<div class="slides-buttons">';
-          html += '<button class="slide-prev">Previous</button>';
-          html += '<button class="slide-next'+nextActive+'">Next</button>';
-          html += '<button class="slide-finish close-story '+finishActive+'">Finish</button>';
+          html += '<button class="slide-prev">'+svgArrow+'<span class="visuallyHidden"> Previous</span></button>';
+          html += '<button class="slide-next'+nextActive+'">'+svgArrow+'<span class="visuallyHidden"> Next</span></button>';
+          html += '<button class="slide-finish close-story '+finishActive+'">×<span class="visuallyHidden"> Finish</span></button>';
         html += '</div>'; // end .slides-buttons
 
       html += '</div>'; // end .story-content
