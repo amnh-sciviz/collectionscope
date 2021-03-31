@@ -122,9 +122,9 @@ var Story = (function() {
         var nextActive = slideCount > 1 ? ' active' : '';
         var finishActive = slideCount === 1 ? ' active' : '';
         html += '<div class="slides-buttons">';
-          html += '<button class="slide-prev">'+svgArrow+'<span class="visuallyHidden"> Previous</span></button>';
-          html += '<button class="slide-next'+nextActive+'">'+svgArrow+'<span class="visuallyHidden"> Next</span></button>';
-          html += '<button class="slide-finish close-story '+finishActive+'">×<span class="visuallyHidden"> Finish</span></button>';
+          html += '<button class="slide-prev story-slide-prev">'+svgArrow+'<span class="visuallyHidden"> Previous</span></button>';
+          html += '<button class="slide-next'+nextActive+' story-slide-next">'+svgArrow+'<span class="visuallyHidden"> Next</span></button>';
+          html += '<button class="slide-finish close-story '+finishActive+' story-slide-finish">×<span class="visuallyHidden"> Finish</span></button>';
         html += '</div>'; // end .slides-buttons
 
       html += '</div>'; // end .story-content

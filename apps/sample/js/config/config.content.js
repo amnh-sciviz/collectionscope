@@ -812,6 +812,10 @@ _.extend(CONFIG, {
         0,
         -33000.0,
         33000.0
+      ],
+      "yearRange": [
+        1854,
+        2018
       ]
     },
     "geographyBars": {
@@ -881,6 +885,10 @@ _.extend(CONFIG, {
         -33000.0,
         33000.0
       ],
+      "yearRange": [
+        1854,
+        2018
+      ],
       "overlays": [
         {
           "type": "plane",
@@ -896,6 +904,74 @@ _.extend(CONFIG, {
       ]
     }
   },
+  "guide": [
+    {
+      "text": "The museum\u2019s anthropology collection is over 530,000 objects with more objects added every year. Over half of those objects are digitized.",
+      "changeLayout": "randomSphere"
+    },
+    {
+      "text": "Explore the objects by looking around with your mouse and using the arrow keys to move. Click an object to see its catalog information.",
+      "touchText": "Explore the objects by touching and dragging and using the navigation circle to move. Tap an object to see its catalog information.",
+      "xrText": "Explore the objects by using the thumbsticks to move. Point and select an object to see its catalog information.",
+      "changeLayout": "randomSphere"
+    },
+    {
+      "text": "Let\u2019s explore where objects were collected on a map.",
+      "changeLayout": "randomSphere"
+    },
+    {
+      "changeLayout": "geographyBars",
+      "text": "The objects in the anthropology collection come from around the world. Move around the map to see how many objects come from each country."
+    },
+    {
+      "moveToLocation": {
+        "x": 2457.6,
+        "y": 256.0,
+        "z": -1024.0
+      },
+      "text": "Some countries are represented by many objects. <strong>Mexico</strong> is represented by the most objects \u2014 <strong>47,423</strong>!",
+      "changeLayout": "geographyBars"
+    },
+    {
+      "text": "A large number of objects might show that a collecting expedition went to that country or a private collection from that country was purchased or donated.",
+      "changeLayout": "geographyBars"
+    },
+    {
+      "text": "Next, let\u2019s explore <em>when</em> these objects were collected.",
+      "changeLayout": "geographyBars"
+    },
+    {
+      "changeLayout": "timelineTunnel",
+      "text": "People have collected and donated objects to the museum throughout its 150-year history. Move through the time tunnel to see when objects were added to the collection."
+    },
+    {
+      "text": "Like in the map layout, a large number of objects in a year might show when a collecting expedition took place or private collection was purchased.",
+      "moveToTime": 1930,
+      "changeLayout": "timelineTunnel"
+    },
+    {
+      "text": "A small number of objects in a year may be because of an inability to collect, a financial downturn, or even incomplete data.",
+      "moveToTime": 1924,
+      "changeLayout": "timelineTunnel"
+    },
+    {
+      "text": "How does the collection look when organized by both geography and time?",
+      "changeLayout": "timelineTunnel"
+    },
+    {
+      "changeLayout": "timelineTracks",
+      "text": "This layout shows the collection organized by geography and time. Explore the racetracks, you can see even more patterns in the museum\u2019s history of collecting."
+    },
+    {
+      "text": "Let\u2019s look at one collecting expedition from 1901-1904 that added over 7,500 objects to the museum\u2019s Asian Ethnography collection.",
+      "moveToTime": 1901,
+      "changeLayout": "timelineTracks"
+    },
+    {
+      "showStory": "laufer",
+      "changeLayout": "timelineTracks"
+    }
+  ],
   "ui": {
     "startTransitionDuration": 5000,
     "transitionDuration": 3000,

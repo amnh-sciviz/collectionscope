@@ -50,9 +50,14 @@ var MainApp = (function() {
       _this.onResize();
     });
 
-    $doc.on('change-view', function(e, newValue) {
-      console.log('Change view to: '+newValue)
+    $doc.on('view-changed', function(e, newValue) {
+      console.log('Changed view to: '+newValue)
       _this.onChangeView(newValue);
+    });
+
+    $doc.on('change-view', function(e, newValue) {
+      console.log('Changing view to: '+newValue)
+      _this.collection.changeView(newValue);
     });
 
     $doc.on('jump-to-item', function(e, itemIndex) {
@@ -132,11 +137,11 @@ var MainApp = (function() {
       _this.collection && _this.collection.storyManager.onClickNavButton($(this));
     });
 
-    $doc.on('click', '.slide-prev', function(e){
+    $doc.on('click', '.story-slide-prev', function(e){
       _this.collection && _this.collection.storyManager.onClickPrevButton($(this));
     });
 
-    $doc.on('click', '.slide-next', function(e){
+    $doc.on('click', '.story-slide-next', function(e){
       _this.collection && _this.collection.storyManager.onClickNextButton($(this));
     });
 
@@ -150,16 +155,7 @@ var MainApp = (function() {
 
     $doc.on('click', '.story-link', function(e) {
       var storyId = $(this).attr('data-story');
-      console.log('Jump to story: '+storyId);
-      _this.$intro.removeClass('active stories');
-      if (_this.collection.currentViewKey == 'randomSphere') {
-        _this.collection.stepViewOption(2); // move out of the random view for stories
-        setTimeout(function(){
-          _this.collection.triggerStoryById(storyId);
-        }, _this.opt.ui.transitionDuration);
-      } else {
-        _this.collection.triggerStoryById(storyId);
-      }
+      _this.onSelectStory(storyId);
     });
 
     $('.toggle-fullscreen').on('click', function(){
@@ -172,8 +168,32 @@ var MainApp = (function() {
       _this.onToggleSound($el.hasClass('active'));
     });
 
-    $doc.on("fullscreenchange", function(){
+    $doc.on('fullscreenchange', function(){
       _this.onFullscreenChange();
+    });
+
+    $('.guide-close').on('click', function(e){
+      _this.collection.guide && _this.collection.guide.close();
+    });
+
+    $('.guide-next').on('click', function(e){
+      _this.collection.guide && _this.collection.guide.slideNext();
+    });
+
+    $('.guide-prev').on('click', function(e){
+      _this.collection.guide && _this.collection.guide.slidePrev();
+    });
+
+    $doc.on('jump-to-location', function(e, position) {
+      _this.controls.flyTo(position, false, _this.opt.ui.transitionDuration);
+    });
+
+    $doc.on('jump-to-time', function(e, year) {
+      _this.collection.jumpToTime(year);
+    });
+
+    $doc.on('jump-to-story', function(e, storyId) {
+      _this.onSelectStory(storyId);
     });
   };
 
@@ -309,6 +329,24 @@ var MainApp = (function() {
     renderNeeded = true;
   };
 
+  MainApp.prototype.onSelectStory = function(storyId){
+    var _this = this;
+    console.log('Jump to story: '+storyId);
+
+    this.$intro.removeClass('active stories');
+
+    // if in random view, switch to geography or timeline view
+    if (_this.collection.currentViewKey == 'randomSphere') {
+      this.collection.changeView('geographyBars') || this.collection.changeView('timelineTunnel');
+      setTimeout(function(){
+        _this.collection.triggerStoryById(storyId);
+      }, this.opt.ui.transitionDuration);
+
+    } else {
+      this.collection.triggerStoryById(storyId);
+    }
+  };
+
   MainApp.prototype.onToggleFullscreen = function() {
     if (!isFullScreen()) {  // current working methods
       if (document.documentElement.requestFullscreen) {
@@ -339,6 +377,7 @@ var MainApp = (function() {
   };
 
   MainApp.prototype.onTourStart = function(){
+    this.collection.guide && this.collection.guide.start();
     this.onUserStart();
   };
 

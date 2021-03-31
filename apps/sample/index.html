@@ -22,7 +22,7 @@
 
         <h1>Collection<strong>Scope</strong></h1>
         <h2>Explore the Museum’s collections across time and space.</h2>
-        <p>There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections!</p>
+        <p>There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! Where were these objects collected? When were they collected? And why were they chosen? Let’s explore.</p>
 
         <div class="loading">
           <div class="loading-circle"></div>
@@ -55,6 +55,20 @@
     <div id="keys-container" class="keys-container"></div>
 
     <div id="stories-container" class="stories-container"></div>
+
+    <div id="guide-container" class="guide-container">
+      <div class="slides-buttons">
+        <button class="slide-prev guide-prev">
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28.5,117.9c2.8,2.8,7.4,2.8,10.3,0c0,0,0,0,0,0l52.7-52.7c2.8-2.8,2.8-7.4,0-10.3c0,0,0,0,0,0L38.8,2.1c-2.8-2.8-7.4-2.8-10.3,0s-2.8,7.4,0,10.3L76.1,60l-47.6,47.6C25.7,110.4,25.6,115,28.5,117.9C28.5,117.9,28.5,117.9,28.5,117.9z"/></svg>
+          <span class="visuallyHidden">Previous</span>
+        </button>
+        <button class="slide-next guide-next">
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28.5,117.9c2.8,2.8,7.4,2.8,10.3,0c0,0,0,0,0,0l52.7-52.7c2.8-2.8,2.8-7.4,0-10.3c0,0,0,0,0,0L38.8,2.1c-2.8-2.8-7.4-2.8-10.3,0s-2.8,7.4,0,10.3L76.1,60l-47.6,47.6C25.7,110.4,25.6,115,28.5,117.9C28.5,117.9,28.5,117.9,28.5,117.9z"/></svg>
+          <span class="visuallyHidden">Next</span>
+        </button>
+      </div>
+      <button class="guide-close close-x">×<span class="visuallyHidden"> close</span></button>
+    </div>
 
     <div id="menus-container" class="menus-container active">
       <!-- <button class="toggle-menus toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button> -->
@@ -130,7 +144,7 @@
           <button class="show-instructions collapsible" title="Show instructions">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
               <path class="filled" d="M113,14c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C14.1,58.3,58.3,14.1,113,14 M113,0C50.6,0,0,50.6,0,113
-              	s50.6,113,113,113s113-50.6,113-113S175.4,0,113,0z"/>
+                s50.6,113,113,113s113-50.6,113-113S175.4,0,113,0z"/>
               <path class="filled" d="M114.3,52.9c7.4,0,13.9,1.2,19.6,3.5c5.7,2.4,10.2,5.7,13.4,10.1c3.2,4.4,4.8,9.6,4.8,15.8c0,6.7-1.5,12.3-4.4,16.9
                 c-2.9,4.6-6.9,8.1-11.8,10.5c-4.9,2.4-10.4,4-16.4,4.7v18.5h-14.4v-26c7.7-1.2,14-2.7,18.7-4.6c4.7-1.9,8.2-4.3,10.4-7.3
                 c2.2-2.9,3.3-6.6,3.3-11c0-5.4-2-9.8-6.1-13.2c-4-3.3-10.2-5-18.4-5c-7.6,0-13.8,2.1-18.6,6.3c-4.8,4.2-7.6,10-8.6,17.2l-12.3-7.1
@@ -270,6 +284,7 @@
   <script src="../../js/lib/collection.js"></script>
   <script src="../../js/lib/controls.js"></script>
   <script src="../../js/lib/geometry.js"></script>
+  <script src="../../js/lib/guide.js"></script>
   <script src="../../js/lib/itemDetailManager.js"></script>
   <script src="../../js/lib/key.js"></script>
   <script src="../../js/lib/label.js"></script>

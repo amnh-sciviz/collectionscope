@@ -102,6 +102,7 @@ keys["categories"] = {
     "parent": "#legend-container",
     "items": categories
 }
+yearRange = [timelineValues[0]["year"], timelineValues[-1]["year"]]
 outjson["keys"] = keys
 
 # Generate content/Stories
@@ -170,6 +171,7 @@ for key, options in visualizations.items():
         options["mode"] = "railcar"
         options["cameraPosition"] = [0, 0, -depth/4]
         options["bounds"] = [0, 0, -depth/2, depth/2]
+        options["yearRange"] = yearRange
 
     elif key == "geographyBars":
         options["keys"] = ["map"]
@@ -199,6 +201,7 @@ for key, options in visualizations.items():
         options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
         options["mode"] = "railcar"
         options["bounds"] = [-width/8, width/8, -depth/2, depth/2]
+        options["yearRange"] = yearRange
         overlayRelativePath = "img/categories.png"
         overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
         makeCategoryTrackOverlay(overlayFullPath)
@@ -211,6 +214,32 @@ for key, options in visualizations.items():
 
     visualizations[key] = options
 outjson["views"] = visualizations
+
+def pointToWorld(point, view):
+    bounds = view["bounds"]
+    camPos = view["cameraPosition"]
+    x = mu.lerp((bounds[1], bounds[0]), point["x"])
+    y = camPos[1]
+    z = mu.lerp((bounds[3], bounds[2]), point["y"])
+    return { "x": x, "y": y, "z": z }
+
+# Generate guide
+if "guide" in config:
+    viewKeys = visualizations.keys()
+    guideSteps = config["guide"]
+    for i, step in enumerate(guideSteps):
+        # add layout to all steps
+        if "changeLayout" not in step:
+            if i > 0:
+                guideSteps[i]["changeLayout"] = guideSteps[i-1]["changeLayout"]
+            else:
+                guideSteps[i]["changeLayout"] = viewKeys[0]
+        viewKey = guideSteps[i]["changeLayout"]
+        if "moveToLocation" in step:
+            guideSteps[i]["moveToLocation"] = pointToWorld(step["moveToLocation"], visualizations[viewKey])
+        if "lookAtLocation" in step:
+            guideSteps[i]["lookAtLocation"] = pointToWorld(step["lookAtLocation"], visualizations[viewKey])
+    outjson["guide"] = guideSteps
 
 # Generate UI
 outjson["ui"] = config["animation"]
