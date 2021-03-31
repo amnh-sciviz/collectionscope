@@ -11,11 +11,20 @@ var StoryManager = (function() {
   }
 
   StoryManager.prototype.init = function(){
+    this.isActive = !_.isEmpty(this.opt.stories);
+
     this.hotspotSelected = false;
     this.raycaster = new THREE.Raycaster();
 
-    this.loadStories();
-    this.loadListeners();
+    if (this.isActive) {
+      this.loadStories();
+      this.loadListeners();
+    } else {
+      this.stories = {};
+      this.hotspots = [];
+      $('.show-stories').css('display', 'none');
+    }
+
   };
 
   StoryManager.prototype.deselectHotspots = function(){
@@ -78,13 +87,18 @@ var StoryManager = (function() {
 
     var markerTexture = new THREE.TextureLoader().load("../../img/indicator_star.png");
     var hotspots = [];
+    var $buttons = $('.story-buttons');
+    var buttonHTML = '';
 
     _.each(this.opt.stories, function(content, contentKey){
       if (!content.hotspotItemIndex) return;
       var story = new Story(_.extend({}, content, {'markerTexture': markerTexture}));
       stories[contentKey] = story;
       hotspots.push(story.hotspot.object);
+      buttonHTML += '<button class="story-button story-link" data-story="'+contentKey+'"><img class="icon" src="../../img/ico-tour.png" alt="Start Story: '+content.title+'" /> '+content.title+'</button>';
     });
+
+    $buttons.html(buttonHTML);
 
     this.stories = stories;
     this.hotspots = hotspots;
@@ -156,6 +170,8 @@ var StoryManager = (function() {
   };
 
   StoryManager.prototype.update = function(now, pointer, camera){
+    if (!this.isActive) return;
+
     this.updateHotspots(pointer, camera);
 
     _.each(this.stories, function(story){
@@ -164,6 +180,8 @@ var StoryManager = (function() {
   };
 
   StoryManager.prototype.updateHotspots = function(pointer, camera){
+    if (!this.isActive) return;
+
     var _this = this;
     var activeHotspot = _.find(this.hotspots, function(hotspot){ return hotspot.visible; });
 
@@ -201,12 +219,16 @@ var StoryManager = (function() {
   };
 
   StoryManager.prototype.updatePositions = function(positionArr, transitionDuration){
+    if (!this.isActive) return;
+
     _.each(this.stories, function(story, key){
       story.updatePositions(positionArr, transitionDuration);
     });
   };
 
   StoryManager.prototype.updateView = function(viewKey){
+    if (!this.isActive) return;
+
     _.each(this.stories, function(story, key){
       story.updateView(viewKey);
     });

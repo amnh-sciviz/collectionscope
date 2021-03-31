@@ -122,10 +122,21 @@ button:focus {
 .app.is-loading .intro-buttons {
   display: none;
 }
-.intro-buttons {
+.story-buttons {
+  display: none;
+}
+.intro.stories .intro-buttons {
+  display: none;
+}
+.intro.stories .story-buttons {
+  display: block;
+}
+.intro-buttons,
+.story-buttons {
   margin: 2rem 0;
 }
-.intro-button {
+.intro-button,
+.story-button {
   text-align: center;
   margin-left : auto;
   margin-right: auto;
@@ -140,10 +151,12 @@ button:focus {
   display: block;
   cursor: pointer;
 }
-.intro-button:hover{
+.intro-button:hover,
+.story-button:hover {
   background-color: var(--button-bg-color);
 }
-.intro-button img {
+.intro-button img,
+.story-button img {
   max-width: 24px;
 }
 
