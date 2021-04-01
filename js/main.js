@@ -253,7 +253,9 @@ var MainApp = (function() {
 
     var targetPosition = new THREE.Vector3(newP[0], newP[1], newP[2]);
     var targetLookAtPosition = false;
-    this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration);
+    var anchorToPosition = false;
+    var onFinished = this.collection.onChangeViewFinished;
+    this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration, anchorToPosition, onFinished);
   };
 
   MainApp.prototype.onExploreStart = function(){
@@ -337,10 +339,11 @@ var MainApp = (function() {
 
     // if in random view, switch to geography or timeline view
     if (_this.collection.currentViewKey == 'randomSphere') {
-      this.collection.changeView('geographyBars') || this.collection.changeView('timelineTunnel');
-      setTimeout(function(){
+
+      var onFinished = function(){
         _this.collection.triggerStoryById(storyId);
-      }, this.opt.ui.transitionDuration);
+      };
+      this.collection.changeView('geographyBars', onFinished) || this.collection.changeView('timelineTunnel', onFinished);
 
     } else {
       this.collection.triggerStoryById(storyId);

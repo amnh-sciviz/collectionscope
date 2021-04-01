@@ -22,6 +22,7 @@ var Collection = (function() {
     this.isViewTransitioning = false;
     this.minAlpha = this.opt.ui.minAlpha;
     this.$el = $(this.opt.el);
+    this.onChangeViewFinished = false;
 
     this.ui = this.opt.ui;
 
@@ -43,7 +44,7 @@ var Collection = (function() {
     this.soundSets = {};
   };
 
-  Collection.prototype.changeView = function(key){
+  Collection.prototype.changeView = function(key, onFinished){
     if (key == this.currentViewKey) return true;
 
     if (!_.has(this.views, key) || !this.$viewOptions || !this.$viewOptions.length || this.isViewTransitioning) return false;
@@ -55,7 +56,10 @@ var Collection = (function() {
 
     this.$viewOptions.eq(viewIndex).prop('checked', true);
     this.$viewOptions.eq(viewIndex).focus();
+
+    if (onFinished) this.onChangeViewFinished = onFinished;
     this.onViewOptionChange(this.$viewOptions.eq(viewIndex));
+
     return true;
   };
 

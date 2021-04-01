@@ -903,12 +903,12 @@ button.toggle-object {
   height: 60px;
   line-height: 60px;
   text-align: center;
-  background: url(../img/ico-audio-blue-bg.png);
+  background: url(../img/ico-audio-play.png);
   background-size: cover;
   background-repeat: no-repeat;
 }
 button.toggle-audio.active {
-  background-image: url(../img/ico-audio-white-bg.png);
+  background-image: url(../img/ico-audio-pause.png);
 }
 button.toggle-object {
   background-image: url(../img/ico-3d-blue-bg.png);
