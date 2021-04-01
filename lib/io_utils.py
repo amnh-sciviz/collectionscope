@@ -4,6 +4,7 @@ import glob
 import json
 import os
 import pickle
+import requests
 import shutil
 import yaml
 from yaml import Loader
@@ -12,6 +13,20 @@ import lib.math_utils as mu
 
 def copyFile(fromFile, toFile):
     shutil.copyfile(fromFile, toFile)
+
+def downloadBinaryFile(url, filename, overwrite=False):
+    if os.path.isfile(filename) and not overwrite:
+        print("%s already exists." % filename)
+        return True
+    print("Downloading %s..." % url)
+    response = requests.get(url, stream=True)
+    with open(filename, 'wb') as f:
+        shutil.copyfileobj(response.raw, f)
+    del response
+
+def getFileExt(fn):
+    basename = os.path.basename(fn)
+    return "." + basename.split(".")[-1]
 
 def makeDirectories(filenames):
     if not isinstance(filenames, list):
@@ -97,6 +112,30 @@ def writeCacheFile(fn, data):
     print("Writing cache to %s..." % fn)
     pickle.dump(data, bz2.open(fn, 'wb'))
     print("Wrote cache to %s." % fn)
+
+def writeCsv(filename, arr, headings="auto", append=False, encoding="utf8", verbose=True, listDelimeter=" | "):
+    if headings == "auto":
+        headings = arr[0].keys() if len(arr) > 0 and type(arr[0]) is dict else None
+    mode = 'w' if not append else 'a'
+    with open(filename, mode, encoding=encoding, newline='') as f:
+        writer = csv.writer(f)
+        if not append and headings is not None:
+            writer.writerow(headings)
+        for i, d in enumerate(arr):
+            row = []
+            if headings is not None:
+                for h in headings:
+                    value = ""
+                    if h in d:
+                        value = d[h]
+                    if isinstance(value, list):
+                        value = listDelimeter.join(value)
+                    row.append(value)
+            else:
+                row = d
+            writer.writerow(row)
+    if verbose:
+        print("Wrote %s rows to %s" % (len(arr), filename))
 
 def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
     with open(filename, "w", encoding="utf8") as f:
