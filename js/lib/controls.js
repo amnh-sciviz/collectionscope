@@ -409,10 +409,10 @@ var Controls = (function() {
     this.isUsingTrackpad = false;
   };
 
-  Controls.prototype.releaseAnchor = function(flyToLastPosition){
+  Controls.prototype.releaseAnchor = function(flyToLastPosition, onFinished){
     if (flyToLastPosition && this.lastPreOrbitPosition && this.lastPreOrbitLookAt) {
       var anchorToPosition = false;
-      this.flyTo(this.lastPreOrbitPosition, this.lastPreOrbitLookAt, this.opt.zoomInTransitionDuration, anchorToPosition);
+      this.flyTo(this.lastPreOrbitPosition, this.lastPreOrbitLookAt, this.opt.zoomInTransitionDuration, anchorToPosition, onFinished);
     }
   };
 

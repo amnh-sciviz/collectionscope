@@ -67,7 +67,11 @@ var Guide = (function() {
 
     // check for view change
     if (step.changeLayout) {
-      $(document).trigger('change-view', [step.changeLayout]);
+      var onFinished = function(){
+        $(document).trigger('change-view', [step.changeLayout]);
+      };
+      // deselect item first
+      $(document).trigger('deselect-item', [onFinished])
     }
 
     // check for camera change

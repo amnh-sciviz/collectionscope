@@ -63,10 +63,13 @@ var Collection = (function() {
     return true;
   };
 
-  Collection.prototype.deselectActiveItem = function(){
-    if (this.itemManager.itemIndex < 0 || this.itemManager.itemIndex===false) return;
+  Collection.prototype.deselectActiveItem = function(onFinished){
+    if (this.itemManager.itemIndex < 0 || this.itemManager.itemIndex===false) {
+      onFinished && onFinished();
+      return;
+    };
     var flyToLastPosition = true;
-    this.controls && this.controls.releaseAnchor(flyToLastPosition);
+    this.controls && this.controls.releaseAnchor(flyToLastPosition, onFinished);
     var itemIndex = this.itemManager.releaseSelectedItem();
     this.updateItemAlpha(itemIndex, 1, 10); // show the current item
   };

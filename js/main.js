@@ -195,6 +195,10 @@ var MainApp = (function() {
     $doc.on('jump-to-story', function(e, storyId) {
       _this.onSelectStory(storyId);
     });
+
+    $doc.on('deselect-item', function(e, onFinished){
+      _this.collection.deselectActiveItem(onFinished);
+    });
   };
 
   MainApp.prototype.loadScene = function(){
