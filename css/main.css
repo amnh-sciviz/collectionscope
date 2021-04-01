@@ -726,6 +726,16 @@ button.close-x:hover {
 .text-slide {
   padding: 0 1rem;
 }
+.text-slide dt {
+  padding: 1rem 0;
+}
+.text-slide dd {
+  font-weight: bold;
+  font-size: 2rem;
+  color: var(--bg-secondary-light-color);
+  margin: 0;
+  padding-bottom: 2rem;
+}
 .slides-nav {
 
 }

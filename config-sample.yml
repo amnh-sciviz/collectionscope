@@ -8,7 +8,7 @@ logo: img/logo.png  # this path is relative to your /apps/{your project}/index.h
 description: Explore the Museum’s collections across time and space.
 introductionText: There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! Where were these objects collected? When were they collected? And why were they chosen? Let’s explore.
  # May contain HTML
-creditText: This project is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a> # May contain HTML
+creditText: The <a href="https://github.com/amnh-sciviz/collectionscope/" target="_blank">CollectionScope Tool</a> is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a> # May contain HTML
 credits:
   - name: American Museum of Natural History
     url: https://amnh.org/
@@ -194,11 +194,11 @@ stories:
       - html: >
           <p>This expedition led by Berthold Laufer collected everyday objects to understand the life of contemporary Chinese people.</p>
       - html: >
-          <p>How many objects were collected?</p>
-          <p><strong>7,500</strong></p>
+          <dt>How many objects were collected?</dt>
+          <dd>7,500</dd>
       - html: >
-          <p>How many objects are currently exhibited?</p>
-          <p><strong>196</strong></p>
+          <dt>How many objects are currently exhibited?</dt>
+          <dd>196</dd>
       - image: img/content/laufer/laufer_field_notes_0233.jpg
         imageAltText: A piece of paper with hand-written inventory of items collected
         html: >

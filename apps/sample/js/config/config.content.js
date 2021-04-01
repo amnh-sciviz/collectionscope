@@ -716,10 +716,10 @@ _.extend(CONFIG, {
           "html": "<p>This expedition led by Berthold Laufer collected everyday objects to understand the life of contemporary Chinese people.</p>\n"
         },
         {
-          "html": "<p>How many objects were collected?</p> <p><strong>7,500</strong></p>\n"
+          "html": "<dt>How many objects were collected?</dt> <dd>7,500</dd>\n"
         },
         {
-          "html": "<p>How many objects are currently exhibited?</p> <p><strong>196</strong></p>\n"
+          "html": "<dt>How many objects are currently exhibited?</dt> <dd>196</dd>\n"
         },
         {
           "image": "img/content/laufer/laufer_field_notes_0233.jpg",

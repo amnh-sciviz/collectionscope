@@ -729,6 +729,9 @@ var Collection = (function() {
         _this.updatePositions(view, transitionDuration, 4.0);
       }, transitionDuration);
 
+      // close the guide if it's open
+      this.guide && this.guide.close();
+
     } else if (closedStoryKey !== false) {
       // reset filters
       this.resetFilters(transitionDuration);
