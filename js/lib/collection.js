@@ -28,7 +28,6 @@ var Collection = (function() {
 
     this.itemManager = new ItemDetailManager(this.opt.metadata);
     this.storyManager = new StoryManager({"stories": this.opt.stories});
-    if (this.opt.guide) this.guide = new Guide({"steps": this.opt.guide});
 
     var views = this.opt.views;
     var i = 0;
@@ -658,6 +657,8 @@ var Collection = (function() {
 
   Collection.prototype.setControls = function(controls){
     this.controls = controls;
+
+    if (this.opt.guide) this.guide = new Guide({"steps": this.opt.guide, "inputMode": controls.device});
   };
 
   Collection.prototype.stepViewOption = function(step){

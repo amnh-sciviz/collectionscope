@@ -38,6 +38,9 @@ var Controls = (function() {
     this.isTouch = isTouchDevice() || this.opt.device === "touch";
     if (this.opt.device === "keyboard") this.isTouch = false;
     this.isXR = false;
+    this.device = "keyboard";
+    if (this.isTouch) this.device = "touch";
+    else if (this.isXR) this.device = "xr";
     this.moveDirectionX = 0;
     this.moveDirectionY = 0;
     this.velocityX = 0;

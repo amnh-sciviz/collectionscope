@@ -5,7 +5,8 @@ var Guide = (function() {
   function Guide(config) {
     var defaults = {
       el: '#guide-container',
-      steps: []
+      steps: [],
+      inputMode: "keyboard" // or touch, xr
     };
     this.opt = _.extend({}, defaults, config);
     this.init();
@@ -29,14 +30,20 @@ var Guide = (function() {
 
   Guide.prototype.loadUI = function(){
     var _this = this;
+    var mode = this.opt.inputMode;
 
     var html = '<div class="guide-steps">';
     _.each(this.opt.steps, function(step, i){
       var className = 'guide-step';
       if (i===_this.currentStepIndex) className += ' active';
-      html += '<div class="'+className+'" data-index="'+i+'">'
-        if (step.text) html += '<p>' + step.text + '</p>';
-        else if (step.html) html += step.html;
+      html += '<div class="'+className+'" data-index="'+i+'">';
+        var text = step.text || step.html || '';
+        if (step.text) text = '<p>' + text + '</p>';
+        if (mode == 'touch' && step.touchText) text = '<p>' + step.touchText + '</p>';
+        else if (mode == 'xr' && step.xrText) text = '<p>' + step.xrText + '</p>';
+        else if (mode == 'touch' && step.touchHTML) text = step.touchHTML;
+        else if (mode == 'xr' && step.xrHTML) text = step.xrHTML;
+        html += text;
       html += '</div>'; // end .guide-step
     });
     html += '</div>';
