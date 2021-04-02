@@ -28,6 +28,19 @@ def getFileExt(fn):
     basename = os.path.basename(fn)
     return "." + basename.split(".")[-1]
 
+def loadData(fn, compressed=False):
+    result = None
+    if compressed and not fn.endswith(".bz2"):
+        fn += ".bz2"
+    if fn and os.path.isfile(fn):
+        print("Loading cache file %s..." % fn)
+        f = bz2.open(fn, "rb") if compressed else open(fn, "rb")
+        if f:
+            result = pickle.load(f)
+            print("Loaded cache file %s" % fn)
+        f.close()
+    return result
+
 def makeDirectories(filenames):
     if not isinstance(filenames, list):
         filenames = [filenames]
@@ -136,6 +149,19 @@ def writeCsv(filename, arr, headings="auto", append=False, encoding="utf8", verb
             writer.writerow(row)
     if verbose:
         print("Wrote %s rows to %s" % (len(arr), filename))
+
+def writeData(fn, data, overwrite=False, compressed=False):
+    if compressed and not fn.endswith(".bz2"):
+        fn += ".bz2"
+    if not os.path.isfile(fn) or overwrite:
+        print("Saving cache file %s..." % fn)
+        if compressed:
+            pickle.dump(data, bz2.open(fn, 'wb'))
+        else:
+            pickle.dump(data, open(fn, 'wb'))
+    else:
+        print("Already exists %s" % fn)
+    return True
 
 def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
     with open(filename, "w", encoding="utf8") as f:

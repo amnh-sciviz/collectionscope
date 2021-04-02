@@ -11,6 +11,13 @@ def formatTextFile(infile, outfile, params):
     ftext = formatText(text, params)
     io.writeTextFile(outfile, ftext)
 
+def stringToId(value, lowercase=True):
+    value = str(value)
+    if lowercase:
+        value = value.lower()
+    value = re.sub('[^A-Za-z0-9\-]+', '_', value)
+    return value
+
 def validateLat(value):
     value = mu.parseNumber(value, alwaysFloat=True, invalidValue=None)
     if value is None:

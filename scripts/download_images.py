@@ -3,6 +3,8 @@
 import argparse
 import inspect
 import math
+from multiprocessing import Pool
+from multiprocessing.dummy import Pool as ThreadPool
 import os
 from pprint import pprint
 import shutil
@@ -27,13 +29,12 @@ parser.add_argument('-limit', dest="LIMIT", default=-1, type=int, help="Limit do
 parser.add_argument('-out', dest="OUTPUT_DIR", default="tmp/downloads/", help="Output directory; make sure there is enough space!")
 parser.add_argument('-overwrite', dest="OVERWRITE", action="store_true", help="Overwrite existing data?")
 parser.add_argument('-probe', dest="PROBE", action="store_true", help="Just output debug info")
+parser.add_argument('-threads', dest="THREADS", default=1, type=int, help="Number of threads")
 a = parser.parse_args()
 
 # Make sure output dirs exist
 makeDirectories(a.OUTPUT_DIR)
 
-downloads = 0
-nofileCount = 0
 # Read data
 fieldNames, rows = readCsv(a.INPUT_FILE)
 if a.FILENAME_COLUMN not in fieldNames:
@@ -51,10 +52,14 @@ if a.IMAGE_URL_COLUMN not in fieldNames:
     sys.exit()
 
 fileCount = len(rows)
+total = fileCount
+downloads = 0
+nofileCount = 0
+if a.LIMIT > 0:
+    total = a.LIMIT
 
 for i, row in enumerate(rows):
     url = row[a.IMAGE_URL_COLUMN]
-
     if len(url) < 1:
         print(f'Could not find url for item {row[a.ID_COLUMN]}. Skipping.')
         continue
@@ -66,20 +71,38 @@ for i, row in enumerate(rows):
     if a.PROBE:
         if not os.path.isfile(filepath):
             nofileCount += 1
-            downloads += 1
     else:
-        downloadBinaryFile(url, filepath, a.OVERWRITE)
-        downloads += 1
-        total = fileCount
-        if a.LIMIT > 0:
-            total = a.LIMIT
-        printProgress(i+1, total)
-
-    if a.LIMIT > 0 and downloads >= a.LIMIT:
-        break
+        rows[i]["__url"] = url
+        rows[i]["__filepath"] = filepath
 
 if a.PROBE:
     print("%s files to download" % nofileCount)
+    sys.exit()
+
+def doDownload(row):
+    global a
+    global downloads
+    global total
+
+    if a.LIMIT > 0 and downloads >= a.LIMIT:
+        return True
+
+    downloadBinaryFile(row["__url"], row["__filepath"], a.OVERWRITE)
+
+    downloads += 1
+    printProgress(downloads, total)
+    return True
+
+print("Downloading media...")
+if a.THREADS > 1:
+    pool = ThreadPool(a.THREADS)
+    results = pool.map(doDownload, rows)
+    pool.close()
+    pool.join()
+    print("Done.")
 else:
-    print("Updating original file with filenames")
-    writeCsv(a.INPUT_FILE, rows, fieldNames)
+    for row in rows:
+        doDownload(row):
+
+print("Updating original file with filenames...")
+writeCsv(a.INPUT_FILE, rows, fieldNames)
