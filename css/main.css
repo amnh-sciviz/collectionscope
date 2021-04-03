@@ -849,12 +849,12 @@ button.toggle-button:hover {
 } */
 
 .item-container {
-  width: 336px;
+  width: 600px;
   height: 336px;
   position: absolute;
   top: 50%;
   left: 50%;
-  margin-left: -168px;
+  margin-left: -300px;
   margin-top: -168px;
   transform: scale3d(1, 1, 1) translateY(0);
   transform-origin: 50% 0;
