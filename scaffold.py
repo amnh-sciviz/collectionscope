@@ -38,6 +38,4 @@ except OSError as exc:
         shutil.copy(src, dest)
     else: raise
 
-# add meta content to index file
-su.formatTextFile(indexFilename, indexFilename, config)
 print("Done.")

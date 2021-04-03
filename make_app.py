@@ -6,6 +6,7 @@ import subprocess
 import sys
 
 import lib.io_utils as io
+import lib.item_utils as tu
 
 # input
 parser = argparse.ArgumentParser()
@@ -20,7 +21,7 @@ config = tu.loadConfig(a.CONFIG_FILE)
 overwriteFlag = ' -overwrite' if a.CLEAN else ''
 
 commands = [
-    '{python_name} scaffold.py -name "{app_name}"{overwrite}'.format(python_name=PYTHON_NAME, app_name=config["name"], overwrite=overwriteFlag),
+    '{python_name} scaffold.py -config "{config_file}"{overwrite}'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE, overwrite=overwriteFlag),
     '{python_name} prepare_metadata.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
     '{python_name} prepare_sets.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),
     '{python_name} prepare_positions.py -config "{config_file}"'.format(python_name=PYTHON_NAME, config_file=a.CONFIG_FILE),

@@ -55,28 +55,33 @@ fileCount = len(rows)
 total = fileCount
 downloads = 0
 nofileCount = 0
+missingLinks = 0
 if a.LIMIT > 0:
     total = a.LIMIT
 
 for i, row in enumerate(rows):
     url = row[a.IMAGE_URL_COLUMN]
     if len(url) < 1:
-        print(f'Could not find url for item {row[a.ID_COLUMN]}. Skipping.')
+        missingLinks += 1
+        # print(f'Could not find url for item {row[a.ID_COLUMN]}. Skipping.')
         continue
 
     ext = getFileExt(url)
     filename = str(row[a.ID_COLUMN]) + ext if a.FILENAME_COLUMN not in row or len(row[a.FILENAME_COLUMN]) < 1 else row[a.FILENAME_COLUMN]
     filepath = a.OUTPUT_DIR + filename
     rows[i][a.FILENAME_COLUMN] = filename
-    if a.PROBE:
-        if not os.path.isfile(filepath):
-            nofileCount += 1
-    else:
-        rows[i]["__url"] = url
-        rows[i]["__filepath"] = filepath
+    if not os.path.isfile(filepath):
+        nofileCount += 1
+    rows[i]["__url"] = url
+    rows[i]["__filepath"] = filepath
+
+total = total - missingLinks
+downloaded = total - nofileCount
+print("%s files to download" % nofileCount)
+print("%s files already downloaded" % downloaded)
+print("%s missing image URLs" % missingLinks)
 
 if a.PROBE:
-    print("%s files to download" % nofileCount)
     sys.exit()
 
 def doDownload(row):
@@ -86,6 +91,9 @@ def doDownload(row):
 
     if a.LIMIT > 0 and downloads >= a.LIMIT:
         return True
+
+    if "__url" not in row or "__filepath" not in row:
+        return False
 
     downloadBinaryFile(row["__url"], row["__filepath"], a.OVERWRITE)
 
@@ -102,7 +110,7 @@ if a.THREADS > 1:
     print("Done.")
 else:
     for row in rows:
-        doDownload(row):
+        doDownload(row)
 
 print("Updating original file with filenames...")
 writeCsv(a.INPUT_FILE, rows, fieldNames)

@@ -80,13 +80,14 @@ for row in rows:
     if rowValue not in uniqueValues:
         uniqueValues.append(rowValue)
         uniqueFileIds.append(valueId)
-        idLookup[valueId] = [row["index"]]
+        idLookup[valueId] = [row["_index"]]
     else:
-        idLookup[valueId].append(row["index"])
+        idLookup[valueId].append(row["_index"])
 
 total = len(uniqueValues)
 print(f'Found {total} unique values to look up.')
 if a.PROBE:
+    pprint(uniqueValues)
     sys.exit()
 
 geolocator = Nominatim(user_agent=a.USER_AGENT)
@@ -99,7 +100,13 @@ for i, v in enumerate(uniqueValues):
         cachedData = loadData(filename)
 
     if cachedData is None:
-        lookupValue = dict(zip(tParts, v))
+        _lookupValue = dict(zip(tParts, v))
+        # remove empty items
+        lookupValue = {}
+        for key, value in _lookupValue.items():
+            value = str(value).strip()
+            if len(value) > 0:
+                lookupValue[key] = value
         location = None
         try:
             location = geolocator.geocode(lookupValue)

@@ -2,9 +2,8 @@
 name: amnh
 
 # Site metadta to be used in the meta tags and introduction screen
-title: CollectionScope
-titleFormatted: Collection<strong>Scope</strong>: AMNH # May contain HTML
-logo: img/logo.png  # this path is relative to your /apps/{your project}/index.html file
+title: "CollectionScope Demo: American Museum of Natural History"
+titleFormatted: "Collection<strong>Scope</strong> Demo" # May contain HTML
 description: Explore the Museum’s collections across time and space.
 introductionText: There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! Where were these objects collected? When were they collected? And why were they chosen? Let’s explore.
  # May contain HTML
@@ -12,18 +11,20 @@ creditText: The <a href="https://github.com/amnh-sciviz/collectionscope/" target
 credits:
   - name: American Museum of Natural History
     url: https://amnh.org/
-    image: img/amnh_logo.png # this path is relative to your /apps/{your project}/index.html file
+    image: ../../img/amnh_logo.png # this path is relative to your /apps/{your project}/index.html file
 
   - name: Knight Foundation
     url: https://knightfoundation.org/
-    image: img/knight_logo.png
+    image: ../../img/knight_logo.png
 
 #################################
 # Define your meta data source
 #################################
 # this can be an absolute path or a path relative to the `make_app.py` script
-metadataFile: E:/Dropbox/amnh/Knight2020/data/all_normalized.csv
-# Basic query for filtering out metadata if applicable; comment this out if you want all the data
+  # you can download this sample data here: https://www.dropbox.com/s/2isyfrkqp8y7860/AMNH_Anthro_Objects_2021-03-24.csv?dl=1
+  # and place it in the ./data/ folder
+metadataFile: data/AMNH_Anthro_Objects_2021-03-24.csv
+# Basic query for filtering out metadata if applicable; comment this out or leave blank if you want all the data
   # Supports the following: =, !=, <, >, <=, >=, CONTAINS, EXCLUDES, EXISTS, AND, OR
   # Examples:
     # Year >= 1900 AND Year <= 2000
@@ -63,8 +64,10 @@ longitudeColumn: Longitude
 # Country column is used for labelling countries in the map view; comment out or ignore if not applicable
 countryColumn: Country
 # This is the map that will be used for the map view
+  # Replace with "img/world_map.png" for a map without region colors
 baseMap: img/world_map_with_regions.png # path is relative to the `make_app.py` script
 # And the map used for the map key in the map view
+  # Replace with "img/world_map_key.png" for a map without region colors
 baseMapKey: img/world_map_key_with_regions.png # path is relative to the `make_app.py` script
 
 #################################

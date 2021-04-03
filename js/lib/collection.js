@@ -387,6 +387,7 @@ var Collection = (function() {
     var deferred = $.Deferred();
     var loaded = 0;
     var totalToLoad = _.keys(this.opt.sets).length;
+    if (totalToLoad <= 0) deferred.resolve();
     _.each(this.opt.sets, function(set, key){
       // check if indice data is set locally
       if (!set.src) {
@@ -659,6 +660,10 @@ var Collection = (function() {
     this.controls = controls;
 
     if (this.opt.guide) this.guide = new Guide({"steps": this.opt.guide, "inputMode": controls.device});
+    else {
+      $('.tour-start').css('display', 'none');
+      $('.explore-start .text-label').text('Start');
+    }
   };
 
   Collection.prototype.stepViewOption = function(step){

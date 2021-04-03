@@ -16,7 +16,7 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", 
 a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
-configStories = config["stories"]
+configStories = config["stories"] if "stories" in config else {}
 
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_SET_DIR_REL = "data/sets/"

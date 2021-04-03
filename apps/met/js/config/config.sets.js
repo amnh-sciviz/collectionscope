@@ -1,0 +1,3 @@
+_.extend(CONFIG, {
+  "sets": {}
+});

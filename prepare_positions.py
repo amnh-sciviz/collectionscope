@@ -20,7 +20,7 @@ a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
 configViews = config["visualizations"]
-configStories = config["stories"]
+configStories = config["stories"] if "stories" in config else {}
 layouts = configViews.keys()
 
 PRECISION = 5
