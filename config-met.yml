@@ -172,15 +172,15 @@ visualizations:
   randomSphere:
     radius: 8192 # increase this number to make less dense
 
-  # This places the items along a "tunnel" organized by time; this will be disabled if no "dateColumn" field is set above
-  timelineTunnel:
-    radius: 256 # increase this to make the tunnel wider
-    depthPerYear: 400 # increase this to make the tunnel longer
-
   # This stacks item on top of a map; this will be disabled if no "latitudeColumn/longitudeColumn" fields are set above
   geographyBars:
     mapWidth: 8192 # increase this to make the map larger
     barHeight: 2048 # increase this to make the bars taller
+
+  # This places the items along a "tunnel" organized by time; this will be disabled if no "dateColumn" field is set above
+  timelineTunnel:
+    radius: 256 # increase this to make the tunnel wider
+    depthPerYear: 400 # increase this to make the tunnel longer
 
   # Places items along "tracks" based on "groupBy" categories along a timeline
   timelineTracks:

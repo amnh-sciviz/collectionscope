@@ -664,36 +664,6 @@ _.extend(CONFIG, {
         8192
       ]
     },
-    "timelineTunnel": {
-      "radius": 256,
-      "depthPerYear": 400,
-      "layout": "timelineTunnel",
-      "keys": [
-        "years"
-      ],
-      "labels": [
-        "years"
-      ],
-      "width": 512,
-      "height": 512,
-      "depth": 58800,
-      "mode": "railcar",
-      "cameraPosition": [
-        0,
-        0,
-        -14700.0
-      ],
-      "bounds": [
-        0,
-        0,
-        -29400.0,
-        29400.0
-      ],
-      "yearRange": [
-        1874,
-        2020
-      ]
-    },
     "geographyBars": {
       "mapWidth": 8192,
       "barHeight": 2048,
@@ -731,6 +701,36 @@ _.extend(CONFIG, {
             0
           ]
         }
+      ]
+    },
+    "timelineTunnel": {
+      "radius": 256,
+      "depthPerYear": 400,
+      "layout": "timelineTunnel",
+      "keys": [
+        "years"
+      ],
+      "labels": [
+        "years"
+      ],
+      "width": 512,
+      "height": 512,
+      "depth": 58800,
+      "mode": "railcar",
+      "cameraPosition": [
+        0,
+        0,
+        -14700.0
+      ],
+      "bounds": [
+        0,
+        0,
+        -29400.0,
+        29400.0
+      ],
+      "yearRange": [
+        1874,
+        2020
       ]
     },
     "timelineTracks": {
