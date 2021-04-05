@@ -87,7 +87,7 @@ keys = {}
 # Map key
 keys["map"] = {
     "type": "map",
-    "image": "../../"+config["baseMapKey"]
+    "image": config["baseMapKey"]
 }
 # Timeline key
 timelineValues = getTimelineValues()
@@ -185,7 +185,7 @@ for key, options in visualizations.items():
         options["overlays"] = [{
           "type": "plane",
           "width": options["width"], "height": options["depth"],
-          "image": "../../"+config["baseMap"],
+          "image": config["baseMap"],
           "offset": [0, -20, 0]
         }]
 

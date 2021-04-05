@@ -5,7 +5,7 @@ var Key = (function() {
   Key.defaultValues = {
     'parent': '#keys-container',
     'type': 'legend',
-    'imageDir': '../../img/',
+    'imageDir': '',
     'camera': false,
     'bounds': false
   }

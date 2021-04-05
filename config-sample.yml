@@ -64,11 +64,11 @@ longitudeColumn: Longitude
 # Country column is used for labelling countries in the map view; comment out or ignore if not applicable
 countryColumn: Country
 # This is the map that will be used for the map view
-  # Replace with "img/world_map.png" for a map without region colors
-baseMap: img/world_map_with_regions.png # path is relative to the `make_app.py` script
+  # Replace with "../../img/world_map.png" for a map without region colors
+baseMap: ../../img/world_map_with_regions.png # path is relative to your /apps/{your project}/index.html file
 # And the map used for the map key in the map view
   # Replace with "img/world_map_key.png" for a map without region colors
-baseMapKey: img/world_map_key_with_regions.png # path is relative to the `make_app.py` script
+baseMapKey: ../../img/world_map_key_with_regions.png # path is relative  to your /apps/{your project}/index.html file
 
 #################################
 # Group by
