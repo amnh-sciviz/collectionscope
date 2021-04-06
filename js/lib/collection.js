@@ -647,6 +647,17 @@ var Collection = (function() {
     if (this.currentViewIndex===index) return false;
 
     this.currentViewIndex = index;
+
+    // check if we're orbiting an item; exit then switch views
+    if (this.controls.isOrbiting) {
+      var onFinished = function(){
+        $(document).trigger('view-changed', value);
+      };
+      // deselect item first
+      $(document).trigger('deselect-item', [onFinished]);
+      return true;
+    }
+
     $(document).trigger('view-changed', value);
     return true;
   };

@@ -51,7 +51,7 @@ var MainApp = (function() {
     });
 
     $doc.on('view-changed', function(e, newValue) {
-      console.log('Changed view to: '+newValue)
+      console.log('Changed view to: '+newValue);
       _this.onChangeView(newValue);
     });
 
@@ -232,18 +232,18 @@ var MainApp = (function() {
     this.controls.setBounds(newView.bounds);
     this.controls.setMode(newView.mode);
 
-    // check if we're orbiting an item; fly with the item
-    if (this.controls.isOrbiting) {
-      var currentItemIndex = this.collection.getCurrentItemIndex();
-      if (currentItemIndex >= 0) {
-        var newPositions = this.collection.itemManager.itemPositions;
-        var targetPosition = newPositions[currentItemIndex];
-        var anchorToPosition = true;
-        // console.log(targetPosition, this.collection.opt.zoomInDistance, duration)
-        this.controls.flyToOrbit(targetPosition, this.collection.opt.zoomInDistance, duration, anchorToPosition);
-        return;
-      }
-    }
+    // // check if we're orbiting an item; fly with the item
+    // if (this.controls.isOrbiting) {
+    //   var currentItemIndex = this.collection.getCurrentItemIndex();
+    //   if (currentItemIndex >= 0) {
+    //     var newPositions = this.collection.itemManager.itemPositions;
+    //     var targetPosition = newPositions[currentItemIndex];
+    //     var anchorToPosition = true;
+    //     // console.log(targetPosition, this.collection.opt.zoomInDistance, duration)
+    //     this.controls.flyToOrbit(targetPosition, this.collection.opt.zoomInDistance, duration, anchorToPosition);
+    //     return;
+    //   }
+    // }
 
     var currentP = this.camera.position;
     var newP = newView.cameraPosition;
