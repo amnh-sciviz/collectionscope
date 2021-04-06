@@ -200,7 +200,7 @@ for key, options in visualizations.items():
         options["depth"] = depth
         options["cameraPosition"] = [0, options["trackHeight"]/2, -depth/4]
         options["mode"] = "railcar"
-        options["bounds"] = [-width/8, width/8, -depth/2, depth/2]
+        options["bounds"] = [-width/2, width/2, -depth/2, depth/2]
         options["yearRange"] = yearRange
         overlayRelativePath = "img/categories.png"
         overlayFullPath = f'apps/{config["name"]}/' + overlayRelativePath
