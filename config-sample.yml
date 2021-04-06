@@ -7,7 +7,7 @@ titleFormatted: "Collection<strong>Scope</strong> Demo" # May contain HTML
 description: Explore the Museum’s collections across time and space.
 introductionText: There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! Where were these objects collected? When were they collected? And why were they chosen? Let’s explore.
  # May contain HTML
-creditText: The <a href="https://github.com/amnh-sciviz/collectionscope/" target="_blank">CollectionScope Tool</a> is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a> # May contain HTML
+creditText: The <a href="https://amnh-sciviz.github.io/collectionscope/" target="_blank">CollectionScope Tool</a> is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a> # May contain HTML
 credits:
   - name: American Museum of Natural History
     url: https://amnh.org/
