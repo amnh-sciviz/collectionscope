@@ -232,13 +232,10 @@ strong{
   max-width: 420px;
   max-height: 100px;
 }
-.documentation .flex-item img{
-  float: right;
-}
 
 .examples .flex-item img{
   display: block;
-  width:auto;
-  max-height: 50%;
+  width: 100%;
+  height: auto;
   border: 1px solid #666;
 }
