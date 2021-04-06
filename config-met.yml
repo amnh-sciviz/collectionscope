@@ -2,8 +2,8 @@
 name: met
 
 # Site metadta to be used in the meta tags and introduction screen
-title: "CollectionScope Demo: The Met Open Access"
-titleFormatted: "Collection<strong>Scope</strong> Demo:<br /><small>The Met Open Access</small>" # May contain HTML
+title: "Collectionscope Demo: The Met Open Access"
+titleFormatted: "Collection<strong>scope</strong> Demo:<br /><small>The Met Open Access</small>" # May contain HTML
 description: Explore the Met's collections across time and space.
 introductionText: There are over <strong>40,000 objects</strong> on display at <a href="https://www.metmuseum.org/" target="_blank">The Met</a> at any given time, but this is only <strong>2 percent</strong> of the Museum’s collections! Where are these objects from? When were they added to The Met’s collection? And why were they chosen? Let’s explore.
  # May contain HTML

@@ -2,8 +2,8 @@
 name: amnh
 
 # Site metadta to be used in the meta tags and introduction screen
-title: "CollectionScope Demo: American Museum of Natural History"
-titleFormatted: "Collection<strong>Scope</strong> Demo" # May contain HTML
+title: "Collectionscope Demo: American Museum of Natural History"
+titleFormatted: "Collection<strong>scope</strong> Demo" # May contain HTML
 description: Explore the Museum’s collections across time and space.
 introductionText: There are <strong>9,369 anthropology objects</strong> on display at the <a href="https://amnh.org" target="_blank">American Museum of Natural History</a>, but this is only <strong>2 percent</strong> of the Museum’s collections! Where were these objects collected? When were they collected? And why were they chosen? Let’s explore.
  # May contain HTML
