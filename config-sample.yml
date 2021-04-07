@@ -54,10 +54,10 @@ maximumYear: 2050
 # Location
 #################################
 # Latitude and longitude values as floats are required for location-based visualization
-# Comment it out if you are not using
   # E.g. NYC would have latitude 40.674239442221605 and longitude -74.02503271185628
   # If you do not have lat/lon values but have countries, states, cities, and/or addresses,
     # there is a script for geocoding these: see `scripts/geocode_locations.py`
+    # if you used this process, "Latitude" and "Longitude" columns should have automatically been added
   # Entries with invalid or missing Lat/Lon will be excluded
 latitudeColumn: Latitude
 longitudeColumn: Longitude
@@ -73,7 +73,7 @@ baseMapKey: ../../img/world_map_key_with_regions.png # path is relative  to your
 #################################
 # Group by
 #################################
-# This column will be used to group the items in different ways; ideally this would be somewhere between 4 and 12 unique groups
+# This column will be used to group the items in different ways; ideally this would be somewhere between 3 and 12 unique groups
   # E.g. "Object type", "Subject", "Era", etc
   # If there are a large number of resulting groups, excess groups can be combined into an "Other" group which is configurable below
 groupByColumn: Region
