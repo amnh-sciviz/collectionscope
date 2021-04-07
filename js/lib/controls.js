@@ -11,7 +11,7 @@ var Controls = (function() {
       "maxVelocity": 20,
       "acceleration": 0.2,
       "bounds": [-256, 256, -32768, 32768],
-      "lookSpeed": 0.01,
+      "lookSpeed": 0.02,
       "zoomInTransitionDuration": 2000,
       "orbitLookSpeed": 0.1,
       "latRange": [-85, 85],  // range of field of view in y-axis
