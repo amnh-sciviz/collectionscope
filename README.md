@@ -55,23 +55,23 @@ There are 4 primary steps to creating a project using your own collections: (1) 
 The first step is to create a [comma-separated-value (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file that contains all the relevant metadata of your collection. At minimum, there should be a column (with a column heading with a name of your choice) for each of the following fields:
 
 1. ***An identifier***: a unique identifier for the item. This will be used to keep track of items and their assets. This should be a number or string that can be used as a valid filename.
-   - e.g. _"500009"_, _"A 109.345"_, _"item-10984"_
+   - e.g. `500009`, `A 109.345`, `item-10984`
 2. ***Title or name***: a short string that will act as a title of the item. Should not contain formatting and should not be too long.
-   - e.g. _"Female Figure with Child"_, _"Water Deity (Chalchiuhtlicue)"_
+   - e.g. `Female Figure with Child`, `Water Deity (Chalchiuhtlicue)`
 3. ***A date that contains a year***: this will be used to put the items along a timeline. This can be any kind of date like date of creation, acquisition, accession, etc. This can be messy and inconsistent. Only the first valid year (in YYYY format) will be extracted from this field. Examples:
-   - _"1976"_, _"1976-01-30"_, _"1/30/1976"_, _"January 30, 1976"_ - in all these cases "1976" will be used
-   - _"1976-1978"_, _"1976-78"_, _"1976 or 1978"_ - the first year will be used ("1976")
-   - _"1/30/76"_ - this is ***invalid*** since "76" is ambiguous
-   - _"20th century"_, _"197?"_, _"70's"_ - all ***invalid*** examples
+   - `1976`, `1976-01-30`, `1/30/1976`, `January 30, 1976` - in all these cases "1976" will be used
+   - `1976-1978`, `1976-78`, `1976 or 1978` - the first year will be used ("1976")
+   - `1/30/76` - this is ***invalid*** since "76" is ambiguous
+   - `20th century`, `197?`, `70's` - all ***invalid*** examples
 4. ***A location***: this will be used to place the items on a map of the world. Any of the following can be used:
-   - Two separate columns for latitude and longitude as decimal values, e.g. Latitude: _"43.63871944444445"_, Longitude: _"-116.2413513485235"_
-   - Or a single column with a string representation of a country name, e.g. _"Egypt"_, _"Federated States of Micronesia"_. [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service will be used to geocode the country based on this string.
+   - Two separate columns for latitude and longitude as decimal values, e.g. Latitude: `43.63871944444445`, Longitude: `-116.2413513485235`
+   - Or a single column with a string representation of a country name, e.g. `Egypt`, `Federated States of Micronesia`. [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service will be used to geocode the country based on this string.
       - Optionally you can also have separate columns for state, city, and street address if you want more specific points. Country is the only required field in this case.
 5. ***Item category or group***: this is open ended and will be used to allow users to organize/group your items in meaningful ways. Ideally there are somewhere between 3 and 12 categories, but you will have the option to group the remaining items into an "Other" category. Some examples:
-   - _"Medium"_ that has values "Ceramic", "Clay", "Metal", "Pigment", "Stone", "Wood"
-   - _"Region"_ that has values "Africa", "Asia", "Central America", "Europe", "Middle East"", "North America", "Oceania, "South American"
-   - _"Department"_ that has values "Anthropology", "Astrophysics", "Paleontology", "Physical Sciences", "Planetary Sciences", "Zoology"
-   - _"Subject"_ that has values "War", "Commerce", "Politics", "Entertainment"
+   - `Medium` that has values "Ceramic", "Clay", "Metal", "Pigment", "Stone", "Wood"
+   - `Region` that has values "Africa", "Asia", "Central America", "Europe", "Middle East"", "North America", "Oceania, "South American"
+   - `Department` that has values "Anthropology", "Astrophysics", "Paleontology", "Physical Sciences", "Planetary Sciences", "Zoology"
+   - `Subject` that has values "War", "Commerce", "Politics", "Entertainment"
 6. ***A public image URL***: this will be used to (1) generate thumbnails for this experience, and (2) display a higher resolution image of an item when they click on it. It's recommended for this image to be small to medium size (about 400px to 1200px max dimension) to reduce loading and processing time.  
 7. ***Any other metadata to display to user***: arbitrary field that will be displayed to the user when they click on an item.
    - e.g. Dimensions, Creators, Donors
@@ -81,7 +81,7 @@ Place this file anywhere accessible to the computer that you will be running the
 
 #### Geocoding your data
 
-For \#4 (location), if you have a string representation of your location (e.g. _"Egypt"_, _"Federated States of Micronesia"_), you will need to run the geocoding process to generate latitude and longitude values:
+For \#4 (location), if you have a string representation of your location (e.g. `Egypt`, `Federated States of Micronesia`), you will need to run the geocoding process to generate latitude and longitude values:
 
 ```
 python scripts/geocode_locations.py \
@@ -112,7 +112,7 @@ This process will update your .csv file and add "Latitude" and "Longitude" colum
 
 #### Downloading your images to produce thumbnails
 
-In order to generate thumbnails for use in the app, you will need to download the images somewhere that is accessible to the computer running the Python scripts. If the images are already somewhere accessible, great! In this case, what you will need to do is have a column (e.g. "Filename") in your .csv file that contains the filename of the image of the item (e.g. _"ITEM_1234.jpg"_).
+In order to generate thumbnails for use in the app, you will need to download the images somewhere that is accessible to the computer running the Python scripts. If the images are already somewhere accessible, great! In this case, what you will need to do is have a column (e.g. "Filename") in your .csv file that contains the filename of the image of the item (e.g. `ITEM_1234.jpg`).
 
 If you need to download the images and you have a column in your .csv that contains a public image URL, you can use the following script to download them locally (make sure you have enough space for this!):
 
@@ -128,7 +128,7 @@ python scripts/download_images.py \
 In the above example:
 
 - The `-in` parameter should contain the relative or absolute path to your .csv file
-- The `-image` parameter is the name of the column that contains the public image URL (e.g. _"https://example.com/image123.jpg"_)
+- The `-image` parameter is the name of the column that contains the public image URL (e.g. `https://example.com/image123.jpg`)
 - The `-id` parameter is the name of the column that contains the identifier string or number of the item. This will be used to name the image file. For example, if you download "https://example.com/image123.jpg" and the identifier for that item is "123", it will name the file "123.jpg".
 - The `-out` parameter should contain the relative or absolute path the folder that you would like to save the images.
 - The `-threads` is the number of concurrent requests you'd like to make. For example, "-threads 2" will allow two downloads to happen simultaneously at any given moment. This is limited by the number of threads your processor allows.
