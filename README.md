@@ -30,7 +30,7 @@ This software was designed to require minimal technical resources needed to make
 
 ### Software
 
-All the scripts necessary for creating your own project is contained in this repository. To start, you should [fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) this repository, then [create a local clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) of your fork.
+All the scripts necessary for creating your own project are contained in this repository. To start, you should [fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) this repository, then [create a local clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) of your fork.
 
 You will need [Python 3.x](https://www.python.org/) installed to process and generate your project and [node.js](https://nodejs.org/en/) installed to run your project locally.
 
@@ -181,6 +181,10 @@ node server.js 1234
 Then access your new app at _localhost:1234/apps/my-project-name_ (updated with your specified port and project name)
 
 If you make minor tweaks to your config file, in most cases you can just run `python prepare_content.py -config "config-my-project.yml"` again if you are updating minor things like project description or UI parameters. In general, running individual scripts repeatedly should not cause any problems. You can also run `python make_app.py -config "config-my-project.yml"` again, which will run everything (will take longer.)
+
+#### Customizing your app
+
+Beyond what's available in the config file, you can do some deeper customization by updating or adding files in your ./app/{your-project-name}/ folder. You can add custom css to `./app/{your-project-name}/css/app.css` or custom js in `./app/{your-project-name}/js/app.js`. You can add your own assets, css, and js files anywhere in this folder and update the index.html to include any new files.
 
 #### Deploying your app
 
