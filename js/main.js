@@ -223,8 +223,6 @@ var MainApp = (function() {
   };
 
   MainApp.prototype.onChangeView = function(newViewKey){
-    this.globalSound.playSoundFromFile("sand.mp3");
-
     var duration = this.opt.ui.transitionDuration;
     this.collection.updateView(newViewKey, duration);
 
@@ -260,6 +258,8 @@ var MainApp = (function() {
     var anchorToPosition = false;
     var onFinished = this.collection.onChangeViewFinished;
     this.controls.flyTo(targetPosition, targetLookAtPosition, this.opt.ui.transitionDuration, anchorToPosition, onFinished);
+
+    this.globalSound.playSoundFromFile("sand.mp3");
   };
 
   MainApp.prototype.onExploreStart = function(){
