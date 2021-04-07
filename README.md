@@ -2,7 +2,7 @@
 
 Collectionscope is an open source software engine for visualizing museum collections across time and space in three dimensional space. [Visit our homepage](https://amnh-sciviz.github.io/collectionscope/) for more details about this project.
 
-![An animated gif of the Collectionscope timeline layout where the camera is flying through a tunnel of items organized by time](https://amnh-sciviz.github.io/collectionscope/img/CollectionScopeVideoLoop.gif)
+![An animated gif of the Collectionscope timeline layout where the camera is flying through a tunnel of items organized by time](https://raw.githubusercontent.com/amnh-sciviz/collectionscope/master/img/CollectionScopeVideoLoop.gif)
 
 You can view a [demo of this tool here](https://amnh-sciviz.github.io/collectionscope/apps/amnh/).
 
