@@ -2,7 +2,7 @@
 
 Collectionscope is an open source software engine for visualizing museum collections across time and space in three dimensional space. [Visit our homepage](https://amnh-sciviz.github.io/collectionscope/) for more details about this project.
 
-![A screenshot of the Collectionscope tool](https://amnh-sciviz.github.io/collectionscope/img/amnh_collectionscope.jpg)
+![An animated gif of the Collectionscope timeline layout where the camera is flying through a tunnel of items organized by time](https://amnh-sciviz.github.io/collectionscope/img/CollectionScopeVideoLoop.gif)
 
 You can view a [demo of this tool here](https://amnh-sciviz.github.io/collectionscope/apps/amnh/).
 
@@ -29,6 +29,8 @@ This software was designed to require minimal technical resources needed to make
 3. Someone who knows how to publish (and optionally customize) a basic static web page (via Github or other host)
 
 ### Software
+
+All the scripts necessary for creating your own project is contained in this repository. To start, you should [fork](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo) this repository, then [create a local clone](https://docs.github.com/en/github/getting-started-with-github/fork-a-repo#step-2-create-a-local-clone-of-your-fork) of your fork.
 
 You will need [Python 3.x](https://www.python.org/) installed to process and generate your project and [node.js](https://nodejs.org/en/) installed to run your project locally.
 
@@ -112,10 +114,10 @@ This process will update your .csv file and add "Latitude" and "Longitude" colum
 
 In order to generate thumbnails for use in the app, you will need to download the images somewhere that is accessible to the computer running the Python scripts. If the images are already somewhere accessible, great! In this case, what you will need to do is have a column (e.g. "Filename") in your .csv file that contains the filename of the image of the item (e.g. _"ITEM_1234.jpg"_).
 
-If you need to download the images and your have a column in your .csv that contains a public image URL, you can use the following script to download them locally (make sure you have enough space for this!):
+If you need to download the images and you have a column in your .csv that contains a public image URL, you can use the following script to download them locally (make sure you have enough space for this!):
 
 ```
-python3 scripts/download_images.py \
+python scripts/download_images.py \
   -in "path/to/metadata.csv" \
   -image "primaryImageSmall"
   -id ""Object ID"
@@ -135,18 +137,66 @@ This process will update your .csv file and add a "Filename" column indicating t
 
 ### 2. Configuring your project
 
-Next, make a copy of [./config-sample.yml](blob/master/config-sample.yml) and name it whatever you like.
+Next, make a copy of [./config-sample.yml](config-sample.yml) and name it whatever you like (e.g. "config-my-project.yml").
 
 Edit this file, following the directions via the embedded comments contained within this file. It mostly allows you to define the names of the columns in your .csv file and provide information about your collection. There are a number of sections that you can comment out (e.g. "Stories" and "Guide") if you want a more minimal experience or if you just want to try out the visualizations of the data without adding additional context. There are also a number of fields that you can leave alone.
 
-For a more stripped-down example, there is another sample configuration file ([./config-met.yml](blob/master/config-met.yml)) that uses a different data source and does not include a guide or stories.
+For a more stripped-down example, there is another sample configuration file ([./config-met.yml](config-met.yml)) that uses a different data source and does not include a guide or stories.
 
 Lastly, you don't need to get it perfect the first time! You can continually re-build your project with updated configuration at any time. You can also create as many config files as you like if you want to try out multiple configurations.
 
 ### 3. Building your project
 
+Next you should be able to simply run the following script (with the name of your .yml config file) that will generate your project:
+
+```
+python make_app.py -config "config-my-project.yml"
+```
+
+Behind the scenes, this script runs a number of other scripts in order:
+
+```
+python scaffold.py -config "config-my-project.yml"
+python prepare_metadata.py -config "config-my-project.yml"
+python prepare_sets.py -config "config-my-project.yml"
+python prepare_positions.py -config "config-my-project.yml"
+python prepare_textures.py -config "config-my-project.yml"
+python prepare_labels.py -config "config-my-project.yml"
+python prepare_content.py -config "config-my-project.yml"
+```
+
+If you are curious or run into issues, you can run each script individually to debug or see what each script does.
+
+After successfully building your project. Your new app should be found in `./apps/{my-project-name}/` where `my-project-name` is the name of app as defined in your configuration file.
+
 ### 4. Viewing and deploying your project
 
-## Extending and modifying this code repository
+Next, if you have not done so already, install and run a simple web server. A [Node.js](https://nodejs.org/en/) [Express](https://expressjs.com/) server is included in this repository. If you have Node.js installed, you can run:
+
+```
+npm install
+node server.js 1234
+```
+
+Then access your new app at _localhost:1234/apps/my-project-name_ (updated with your specified port and project name)
+
+If you make minor tweaks to your config file, in most cases you can just run `python prepare_content.py -config "config-my-project.yml"` again if you are updating minor things like project description or UI parameters. In general, running individual scripts repeatedly should not cause any problems. You can also run `python make_app.py -config "config-my-project.yml"` again, which will run everything (will take longer.)
+
+#### Deploying your app
+
+The entire app is completely static files, so deployment to any host should be pretty easy. Simply copying the contents of the repository to a simple host is all that is needed. Specifically, the required folders to copy are:
+
+```
+./apps/
+./audio/
+./css/
+./fonts/
+./img/
+./js/
+```
+
+If you would like to use [Github Pages](https://pages.github.com/) to host your app, you simply need to enable Pages in your repository settings, then push your code to Github.
 
 ## Credits
+
+This prototype is [supported](https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/) by [The Knight Foundation](https://knightfoundation.org/) and built by the [American Museum of Natural History](https://www.amnh.org/)'s [Science Visualization Group](https://amnh-sciviz.github.io/)
