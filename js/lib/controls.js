@@ -54,6 +54,7 @@ var Controls = (function() {
     this.orbitPointerOrigin = new THREE.Vector2();
     this.cameraIsLocked = false;
     this.isUsingTrackpad = false;
+    this.storyIsOpen = false;
 
     this.autoAttach = true;
     this.isAttached = true;
@@ -269,10 +270,18 @@ var Controls = (function() {
       e.preventDefault();
     });
 
+    var cursorShouldBeAttached = function(e){
+      if (e.target.id == 'mainCanvas') return true;
+      if (!_this.storyIsOpen) return false;
+      // stay attached if hovering over media in story
+      var $media = $(e.target).closest('.media-slides');
+      if ($media.length) return true;
+      else return false;
+    };
     $doc.on("mousemove", function(e){
       if (isTouch || _this.isUsingTrackpad) return;
       if (_this.autoAttach && !_this.isOrbiting) {
-        if (e.target.id !== 'mainCanvas') _this.attachCursor(false, true);
+        if (!cursorShouldBeAttached(e)) _this.attachCursor(false, true);
         else _this.attachCursorWithDelay(500);
       }
       if (_this.isAttached) {

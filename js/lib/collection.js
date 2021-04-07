@@ -758,8 +758,13 @@ var Collection = (function() {
       this.storyManager.updateView(view.key)
     }
 
-    if (this.storyManager.hasOpenStory()) this.$el.addClass('story-is-open');
-    else this.$el.removeClass('story-is-open');
+    if (this.storyManager.hasOpenStory()) {
+      if (this.controls) this.controls.storyIsOpen = true;
+      this.$el.addClass('story-is-open');
+    } else {
+      if (this.controls) this.controls.storyIsOpen = false;
+      this.$el.removeClass('story-is-open');
+    }
 
     return openedStoryKey;
   };
