@@ -1023,6 +1023,18 @@ button.item-close:hover {
   margin: 0;
 }
 
+.item-metadata {
+  max-height: 250px;
+  overflow: hidden;
+  overflow-y: auto;
+}
+@media screen and (max-height: 720px) {
+  .item-container {
+    top: 192px;
+    margin-top: 0;
+  }
+}
+
 .touchpad {
   width: 180px;
   height: 180px;
