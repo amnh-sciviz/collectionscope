@@ -54,7 +54,7 @@ There are 4 primary steps to creating a project using your own collections: (1) 
 
 The first step is to create a [comma-separated-value (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file that contains all the relevant metadata of your collection.
 
-Here is a minimal example:
+Here is a minimal example of a few records (as mentioned before, the ideal dataset should be somewhere between 1K and 250K records):
 
 | Object ID | Title | AccessionYear | Country | Department | Link Resource | primaryImageSmall |
 | --------- | ----- | ------------- | ------- | ---------- | ------------- | ----------------- |
