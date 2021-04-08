@@ -239,3 +239,10 @@ strong{
   height: auto;
   border: 1px solid #666;
 }
+
+.reel video {
+  width: 100%;
+  height: auto;
+  display: block;
+  margin-top: 30px;
+}
