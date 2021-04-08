@@ -34,13 +34,52 @@ var Raycaster = (function() {
 
     // create an object for highlighting intersections
     var outerRadius = innerRadius + this.opt.highlightThickness;
-    var thetaSegments = 32; // 4 segments to make a square
-    var geometry = new THREE.RingGeometry( innerRadius, outerRadius, thetaSegments );
-    var material = new THREE.MeshBasicMaterial( { color: this.opt.highlightColor, side: THREE.DoubleSide } );
-    // var geometry = new THREE.SphereGeometry( 100, 32, 32 );
-    // var material = new THREE.MeshBasicMaterial( {color: 0xff0000} );
-    var mesh = new THREE.Mesh( geometry, material );
-    mesh.rotateZ(Math.PI / 4);
+
+    function vertexShader() {
+      return `
+        uniform vec3 viewVector;
+        uniform float c;
+        uniform float p;
+        varying float intensity;
+        void main()
+        {
+          vec3 vNormal = normalize( normalMatrix * normal );
+          vec3 vNormel = normalize( normalMatrix * viewVector );
+          intensity = pow( c - dot(vNormal, vNormel), p );
+
+          gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+        }
+      `
+    }
+    function fragmentShader(){
+      return `
+        uniform vec3 glowColor;
+        varying float intensity;
+        void main()
+        {
+          vec3 glow = glowColor * intensity;
+          gl_FragColor = vec4( glow, 1.0 );
+        }
+      `
+    }
+    let uniforms = {
+      c:   { type: "f", value: 1.0 },
+      p:   { type: "f", value: 1.4 },
+      glowColor: { type: "vec3", value: new THREE.Color(0x00ffff) },
+      viewVector: { type: "vec3", value: new THREE.Vector3(0.0,0.0,1.0) }
+    }
+    var customMaterial = new THREE.ShaderMaterial({
+      uniforms: uniforms,
+      vertexShader: vertexShader(),
+      fragmentShader: fragmentShader(),
+      side: THREE.FrontSide,
+      blending: THREE.AdditiveBlending,
+      transparent: true
+    });
+
+    var geometry = new THREE.SphereGeometry(outerRadius, 32, 32);
+    var mesh = new THREE.Mesh(geometry, customMaterial)
+
     var container = new THREE.Group();
     container.add(mesh);
     container.visible = false;
