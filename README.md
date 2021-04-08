@@ -52,7 +52,18 @@ There are 4 primary steps to creating a project using your own collections: (1) 
 
 ### 1. Preparing your data
 
-The first step is to create a [comma-separated-value (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file that contains all the relevant metadata of your collection. At minimum, there should be a column (with a column heading with a name of your choice) for each of the following fields:
+The first step is to create a [comma-separated-value (CSV)](https://en.wikipedia.org/wiki/Comma-separated_values) file that contains all the relevant metadata of your collection.
+
+Here is a minimal example:
+
+| Object ID | Title | AccessionYear | Country | Department | Link Resource | primaryImageSmall |
+| --------- | ----- | ------------- | ------- | ---------- | ------------- | ----------------- |
+| 552729 | Amulet, Isis, Horus | 1910 | Egypt | Egyptian Art | http://www.metmuseum.org/art/collection/search/552729 | https://images.metmuseum.org/CRDImages/eg/web-large/M_2082.jpg |
+| 451401 | Portrait of a Sufi | 1957 | India | Islamic Art | http://www.metmuseum.org/art/collection/search/451401 | https://images.metmuseum.org/CRDImages/is/web-large/sf57-51-22r.jpg |
+| 503545 | Cornet in B-flat | 2002 | United Kingdom | Musical Instruments | http://www.metmuseum.org/art/collection/search/503545 | https://images.metmuseum.org/CRDImages/mi/web-large/slide 2002.189 a-f.JPG |
+| 4886 | Looking Glass | 1956 | United States | The American Wing | http://www.metmuseum.org/art/collection/search/4886 | https://images.metmuseum.org/CRDImages/ad/web-large/DT211261.jpg |
+
+At minimum, there should be a column (with a heading name of your choice) for each of the following fields:
 
 1. ***An identifier***: a unique identifier for the item. This will be used to keep track of items and their assets. This should be a number or string that can be used as a valid filename.
    - e.g. `500009`, `A 109.345`, `item-10984`
