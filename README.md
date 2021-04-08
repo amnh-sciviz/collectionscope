@@ -65,18 +65,31 @@ Here is a minimal example of a few records (as mentioned before, the ideal datas
 
 At minimum, there should be a column (with a heading name of your choice) for each of the following fields:
 
-1. ***An identifier***: a unique identifier for the item. This will be used to keep track of items and their assets. This should be a number or string that can be used as a valid filename.
-   - e.g. `500009`, `A 109.345`, `item-10984`
-2. ***Title or name***: a short string that will act as a title of the item. Should not contain formatting and should not be too long.
-   - e.g. `Female Figure with Child`, `Water Deity (Chalchiuhtlicue)`
+1. ***An identifier***: a unique identifier for the item. This will be used to keep track of items and their assets. This should be a number or string that can be used as a valid filename.  Examples:
+   - `500009`
+   - `A 109.345`
+   - `item-10984`
+2. ***Title or name***: a short string that will act as a title of the item. Should not contain formatting and should not be too long. Examples:
+   - `Female Figure with Child`
+   - `Water Deity (Chalchiuhtlicue)`
 3. ***A date that contains a year***: this will be used to put the items along a timeline. This can be any kind of date like date of creation, acquisition, accession, etc. This can be messy and inconsistent. Only the first valid year (in YYYY format) will be extracted from this field. Examples:
-   - `1976`, `1976-01-30`, `1/30/1976`, `January 30, 1976` - in all these cases "1976" will be used
-   - `1976-1978`, `1976-78`, `1976 or 1978` - the first year will be used ("1976")
-   - `1/30/76` - this is ***invalid*** since "76" is ambiguous
-   - `20th century`, `197?`, `70's` - all ***invalid*** examples
-4. ***A location***: this will be used to place the items on a map of the world. Any of the following can be used:
-   - Two separate columns for latitude and longitude as decimal values, e.g. Latitude: `43.63871944444445`, Longitude: `-116.2413513485235`
-   - Or a single column with a string representation of a country name, e.g. `Egypt`, `Federated States of Micronesia`. [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service will be used to geocode the country based on this string.
+   - In all these cases "1976" will be used:
+      - `1976`
+      - `1976-01-30`
+      - `1/30/1976`
+      - `January 30, 1976`
+   - In these cases, the first year will be used ("1976"):
+      - `1976-1978`
+      - `1976-78`
+      - `1976 or 1978`
+   - These are all ***invalid*** examples:
+      - `1/30/76` ("76" is ambiguous)
+      - `20th century`
+      - `197?`
+      - `70's`
+4. ***A location***: this will be used to place the items on a map of the world. One of the following can be used:
+   1. Two separate columns for latitude and longitude as decimal values, e.g. Latitude: `43.63871944444445`, Longitude: `-116.2413513485235`
+   2. Or a single column with a string representation of a country name, e.g. `Egypt`, `Federated States of Micronesia`. [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service will be used to geocode the country based on this string.
       - Optionally you can also have separate columns for state, city, and street address if you want more specific points. Country is the only required field in this case.
 5. ***Item category or group***: this is open ended and will be used to allow users to organize/group your items in meaningful ways. Ideally there are somewhere between 3 and 12 categories, but you will have the option to group the remaining items into an "Other" category. Some examples:
    - `Medium` that has values "Ceramic", "Clay", "Metal", "Pigment", "Stone", "Wood"
@@ -84,7 +97,7 @@ At minimum, there should be a column (with a heading name of your choice) for ea
    - `Department` that has values "Anthropology", "Astrophysics", "Paleontology", "Physical Sciences", "Planetary Sciences", "Zoology"
    - `Subject` that has values "War", "Commerce", "Politics", "Entertainment"
 6. ***A public image URL***: this will be used to (1) generate thumbnails for this experience, and (2) display a higher resolution image of an item when they click on it. It's recommended for this image to be small to medium size (about 400px to 1200px max dimension) to reduce loading and processing time.  
-7. ***Any other metadata to display to user***: arbitrary field that will be displayed to the user when they click on an item.
+7. ***Any other metadata to display to user***: arbitrary fields that will be displayed to the user when they click on an item.
    - e.g. Dimensions, Creators, Donors
    - A column that contains a ***public URL*** for the item is recommended if you want link at item to its source
 
@@ -92,7 +105,7 @@ Place this file anywhere accessible to the computer that you will be running the
 
 #### Geocoding your data
 
-For \#4 (location), if you have a string representation of your location (e.g. `Egypt`, `Federated States of Micronesia`), you will need to run the geocoding process to generate latitude and longitude values:
+For \#4 (location data), if you have a string representation of your location (e.g. `Egypt`, `Federated States of Micronesia`), you will need to run the geocoding process to generate latitude and longitude values:
 
 ```
 python scripts/geocode_locations.py \
@@ -104,7 +117,7 @@ python scripts/geocode_locations.py \
 In the above example:
 
 - The `-in` parameter should contain the relative or absolute path to your .csv file
-- The `-user` parameter will be used to identify your app and contact to the free [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service as per its [usage policy](https://operations.osmfoundation.org/policies/nominatim/)
+- The `-user` parameter will be used to identify your app and contact to the free [OpenStreetMap](https://www.openstreetmap.org/)'s [Nominatim](https://wiki.openstreetmap.org/wiki/Nominatim) service as per their [usage policy](https://operations.osmfoundation.org/policies/nominatim/)
 - The `-country` parameter is the name of the column that contains a country string to be geocoded
 
 Optionally, you can also identify address, city, and state columns (country is still required):
