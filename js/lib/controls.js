@@ -568,7 +568,7 @@ var Controls = (function() {
   };
 
   Controls.prototype.updateOrbit = function(now, delta){
-    if (this.pointed === false || delta <= 0 || anchor === false) return;
+    if (this.pointed === false || delta <= 0 || this.anchor === false) return;
 
     var anchor = this.anchor;
     var orbit = this.orbit;
