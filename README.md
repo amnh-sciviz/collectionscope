@@ -144,7 +144,7 @@ If you need to download the images and you have a column in your .csv that conta
 python scripts/download_images.py \
   -in "path/to/metadata.csv" \
   -image "primaryImageSmall"
-  -id ""Object ID"
+  -id "Object ID"
   -out "F:/collectionscope/images/"
   -threads 2
 ```

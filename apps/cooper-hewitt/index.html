@@ -1,0 +1,331 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>Collectionscope Demo: Cooper Hewitt Smithsonian Design Museum</title>
+  <meta name="description" content="Explore The Cooper Hewitt Smithsonian Design Museum's open access collections across time and space.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <meta property="og:image" content="https://amnh-sciviz.github.io/collectionscope/img/amnh_collectionscope.jpg" />
+  <meta name="image_src" content="https://amnh-sciviz.github.io/collectionscope/img/amnh_collectionscope.jpg" />
+
+  <link rel="stylesheet" href="../../css/vendor/normalize.css">
+  <link rel="stylesheet" href="../../css/vars.css">
+  <link rel="stylesheet" href="../../css/main.css">
+  <link rel="stylesheet" href="css/app.css">
+</head>
+
+<body>
+
+  <div id="app" class="app is-loading">
+
+    <div class="intro active">
+      <div>
+
+        <h1>Collection<strong>scope</strong> Demo:<br /><small>Cooper Hewitt Smithsonian Design Museum</small></h1>
+        <h2>Explore The Cooper Hewitt Smithsonian Design Museum's open access collections across time and space.</h2>
+        <p>There is <a href="https://www.si.edu/openaccess">open access</a> metadata about over <strong>40,000 objects</strong> from <a href="https://www.cooperhewitt.org/" target="_blank">Cooper Hewitt Smithsonian Design Museum</a>. Let’s explore these objects over time and space.</p>
+
+        <div class="loading">
+          <div class="loading-circle"></div>
+          <p>Loading</p>
+          <p class="loading-text">0%</p>
+        </div>
+
+        <div class="intro-buttons">
+          <button class="intro-button tour-start">
+            <img class="icon" src="../../img/ico-tour.png" alt="Start guided tour icon" />
+            <span class="text-label">Start guided tour</span>
+          </button>
+          <button class="intro-button explore-start">
+            <img class="icon" src="../../img/ico-explore.png" alt="Explore freely icon" />
+            <span class="text-label">Explore freely</span>
+          </button>
+        </div>
+
+        <div class="story-buttons"></div>
+
+        <div class="intro-footer"><div class="credits"><a href="https://amnh.org/" target="_blank"><img src="../../img/amnh_logo.png" alt="American Museum of Natural History" /></a><a href="https://knightfoundation.org/" target="_blank"><img src="../../img/knight_logo.png" alt="Knight Foundation" /></a></div>
+<p>The <a href="https://amnh-sciviz.github.io/collectionscope/" target="_blank">CollectionScope Tool</a> is a part of the Knight Foundation's <a href="https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/" target="_blank">Immersive Technology in the Arts Fund</a></p></div>
+
+      </div>
+
+    </div>
+
+    <div id="legend-container" class="legend-container"></div>
+
+    <div id="keys-container" class="keys-container"></div>
+
+    <div id="stories-container" class="stories-container"></div>
+
+    <div id="guide-container" class="guide-container">
+      <div class="slides-buttons">
+        <button class="slide-prev guide-prev">
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28.5,117.9c2.8,2.8,7.4,2.8,10.3,0c0,0,0,0,0,0l52.7-52.7c2.8-2.8,2.8-7.4,0-10.3c0,0,0,0,0,0L38.8,2.1c-2.8-2.8-7.4-2.8-10.3,0s-2.8,7.4,0,10.3L76.1,60l-47.6,47.6C25.7,110.4,25.6,115,28.5,117.9C28.5,117.9,28.5,117.9,28.5,117.9z"/></svg>
+          <span class="visuallyHidden">Previous</span>
+        </button>
+        <button class="slide-next guide-next">
+          <svg class="arrow-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120"><path d="M28.5,117.9c2.8,2.8,7.4,2.8,10.3,0c0,0,0,0,0,0l52.7-52.7c2.8-2.8,2.8-7.4,0-10.3c0,0,0,0,0,0L38.8,2.1c-2.8-2.8-7.4-2.8-10.3,0s-2.8,7.4,0,10.3L76.1,60l-47.6,47.6C25.7,110.4,25.6,115,28.5,117.9C28.5,117.9,28.5,117.9,28.5,117.9z"/></svg>
+          <span class="visuallyHidden">Next</span>
+        </button>
+      </div>
+      <button class="guide-close close-x">×<span class="visuallyHidden"> close</span></button>
+    </div>
+
+    <div id="menus-container" class="menus-container active">
+      <!-- <button class="toggle-menus toggle-button active" data-on="Minimize" data-off="Maximize">Minimize</button> -->
+
+      <div id="radio-buttons-views" class="radio-buttons radio-buttons-views menu">
+        <h2>Choose your layout</h2>
+        <form class="radio-button-form">
+          <label for="view-randomSphere">
+            <input id="view-randomSphere" class="view-option" type="radio" name="change-view" value="randomSphere" data-type="string" data-index="0" data-primary="1" checked="">
+            <svg version="1.1" id="ico-random" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M232.3,137.3v4.5v59.2h79.8v-63.7H232.3z M241.3,146.3h61.8V192h-61.8V146.3z M130.2,164.3v4.5v59.2H210v-63.8L130.2,164.3
+                L130.2,164.3z M139.2,173.3H201V219h-61.8C139.2,219,139.2,173.3,139.2,173.3z M330,199.8v4.5v59.2h79.8v-63.8
+                C409.8,199.8,330,199.8,330,199.8z M339,208.8h61.8v45.7H339V208.8z M231.6,249.1v4.5v59.2h79.8v-63.8H231.6z M240.6,258.1h61.8
+                v45.7h-61.8V258.1z M130.2,335.8v4.5v59.2H210v-63.8L130.2,335.8L130.2,335.8z M275.7,338.9v4.5v59.2h79.8v-63.7H275.7z
+                 M139.2,344.8H201v45.7h-61.8V344.8z M284.7,348h61.8v45.7h-61.8C284.7,393.7,284.7,348,284.7,348z"/>
+            </svg>
+            <p>Random</p>
+          </label>
+          <label for="view-geographyBars">
+            <input id="view-geographyBars" class="view-option" type="radio" name="change-view" value="geographyBars" data-type="string" data-index="1" data-primary="1">
+            <svg version="1.1" id="ico-map" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M195.3 376l-60-30V164.7l60 30zM265.4 164.7l-60 30V376l60-30zM302.5 279.1c0 7.5 5.2 18.7 5.8 19.9l26.8 52.4V376l-60-30V164.7l60 30V242c-18.4 2.4-32.6 18.1-32.6 37.1zM404.7 164.7V346l-60 30v-23.8l26.9-52.9.1-.1c.6-1.3 5.8-12.5 5.8-20 0-19-14.3-34.8-32.7-37.2v-47.3l59.9-30z"/>
+              <path class="menu-icon-path" d="M367.4 279.1c0 4-2.9 11.7-4.8 15.7l-17.9 35.3-4.7 9.2-5-9.7-17.8-34.8c-1.9-4-4.8-11.7-4.8-15.6 0-13.5 9.8-24.7 22.6-27 1.6-.3 3.2-.5 4.9-.5 1.6 0 3.2.1 4.7.4 12.9 2.2 22.8 13.5 22.8 27z"/>
+            </svg>
+            <p>Map</p>
+          </label>
+          <label for="view-timelineTunnel">
+            <input id="view-timelineTunnel" class="view-option" type="radio" name="change-view" value="timelineTunnel" data-type="string" data-index="2" data-primary="1">
+            <svg version="1.1" id="ico-tunnel" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" xml:space="preserve">
+              <path class="menu-icon-path" d="M340.2 340.8c-3.3 0-6-2.7-6-6v-84.1c0-35.4-28.8-64.2-64.2-64.2s-64.2 28.8-64.2 64.2v84.1c0 3.3-2.7 6-6 6s-6-2.7-6-6v-84.1c0-42 34.2-76.2 76.2-76.2s76.2 34.2 76.2 76.2v84.1c0 3.3-2.7 6-6 6z"/>
+              <path class="menu-icon-path" d="M401.3 369.8c-16.5 0-29.8-13.4-29.8-29.8v-91.8c0-56.4-45.3-102.4-101-102.6-27.2-.1-52.7 10.4-71.9 29.6s-29.8 44.7-29.8 71.8v93c0 16.5-13.4 29.8-29.8 29.8-3.3 0-6-2.7-6-6s2.7-6 6-6c9.8 0 17.8-8 17.8-17.8v-93c0-30.4 11.8-58.9 33.4-80.3 21.5-21.4 50.1-33.2 80.4-33.1 62.3.2 113 51.6 113 114.6V340c0 9.8 8 17.8 17.8 17.8 3.3 0 6 2.7 6 6s-2.8 6-6.1 6z"/>
+            </svg>
+            <p>Tunnel</p>
+          </label>
+          <label for="view-timelineTracks">
+            <input id="view-timelineTracks" class="view-option" type="radio" name="change-view" value="timelineTracks" data-type="string" data-index="3" data-primary="1">
+            <svg version="1.1" id="ico-racetracks" class="menu-icon" xmlns="http://www.w3.org/2000/svg" x="0" y="0" viewBox="0 0 540 540" width="60px" height="60px" xml:space="preserve">
+              <path class="menu-icon-path" d="M192.5 328.1V149c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v179.1h44zM148.6 334.9V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7v-47.1h-44zM259.4 281.2V149c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v132.2h44zM215.5 288v94c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7v-94h-44zM325.4 217.9v-69c0-2.6-2.1-4.7-4.7-4.7h-34.6c-2.6 0-4.7 2.1-4.7 4.7v69h44zM281.5 224.7V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7V224.7h-44zM391.3 169.5V149c0-2.6-2.1-4.7-4.7-4.7H352c-2.6 0-4.7 2.1-4.7 4.7v20.6h44zM347.4 176.4V382c0 2.6 2.1 4.7 4.7 4.7h34.6c2.6 0 4.7-2.1 4.7-4.7V176.4h-44z"/>
+            </svg>
+            <p>Racetracks</p>
+          </label>
+        </form>
+    </div>
+    </div>
+
+    <div id="viewer" class="viewer"><div class="viewer-inner"></div></div>
+
+    <nav class="main-nav active">
+      <ul class="icon-list">
+        <li>
+          <button class="toggle-menu" title="Toggle menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+              <path class="filled" d="M113,14a99,99,0,1,1-99,99,99.11,99.11,0,0,1,99-99m0-14A113,113,0,1,0,226,113,113,113,0,0,0,113,0Z"/>
+              <path class="filled" d="M160,120H66a7,7,0,0,1,0-14H160a7,7,0,1,1,0,14Z"/>
+              <path class="filled" d="M160,158.09H66a7,7,0,0,1,0-14H160a7,7,0,0,1,0,14Z"/>
+              <path class="filled" d="M160,81.91H66a7,7,0,0,1,0-14H160a7,7,0,0,1,0,14Z"/>
+            </svg>
+            <span class="visuallyHidden">Toggle menu</span>
+          </button>
+        </li>
+        <li>
+          <button class="show-information collapsible" title="Return to home screen">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+              <polygon class="filled" points="112.6,42.9 183.8,114.3 167.4,114.3 165.2,114.3 165.2,116.5 165.2,173.5 130.1,173.5 130.1,138.4
+                130.1,136.2 127.9,136.2 97.2,136.2 95,136.2 95,138.4 95,173.5 59.9,173.5 59.9,116.5 59.9,114.3 57.7,114.3 41.3,114.3"/>
+              <path class="filled" d="M113.1,14.1c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C14.1,58.5,58.4,14.2,113.1,14.1 M113.1,0.1
+                c-62.4,0-113,50.6-113,113s50.6,113,113,113s113-50.6,113-113S175.5,0.1,113.1,0.1z"/>
+            </svg>
+            <span class="visuallyHidden">Return to home screen</span>
+          </button>
+        </li>
+        <li>
+          <a href="https://amnh-sciviz.github.io/collectionscope/" target="_blank" class="collapsible button" title="Read more information about this tool">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+              <path class="filled" d="M113,14c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C14.1,58.3,58.3,14.1,113,14 M113,0
+                C50.6,0,0,50.6,0,113s50.6,113,113,113s113-50.6,113-113S175.4,0,113,0z"/>
+              <path class="filled" d="M113,164.5c-3.9,0-7-3.1-7-7V98c0-3.9,3.1-7,7-7s7,3.1,7,7v59.5C120,161.4,116.9,164.5,113,164.5z"/>
+              <path class="filled" d="M113,77.4c-3.9,0-7-3.1-7-7v-2.5c0-3.9,3.1-7,7-7s7,3.1,7,7v2.5C120,74.3,116.9,77.4,113,77.4z"/>
+            </svg>
+            <span class="visuallyHidden">Read more information about this tool</span>
+          </a>
+        </li>
+        <li>
+          <button class="show-instructions collapsible" title="Show instructions">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+              <path class="filled" d="M113,14c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C14.1,58.3,58.3,14.1,113,14 M113,0C50.6,0,0,50.6,0,113
+                s50.6,113,113,113s113-50.6,113-113S175.4,0,113,0z"/>
+              <path class="filled" d="M114.3,52.9c7.4,0,13.9,1.2,19.6,3.5c5.7,2.4,10.2,5.7,13.4,10.1c3.2,4.4,4.8,9.6,4.8,15.8c0,6.7-1.5,12.3-4.4,16.9
+                c-2.9,4.6-6.9,8.1-11.8,10.5c-4.9,2.4-10.4,4-16.4,4.7v18.5h-14.4v-26c7.7-1.2,14-2.7,18.7-4.6c4.7-1.9,8.2-4.3,10.4-7.3
+                c2.2-2.9,3.3-6.6,3.3-11c0-5.4-2-9.8-6.1-13.2c-4-3.3-10.2-5-18.4-5c-7.6,0-13.8,2.1-18.6,6.3c-4.8,4.2-7.6,10-8.6,17.2l-12.3-7.1
+                c1.3-5.9,3.7-11.1,7.4-15.5c3.6-4.4,8.3-7.9,13.8-10.3C100.6,54.1,107,52.9,114.3,52.9z M112.2,148.1c3.3,0,6.1,1,8.1,3.1
+                s3.1,4.8,3.1,8.1c0,3.3-1,6.1-3.1,8.1c-2.1,2.1-4.8,3.1-8.1,3.1c-3.3,0-6.1-1-8.1-3.1c-2.1-2.1-3.1-4.8-3.1-8.1
+                c0-3.3,1-6.1,3.1-8.1S108.9,148.1,112.2,148.1z"/>
+            </svg>
+            <span class="visuallyHidden">Show instructions</span>
+          </button>
+        </li>
+        <li>
+            <button class="toggle-fullscreen collapsible" title="Toggle fullscreen">
+              <svg class="maximize" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+                <path class="filled" d="M61 102a7 7 0 01-7-7V60.34a7 7 0 017-7h34.23a7 7 0 010 14H68V95a7 7 0 01-7 7zM164.9 102a7 7 0 01-7-7V67.34h-27.23a7 7 0 110-14h34.23a7 7 0 017 7V95a7 7 0 01-7 7zM95.23 172.92H61a7 7 0 01-7-7v-34.69a7 7 0 1114 0v27.69h27.23a7 7 0 010 14zM164.9 172.92h-34.23a7 7 0 110-14h27.23v-27.69a7 7 0 0114 0v34.69a7 7 0 01-7 7z"/>
+                <path class="filled" d="M113 14a99 99 0 11-99 99 99.11 99.11 0 0199-99m0-14a113 113 0 10113 113A113 113 0 00113 0z"/>
+              </svg>
+              <svg class="minimize" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+                <path class="filled" d="M69.51,110.7a7,7,0,0,1-7-7V69a7,7,0,0,1,7-7h34.23a7,7,0,1,1,0,14H76.51v27.7A7,7,0,0,1,69.51,110.7Z"/>
+                <path class="filled" d="M156.49,110.57a7,7,0,0,1-7-7V75.87H122.26a7,7,0,1,1,0-14h34.23a7,7,0,0,1,7,7v34.7A7,7,0,0,1,156.49,110.57Z"/>
+                <path class="filled" d="M103.74,164.13H69.51a7,7,0,0,1-7-7v-34.7a7,7,0,1,1,14,0v27.7h27.23a7,7,0,1,1,0,14Z"/>
+                <path class="filled" d="M156.49,164H122.26a7,7,0,1,1,0-14h27.23V122.3a7,7,0,0,1,14,0V157A7,7,0,0,1,156.49,164Z"/>
+                <path class="filled" d="M113,14a99,99,0,1,1-99,99,99.11,99.11,0,0,1,99-99m0-14A113,113,0,1,0,226,113,113,113,0,0,0,113,0Z"/>
+              </svg>
+              <span class="visuallyHidden">Toggle fullscreen</span>
+            </button>
+          </li>
+          <li>
+            <button class="toggle-sound collapsible" title="Toggle sound">
+              <svg class="sound-on" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+                <path class="filled" d="M113 14a99 99 0 11-99 99 99.11 99.11 0 0199-99m0-14a113 113 0 10113 113A113 113 0 00113 0z"/>
+                <path class="filled" d="M139.4 175a12.56 12.56 0 01-9-3.77l-27.75-28.24H77.4a13.61 13.61 0 01-13.59-13.59V97.5A13.61 13.61 0
+                0177.4 83.91h24.45l28.59-29.09A12.59 12.59 0 01152 63.65v98.7A12.62 12.62 0 01139.4 175zm-61.59-46h27.81a7 7 0
+                015 2.09L138 158.91V67.09l-28.22 28.73a7 7 0 01-5 2.09h-27z"/>
+              </svg>
+              <svg class="sound-off" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+                <path class="filled" d="M113 14c54.7 0 99 44.3 99 99s-44.3 99-99 99-99-44.3-99-99c.1-54.7 44.3-98.9
+                99-99m0-14C50.6 0 0 50.6 0 113s50.6 113 113 113 113-50.6 113-113S175.4 0 113 0z"/>
+                <path class="filled" d="M182.2 149.8L152 119.6V63.7c0-3.4-1.4-6.6-3.8-9-4.9-4.9-12.9-4.9-17.8.1L109
+                76.6 84.7 52.3c-2.7-2.7-7.2-2.7-9.9 0s-2.7 7.2 0 9.9l21.7 21.7L109 96.5l63.2 63.2c1.3 1.3 3.1 2 5 2s3.6-.7
+                5-2c2.7-2.7 2.7-7.2 0-9.9zM138 67.1v38.5l-19.1-19.1L138 67.1zM138 158.9L110.6 131c-1.3-1.3-3.1-2.1-5-2.1H77.8v-31h17.1l-14-14h-3.5c-7.5
+                0-13.6 6.1-13.6 13.6v31.8c0 7.5 6.1 13.6 13.6 13.6h25.2l27.8 28.2c2.4 2.4 5.6 3.8 9 3.8 7 0 12.6-5.6 12.6-12.6V155l-14-14v17.9z"/>
+              </svg>
+              <span class="visuallyHidden">Toggle sound</span>
+            </button>
+          </li>
+          <li>
+            <button class="show-stories collapsible" title="Show story menu">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 226 226">
+                <path class="filled" d="M113,14c54.7,0,99,44.3,99,99s-44.3,99-99,99s-99-44.3-99-99C14.1,58.3,58.3,14.1,113,14 M113,0
+                  C50.6,0,0,50.6,0,113s50.6,113,113,113s113-50.6,113-113S175.4,0,113,0z"/>
+                <path class="filled" d="M146.7,165.2c-1.1,0-2.3-0.3-3.2-1l-30.5-22l-30.6,21.9c-2.5,1.7-5.9,1.1-7.7-1.4
+                  c-1-1.4-1.2-3.1-0.7-4.8l11.4-35.8L55.1,100c-2.5-1.7-3.1-5.2-1.3-7.7c1-1.5,2.8-2.4,4.6-2.3l37.6-0.2l11.8-35.7
+                  c1-2.9,4.1-4.4,7-3.5c1.6,0.5,2.9,1.8,3.5,3.5L130,89.8l37.6,0.2c3,0,5.5,2.5,5.5,5.5c0,1.7-0.8,3.4-2.2,4.4l-30.3,22.3l11.4,35.8
+                  c0.9,2.9-0.7,6-3.5,6.9C147.8,165.1,147.3,165.2,146.7,165.2L146.7,165.2z M113,130c1.1,0,2.3,0.3,3.2,1l20.3,14.6l-7.6-23.8
+                  c-0.7-2.3,0.1-4.7,2-6.1l20.1-14.8l-25-0.1c-2.4,0-4.5-1.5-5.2-3.8L113,73.3L105.1,97c-0.7,2.2-2.8,3.8-5.2,3.8l-25,0.1L95,115.7
+                  c1.9,1.4,2.7,3.8,2,6.1l-7.6,23.8l20.3-14.5C110.7,130.3,111.8,130,113,130z"/>
+              </svg>
+              <span class="visuallyHidden">Show story menu</span>
+            </button>
+          </li>
+      </ul>
+    </nav>
+
+    <div id="touchpad" class="touchpad"><div class="touchpad-handle"></div></div>
+
+    <div id="item-container" class="item-container">
+      <button class="item-close">×<span class="visuallyHidden"> close</span></button>
+      <div id="item-title" class="item-title"></div>
+      <div id="item-media-container" class="item-media-container">
+        <button class="toggle-audio"><span class="visuallyHidden">Toggle audio</span></button>
+        <button class="toggle-object"><span class="visuallyHidden">Toggle 3D object</span></button>
+        <iframe class="item-object"></iframe>
+        <img id="item-image" class="item-image" />
+      </div>
+      <div id="item-metadata-container" class="item-metadata-container">
+        <div id="item-metadata" class="item-metadata"></div>
+      </div>
+    </div>
+
+  </div>
+
+  <div id="instructions" class="instructions">
+    <div>
+      <button class="instructions-close close-x">×<span class="visuallyHidden"> close</span></button>
+      <div class="keyboard-instructions device-instructions">
+        <h1>Controls</h1>
+        <ul>
+          <li>Move your mouse to <strong>look around</strong></li>
+          <li>W-A-S-D or arrow keys to <strong>move around</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-WASD.png" alt="WASD Keys Icon" />
+            </div>
+            <div class="image-container">
+              <img src="../../img/ico-arrowkeys.png" alt="Arrow Keys Icon" />
+            </div>
+          </li>
+          <li>Space bar to <strong>change layout</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-spacebar.png" alt="Space Bar Icon" class="space-icon" />
+            </div>
+          </li>
+        </ul>
+        <button class="instructions-close large">Okay</button>
+        <p><small>Using a touch device? <a href="?device=touch">Tap here to load touch mode.</a></small></p>
+      </div>
+      <div class="touch-instructions device-instructions">
+        <h1>Controls</h1>
+        <ul>
+          <li>Drag to <strong>look around</strong></li>
+          <li>Use trackpad to <strong>move around</strong></li>
+          <li class="image-row">
+            <div class="image-container">
+              <img src="../../img/ico-trackpad.png" alt="Trackpad icon" class="trackpad-icon" />
+            </div>
+          </li>
+        </ul>
+        <button class="instructions-close large">Okay</button>
+        <p><small>Using a keyboard and mouse? <a href="?device=keyboard">Tap here to load keyboard mode.</a></small></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  var renderNeeded = true;
+  </script>
+  <script src="../../js/vendor/jquery-3.4.1.min.js"></script>
+  <script src="../../js/vendor/underscore-1.9.2.min.js"></script>
+  <script src="../../js/vendor/three-r114.min.js"></script>
+  <script src="../../js/vendor/hammer.min.js"></script>
+  <script src="../../js/vendor/seedrandom.min.js"></script>
+
+  <script src="../../js/utils/math_utils.js"></script>
+  <script src="../../js/utils/utils.js"></script>
+
+  <script src="../../js/lib/collection.js"></script>
+  <script src="../../js/lib/controls.js"></script>
+  <script src="../../js/lib/geometry.js"></script>
+  <script src="../../js/lib/guide.js"></script>
+  <script src="../../js/lib/itemDetailManager.js"></script>
+  <script src="../../js/lib/key.js"></script>
+  <script src="../../js/lib/label.js"></script>
+  <script src="../../js/lib/labelSet.js"></script>
+  <script src="../../js/lib/material.js"></script>
+  <script src="../../js/lib/mesh.js"></script>
+  <script src="../../js/lib/overlay.js"></script>
+  <script src="../../js/lib/pointGeometry.js"></script>
+  <script src="../../js/lib/raycaster.js"></script>
+  <script src="../../js/lib/set.js"></script>
+  <script src="../../js/lib/sound.js"></script>
+  <script src="../../js/lib/soundSet.js"></script>
+  <script src="../../js/lib/story.js"></script>
+  <script src="../../js/lib/storyManager.js"></script>
+  <script src="../../js/main.js"></script>
+
+  <script src="js/config.js"></script>
+  <!-- these files should be generated by running make_app.py -->
+  <script src="js/config/config.labels.js"></script>
+  <script src="js/config/config.metadata.js"></script>
+  <script src="js/config/config.sets.js"></script>
+  <script src="js/config/config.positions.js"></script>
+  <!-- <script src="js/config/config.sounds.js"></script> -->
+  <script src="js/config/config.textures.js"></script>
+  <script src="js/config/config.content.js"></script>
+  <!-- / -->
+  <script src="js/app.js"></script>
+</body>
+
+</html>
