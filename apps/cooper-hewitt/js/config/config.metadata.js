@@ -1,7 +1,7 @@
 _.extend(CONFIG, {
   "metadata": {
-    "itemCount": 31393,
-    "itemsPerFile": 31,
+    "itemCount": 39801,
+    "itemsPerFile": 40,
     "itemsPath": "data/metadata/"
   }
 });

@@ -24,6 +24,7 @@ from lib.string_utils import *
 parser = argparse.ArgumentParser()
 parser.add_argument('-in', dest="INPUT_FILE", default="path/to/metadata.csv", help="Path to csv file")
 parser.add_argument('-user', dest="USER_AGENT", default="collectionscope/1.0 (email@name.org)", help="The name of your app and email address for using Open Street Map Nominatim service: https://wiki.openstreetmap.org/wiki/Nominatim")
+parser.add_argument('-aliases', dest="COUNTRY_ALIASES", default="data/country_aliases.csv", help="A .csv file with a list of alternative names for countries")
 parser.add_argument('-country', dest="COUNTRY_COLUMN", default="Country", help="Column that contains country string")
 parser.add_argument('-state', dest="STATE_COLUMN", default="", help="Column that contains state string. Leave blank if not present.")
 parser.add_argument('-city', dest="CITY_COLUMN", default="", help="Column that contains city string. Leave blank if not present.")
@@ -40,6 +41,9 @@ OUTPUT_FILE = a.OUTPUT_FILE if len(a.OUTPUT_FILE) > 0 else a.INPUT_FILE
 
 # Make sure output dirs exist
 makeDirectories([a.CACHE_DIRECTORY, OUTPUT_FILE])
+
+_, aliases = readCsv(a.COUNTRY_ALIASES)
+aliasLookup = createLookup(aliases, "match")
 
 parts = []
 columns = []
@@ -70,6 +74,8 @@ for row in rows:
     rowValue = []
     for j, col in enumerate(columns):
         value = str(row[col]).strip()
+        if parts[j] == "country" and value in aliasLookup:
+            value = aliasLookup[value]["target"]
         rowValue.append(value)
         if len(value) < 1 and parts[j] == "country":
             isValid = False
@@ -77,7 +83,7 @@ for row in rows:
         continue
     rowValue = tuple(rowValue)
     valueId = "_".join(stringToId(part) for part in list(rowValue))
-    if rowValue not in uniqueValues:
+    if valueId not in idLookup:
         uniqueValues.append(rowValue)
         uniqueFileIds.append(valueId)
         idLookup[valueId] = [row["_index"]]

@@ -5,3 +5,4 @@ package-lock.json
 tmp/
 data/*
 !data/.keep
+!data/country_aliases.csv

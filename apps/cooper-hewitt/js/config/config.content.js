@@ -9,107 +9,107 @@ _.extend(CONFIG, {
       "items": [
         {
           "year": 1896,
-          "value": 496
+          "value": 680
         },
         {
           "year": 1897,
-          "value": 201
+          "value": 230
         },
         {
           "year": 1898,
-          "value": 92
-        },
-        {
-          "year": 1899,
-          "value": 84
-        },
-        {
-          "year": 1900,
-          "value": 19
-        },
-        {
-          "year": 1901,
-          "value": 2097
-        },
-        {
-          "year": 1902,
-          "value": 481
-        },
-        {
-          "year": 1903,
-          "value": 58
-        },
-        {
-          "year": 1904,
-          "value": 595
-        },
-        {
-          "year": 1905,
-          "value": 201
-        },
-        {
-          "year": 1906,
-          "value": 113
-        },
-        {
-          "year": 1907,
-          "value": 109
-        },
-        {
-          "year": 1908,
-          "value": 107
-        },
-        {
-          "year": 1909,
-          "value": 278
-        },
-        {
-          "year": 1910,
-          "value": 45
-        },
-        {
-          "year": 1911,
-          "value": 359
-        },
-        {
-          "year": 1912,
-          "value": 437
-        },
-        {
-          "year": 1913,
-          "value": 60
-        },
-        {
-          "year": 1914,
-          "value": 445
-        },
-        {
-          "year": 1915,
-          "value": 40
-        },
-        {
-          "year": 1916,
           "value": 162
         },
         {
+          "year": 1899,
+          "value": 106
+        },
+        {
+          "year": 1900,
+          "value": 57
+        },
+        {
+          "year": 1901,
+          "value": 2145
+        },
+        {
+          "year": 1902,
+          "value": 510
+        },
+        {
+          "year": 1903,
+          "value": 72
+        },
+        {
+          "year": 1904,
+          "value": 617
+        },
+        {
+          "year": 1905,
+          "value": 229
+        },
+        {
+          "year": 1906,
+          "value": 196
+        },
+        {
+          "year": 1907,
+          "value": 252
+        },
+        {
+          "year": 1908,
+          "value": 148
+        },
+        {
+          "year": 1909,
+          "value": 488
+        },
+        {
+          "year": 1910,
+          "value": 65
+        },
+        {
+          "year": 1911,
+          "value": 576
+        },
+        {
+          "year": 1912,
+          "value": 499
+        },
+        {
+          "year": 1913,
+          "value": 82
+        },
+        {
+          "year": 1914,
+          "value": 522
+        },
+        {
+          "year": 1915,
+          "value": 50
+        },
+        {
+          "year": 1916,
+          "value": 188
+        },
+        {
           "year": 1917,
-          "value": 1024
+          "value": 1031
         },
         {
           "year": 1918,
-          "value": 59
+          "value": 63
         },
         {
           "year": 1919,
-          "value": 67
+          "value": 109
         },
         {
           "year": 1920,
-          "value": 237
+          "value": 423
         },
         {
           "year": 1921,
-          "value": 866
+          "value": 1287
         },
         {
           "year": 1922,
@@ -117,371 +117,371 @@ _.extend(CONFIG, {
         },
         {
           "year": 1923,
-          "value": 192
+          "value": 246
         },
         {
           "year": 1924,
-          "value": 42
+          "value": 73
         },
         {
           "year": 1925,
-          "value": 83
+          "value": 159
         },
         {
           "year": 1926,
-          "value": 1557
+          "value": 1620
         },
         {
           "year": 1927,
-          "value": 28
+          "value": 41
         },
         {
           "year": 1928,
-          "value": 64
+          "value": 105
         },
         {
           "year": 1929,
-          "value": 36
+          "value": 41
         },
         {
           "year": 1930,
-          "value": 19
+          "value": 24
         },
         {
           "year": 1931,
-          "value": 1165
+          "value": 1814
         },
         {
           "year": 1932,
-          "value": 43
+          "value": 78
         },
         {
           "year": 1933,
-          "value": 87
-        },
-        {
-          "year": 1934,
-          "value": 15
-        },
-        {
-          "year": 1935,
-          "value": 25
-        },
-        {
-          "year": 1936,
-          "value": 106
-        },
-        {
-          "year": 1937,
-          "value": 211
-        },
-        {
-          "year": 1938,
-          "value": 3366
-        },
-        {
-          "year": 1939,
-          "value": 386
-        },
-        {
-          "year": 1940,
-          "value": 229
-        },
-        {
-          "year": 1941,
-          "value": 535
-        },
-        {
-          "year": 1942,
-          "value": 582
-        },
-        {
-          "year": 1943,
-          "value": 408
-        },
-        {
-          "year": 1944,
-          "value": 168
-        },
-        {
-          "year": 1945,
-          "value": 231
-        },
-        {
-          "year": 1946,
-          "value": 104
-        },
-        {
-          "year": 1947,
-          "value": 209
-        },
-        {
-          "year": 1948,
-          "value": 627
-        },
-        {
-          "year": 1949,
-          "value": 261
-        },
-        {
-          "year": 1950,
-          "value": 212
-        },
-        {
-          "year": 1951,
-          "value": 283
-        },
-        {
-          "year": 1952,
-          "value": 221
-        },
-        {
-          "year": 1953,
-          "value": 815
-        },
-        {
-          "year": 1954,
-          "value": 175
-        },
-        {
-          "year": 1955,
-          "value": 275
-        },
-        {
-          "year": 1956,
-          "value": 249
-        },
-        {
-          "year": 1957,
-          "value": 563
-        },
-        {
-          "year": 1958,
-          "value": 133
-        },
-        {
-          "year": 1959,
-          "value": 238
-        },
-        {
-          "year": 1960,
-          "value": 305
-        },
-        {
-          "year": 1961,
-          "value": 257
-        },
-        {
-          "year": 1962,
-          "value": 827
-        },
-        {
-          "year": 1963,
-          "value": 47
-        },
-        {
-          "year": 1964,
-          "value": 37
-        },
-        {
-          "year": 1965,
-          "value": 29
-        },
-        {
-          "year": 1966,
-          "value": 107
-        },
-        {
-          "year": 1967,
-          "value": 149
-        },
-        {
-          "year": 1968,
-          "value": 271
-        },
-        {
-          "year": 1969,
-          "value": 153
-        },
-        {
-          "year": 1970,
-          "value": 132
-        },
-        {
-          "year": 1971,
-          "value": 513
-        },
-        {
-          "year": 1972,
-          "value": 344
-        },
-        {
-          "year": 1973,
-          "value": 268
-        },
-        {
-          "year": 1974,
-          "value": 162
-        },
-        {
-          "year": 1975,
-          "value": 92
-        },
-        {
-          "year": 1976,
-          "value": 323
-        },
-        {
-          "year": 1977,
-          "value": 107
-        },
-        {
-          "year": 1978,
-          "value": 142
-        },
-        {
-          "year": 1979,
-          "value": 1392
-        },
-        {
-          "year": 1980,
-          "value": 141
-        },
-        {
-          "year": 1981,
-          "value": 390
-        },
-        {
-          "year": 1982,
-          "value": 58
-        },
-        {
-          "year": 1983,
           "value": 93
         },
         {
-          "year": 1984,
-          "value": 414
+          "year": 1934,
+          "value": 23
         },
         {
-          "year": 1985,
-          "value": 507
+          "year": 1935,
+          "value": 49
         },
         {
-          "year": 1986,
-          "value": 212
+          "year": 1936,
+          "value": 133
         },
         {
-          "year": 1987,
-          "value": 19
+          "year": 1937,
+          "value": 259
         },
         {
-          "year": 1988,
-          "value": 85
+          "year": 1938,
+          "value": 3624
         },
         {
-          "year": 1989,
-          "value": 109
+          "year": 1939,
+          "value": 460
         },
         {
-          "year": 1990,
-          "value": 19
+          "year": 1940,
+          "value": 274
         },
         {
-          "year": 1991,
-          "value": 57
+          "year": 1941,
+          "value": 662
         },
         {
-          "year": 1992,
-          "value": 117
+          "year": 1942,
+          "value": 617
         },
         {
-          "year": 1993,
-          "value": 18
+          "year": 1943,
+          "value": 496
         },
         {
-          "year": 1994,
-          "value": 53
+          "year": 1944,
+          "value": 213
         },
         {
-          "year": 1995,
+          "year": 1945,
+          "value": 300
+        },
+        {
+          "year": 1946,
+          "value": 133
+        },
+        {
+          "year": 1947,
           "value": 229
         },
         {
+          "year": 1948,
+          "value": 806
+        },
+        {
+          "year": 1949,
+          "value": 429
+        },
+        {
+          "year": 1950,
+          "value": 284
+        },
+        {
+          "year": 1951,
+          "value": 408
+        },
+        {
+          "year": 1952,
+          "value": 331
+        },
+        {
+          "year": 1953,
+          "value": 1043
+        },
+        {
+          "year": 1954,
+          "value": 219
+        },
+        {
+          "year": 1955,
+          "value": 388
+        },
+        {
+          "year": 1956,
+          "value": 282
+        },
+        {
+          "year": 1957,
+          "value": 778
+        },
+        {
+          "year": 1958,
+          "value": 174
+        },
+        {
+          "year": 1959,
+          "value": 393
+        },
+        {
+          "year": 1960,
+          "value": 413
+        },
+        {
+          "year": 1961,
+          "value": 474
+        },
+        {
+          "year": 1962,
+          "value": 1167
+        },
+        {
+          "year": 1963,
+          "value": 58
+        },
+        {
+          "year": 1964,
+          "value": 48
+        },
+        {
+          "year": 1965,
+          "value": 37
+        },
+        {
+          "year": 1966,
+          "value": 116
+        },
+        {
+          "year": 1967,
+          "value": 207
+        },
+        {
+          "year": 1968,
+          "value": 402
+        },
+        {
+          "year": 1969,
+          "value": 176
+        },
+        {
+          "year": 1970,
+          "value": 163
+        },
+        {
+          "year": 1971,
+          "value": 562
+        },
+        {
+          "year": 1972,
+          "value": 497
+        },
+        {
+          "year": 1973,
+          "value": 350
+        },
+        {
+          "year": 1974,
+          "value": 245
+        },
+        {
+          "year": 1975,
+          "value": 153
+        },
+        {
+          "year": 1976,
+          "value": 396
+        },
+        {
+          "year": 1977,
+          "value": 223
+        },
+        {
+          "year": 1978,
+          "value": 196
+        },
+        {
+          "year": 1979,
+          "value": 1415
+        },
+        {
+          "year": 1980,
+          "value": 202
+        },
+        {
+          "year": 1981,
+          "value": 563
+        },
+        {
+          "year": 1982,
+          "value": 84
+        },
+        {
+          "year": 1983,
+          "value": 122
+        },
+        {
+          "year": 1984,
+          "value": 473
+        },
+        {
+          "year": 1985,
+          "value": 626
+        },
+        {
+          "year": 1986,
+          "value": 272
+        },
+        {
+          "year": 1987,
+          "value": 39
+        },
+        {
+          "year": 1988,
+          "value": 94
+        },
+        {
+          "year": 1989,
+          "value": 146
+        },
+        {
+          "year": 1990,
+          "value": 58
+        },
+        {
+          "year": 1991,
+          "value": 79
+        },
+        {
+          "year": 1992,
+          "value": 175
+        },
+        {
+          "year": 1993,
+          "value": 45
+        },
+        {
+          "year": 1994,
+          "value": 101
+        },
+        {
+          "year": 1995,
+          "value": 439
+        },
+        {
           "year": 1996,
-          "value": 62
+          "value": 124
         },
         {
           "year": 1997,
-          "value": 21
+          "value": 32
         },
         {
           "year": 1998,
-          "value": 64
+          "value": 117
         },
         {
           "year": 1999,
-          "value": 22
+          "value": 43
         },
         {
           "year": 2000,
-          "value": 13
-        },
-        {
-          "year": 2001,
-          "value": 3
-        },
-        {
-          "year": 2002,
-          "value": 9
-        },
-        {
-          "year": 2003,
-          "value": 21
-        },
-        {
-          "year": 2004,
-          "value": 2
-        },
-        {
-          "year": 2005,
-          "value": 13
-        },
-        {
-          "year": 2006,
-          "value": 20
-        },
-        {
-          "year": 2007,
           "value": 28
         },
         {
-          "year": 2008,
-          "value": 21
-        },
-        {
-          "year": 2009,
-          "value": 118
-        },
-        {
-          "year": 2010,
-          "value": 15
-        },
-        {
-          "year": 2011,
-          "value": 3
-        },
-        {
-          "year": 2012,
-          "value": 6
-        },
-        {
-          "year": 2013,
+          "year": 2001,
           "value": 17
         },
         {
+          "year": 2002,
+          "value": 16
+        },
+        {
+          "year": 2003,
+          "value": 36
+        },
+        {
+          "year": 2004,
+          "value": 4
+        },
+        {
+          "year": 2005,
+          "value": 15
+        },
+        {
+          "year": 2006,
+          "value": 88
+        },
+        {
+          "year": 2007,
+          "value": 54
+        },
+        {
+          "year": 2008,
+          "value": 45
+        },
+        {
+          "year": 2009,
+          "value": 124
+        },
+        {
+          "year": 2010,
+          "value": 17
+        },
+        {
+          "year": 2011,
+          "value": 7
+        },
+        {
+          "year": 2012,
+          "value": 7
+        },
+        {
+          "year": 2013,
+          "value": 20
+        },
+        {
           "year": 2014,
-          "value": 6
+          "value": 10
         },
         {
           "year": 2015,
@@ -489,15 +489,15 @@ _.extend(CONFIG, {
         },
         {
           "year": 2016,
-          "value": 16
+          "value": 21
         },
         {
           "year": 2017,
-          "value": 9
+          "value": 17
         },
         {
           "year": 2018,
-          "value": 11
+          "value": 15
         },
         {
           "year": 2019,
@@ -516,42 +516,42 @@ _.extend(CONFIG, {
         {
           "text": "Wallcoverings",
           "color": "#7aa030",
-          "count": 3366
+          "count": 4206
         },
         {
           "text": "figures",
           "color": "#726aa4",
-          "count": 2918
+          "count": 3060
         },
         {
-          "text": "architecture",
+          "text": "Print",
           "color": "#d37200",
-          "count": 1979
+          "count": 2544
         },
         {
           "text": "woven textiles",
           "color": "#d6a900",
-          "count": 1967
-        },
-        {
-          "text": "tiles",
-          "color": "#529c99",
-          "count": 1706
+          "count": 2349
         },
         {
           "text": "embroidery & stitching",
-          "color": "#b13734",
-          "count": 1651
+          "color": "#529c99",
+          "count": 2190
         },
         {
-          "text": "landscapes",
+          "text": "architecture",
+          "color": "#b13734",
+          "count": 2141
+        },
+        {
+          "text": "printed, dyed & painted textiles",
           "color": "#1f3c90",
-          "count": 1553
+          "count": 1900
         },
         {
           "text": "Other",
           "color": "#5a0661",
-          "count": 16253
+          "count": 21411
         }
       ]
     }
