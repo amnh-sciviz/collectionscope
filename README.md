@@ -6,6 +6,15 @@ Collectionscope is an open source software engine for visualizing museum collect
 
 You can view a [demo of this tool here](https://amnh-sciviz.github.io/collectionscope/apps/amnh/).
 
+## Maintenance status
+
+This prototype was developed by the [American Museum of Natural History](https://www.amnh.org/)'s [Science Visualization Group](https://amnh-sciviz.github.io/) in 2020 through 2021 with the support of [The Knight Foundation](https://knightfoundation.org/)'s [call for experimental projects using immersive technology in the arts](https://knightfoundation.org/press/releases/shaping-the-future-of-technology-in-museums-knight-invests-750000-in-five-experiments-using-immersive-technology-in-the-arts/).
+
+***The development period of this project has ended as of the April 2021, and unfortunately we cannot commit to actively maintaining the codebase. However:***
+
+1. This codebase is open source and you are encouraged to fork it and continue to improve it!
+2. You may continue to submit issues and feedback. While we may not be able to address your issue, it is very useful for us to know if and how other individuals and organizations are using this tool, which can inform future projects.
+
 ## Who is this software engine for?
 
 Organizations, institutions, and individuals who:
