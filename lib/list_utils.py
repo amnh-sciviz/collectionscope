@@ -1,3 +1,4 @@
+# list_utils.py all replaced by code with Kimseonghyun and ChatGPT
 from collections import Counter
 import itertools
 from operator import itemgetter
@@ -16,7 +17,6 @@ def createLookup(arr, key):
 def filterByQuery(arr, ors, caseSensitive=False):
     if isinstance(ors, tuple):
         ors = [[ors]]
-    # pprint(ors)
 
     if len(ors) < 1:
         return arr
@@ -27,8 +27,11 @@ def filterByQuery(arr, ors, caseSensitive=False):
         for ands in ors:
             andValid = True
             for key, comparator, value in ands:
+                if key in item:
+                    itemValue = str(item[key])
+                else:
+                    itemValue = ""
                 value = str(value)
-                itemValue = str(item[key])
                 if not caseSensitive:
                     value = value.lower()
                     itemValue = itemValue.lower()

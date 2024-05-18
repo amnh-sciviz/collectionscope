@@ -19,6 +19,7 @@ a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
 itemFields = config["itemFields"] if "itemFields" in config else None
+identifierColumn = config.get("identifierColumn", "_id")
 
 if itemFields is None:
     print(f'No item metadata fields are set in config. Skipping...')
@@ -51,7 +52,7 @@ itemsPerFile = a.ITEMS_PER_FILE
 if itemsPerFile < 1:
     targetFiles = 1000
     itemsPerFile = mu.roundInt(1.0 * itemCount / targetFiles)
-    itemsPerFile = min(itemsPerFile, 1000)
+    itemsPerFile = max(itemsPerFile, 1)  # Ensure itemsPerFile is at least 1
 
 totalFiles = mu.ceilInt(1.0 * itemCount / itemsPerFile)
 print(f'{itemsPerFile} per file with a total of {totalFiles} files')
@@ -76,8 +77,8 @@ for i, item in enumerate(items):
         itemOut.append(fieldOut)
 
     # Add story metadata if it exists
-    if item["_id"] in storyItems:
-        storyItem = storyItems[item["_id"]]
+    if identifierColumn in item and str(item[identifierColumn]) in storyItems:
+        storyItem = storyItems[str(item[identifierColumn])]
         if "html" in storyItem:
             itemOut.append({
                 "isHTML": True,

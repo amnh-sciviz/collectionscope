@@ -27,11 +27,11 @@ maxWidth = 4096
 maxTextureFiles = 10
 minCellWidth = 1
 maxCellWidth = 512
-containsAlpha = config["imageHasAlpha"] if "imageHasAlpha" in config else False
-defaultColor = config["defaultColor"] if "defaultColor" in config else "#3C3C3C"
-filenameKey = config["filenameColumn"] if "filenameColumn" in config else "filename"
-imageDir = config["imageDirectory"]
-noImageValue = config["noImageValue"] if "noImageValue" in config else None
+containsAlpha = config.get("imageHasAlpha", False)
+defaultColor = config.get("defaultColor", "#3C3C3C")
+filenameKey = config.get("filenameColumn", "filename")
+imageDir = config.get("imageDirectory", "path/to/default/images")  # Provide a default path if not set
+noImageValue = config.get("noImageValue")
 
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
 OUTPUT_TEXTURES_DIR_REL = "img/textures/"
@@ -49,8 +49,8 @@ items, categories = tu.getItems(config)
 
 # Make texture for each set
 # sets = list(configSets.items())
-sets = [] # just produce the default set for now
-sets = [("default", {"query": ""})] + sets # add default set
+sets = []  # just produce the default set for now
+sets = [("default", {"query": ""})] + sets  # add default set
 jsonsets = {}
 for keyName, options in sets:
     setItems = lu.filterByQueryString(items, options["query"])
@@ -102,8 +102,11 @@ for keyName, options in sets:
         shape = (setCount, cellWidth, cellWidth, colors)
         imageData = np.zeros(shape, dtype=np.uint8)
         for i, item in enumerate(setItems):
-            basename = item[filenameKey]
-            fn = imageDir + basename
+            basename = item.get(filenameKey)
+            if not basename:
+                print(f"Skipping item {i} due to missing filename key.")
+                continue
+            fn = os.path.join(imageDir, basename)
             if "{" in fn:
                 fn = fn.format(**item)
             # check for no image
@@ -118,7 +121,7 @@ for keyName, options in sets:
                     img = Image.new(mode=colorMode, size=(cellWidth, cellWidth), color=defaultColor)
 
             imageData[i] = np.array(img)
-            mu.printProgress(i+1, setCount)
+            mu.printProgress(i + 1, setCount)
         io.writeCacheFile(cacheFilename, imageData)
 
     setCount, cellWidth, cellWidth, colors = imageData.shape
@@ -130,8 +133,8 @@ for keyName, options in sets:
     cellsPerRow = int(maxWidth / cellWidth)
     assetFiles = []
     for fileIndex in range(textureFileCount):
-        textureImageFn = OUTPUT_TEXTURES_DIR + "%s_%s.%s" % (keyName, fileIndex, format)
-        textureImageFnRel = OUTPUT_TEXTURES_DIR_REL + "%s_%s.%s" % (keyName, fileIndex, format)
+        textureImageFn = os.path.join(OUTPUT_TEXTURES_DIR, "%s_%s.%s" % (keyName, fileIndex, format))
+        textureImageFnRel = os.path.join(OUTPUT_TEXTURES_DIR_REL, "%s_%s.%s" % (keyName, fileIndex, format))
         endIndex = startIndex + cellsPerFile
         fileImageData = imageData[startIndex:] if endIndex >= setCount else imageData[startIndex:endIndex]
         baseImg = Image.new(mode=colorMode, size=(maxWidth, maxWidth), color=tuple(bgColor))
@@ -141,7 +144,7 @@ for keyName, options in sets:
             row = int(i / cellsPerRow)
             x = col * cellWidth
             y = row * cellWidth
-            basePixels[y:y+cellWidth, x:x+cellWidth] = fileImageData[i]
+            basePixels[y:y + cellWidth, x:x + cellWidth] = fileImageData[i]
         iu.savePixelsToImage(textureImageFn, basePixels)
         startIndex += cellsPerFile
         assetFiles.append({"src": textureImageFnRel})

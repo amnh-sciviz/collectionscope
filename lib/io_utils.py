@@ -8,6 +8,7 @@ import requests
 import shutil
 import yaml
 from yaml import Loader
+import pandas as pd
 
 import lib.math_utils as mu
 
@@ -65,11 +66,11 @@ def readCacheFile(fn):
             print("Loaded cache file %s" % fn)
     return result
 
-def readCsv(filename, verbose=True, parseNumbers=True):
+def readCsv(filename, verbose=True, parseNumbers=True, encoding='utf-8'):
     rows = []
     fieldnames = []
     if os.path.isfile(filename):
-        with open(filename, "r", encoding="utf8") as f:
+        with open(filename, "r", newline="", encoding=encoding, errors="replace") as f:
             lines = list(f)
             reader = csv.DictReader(lines, skipinitialspace=True)
             if len(lines) > 0:
@@ -83,10 +84,22 @@ def readCsv(filename, verbose=True, parseNumbers=True):
         print("No file found at %s" % filename)
     return (fieldnames, rows)
 
+def readXlsx(filename, sheet_name=0):
+    """
+    Read data from an XLSX file.
+    """
+    data = []
+    if os.path.isfile(filename):
+        df = pd.read_excel(filename, sheet_name=sheet_name)
+        data = df.to_dict(orient='records')
+    else:
+        print("No file found at %s" % filename)
+    return data
+
 def readJSON(filename):
     data = {}
     if os.path.isfile(filename):
-        with open(filename, "r", encoding="utf8") as f:
+        with open(filename, "r", encoding="utf-8") as f:
             data = json.load(f)
     else:
         print("No file found at %s" % filename)
@@ -95,7 +108,7 @@ def readJSON(filename):
 def readTextFile(filename):
     contents = ""
     if os.path.isfile(filename):
-        with open(filename, "r", encoding="utf8") as f:
+        with open(filename, "r", encoding="utf-8") as f:
             contents = f.read()
     else:
         print("No file found at %s" % filename)
@@ -104,7 +117,7 @@ def readTextFile(filename):
 def readYaml(filename):
     data = {}
     if os.path.isfile(filename):
-        with open(filename, encoding="utf8") as f:
+        with open(filename, encoding="utf-8") as f:
             data = yaml.load(f, Loader=Loader)
     else:
         print("No file found at %s" % filename)
@@ -126,7 +139,7 @@ def writeCacheFile(fn, data):
     pickle.dump(data, bz2.open(fn, 'wb'))
     print("Wrote cache to %s." % fn)
 
-def writeCsv(filename, arr, headings="auto", append=False, encoding="utf8", verbose=True, listDelimeter=" | "):
+def writeCsv(filename, arr, headings="auto", append=False, encoding="utf-8", verbose=True, listDelimeter=" | "):
     if headings == "auto":
         headings = arr[0].keys() if len(arr) > 0 and type(arr[0]) is dict else None
     mode = 'w' if not append else 'a'
@@ -164,7 +177,7 @@ def writeData(fn, data, overwrite=False, compressed=False):
     return True
 
 def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append=""):
-    with open(filename, "w", encoding="utf8") as f:
+    with open(filename, "w", encoding="utf-8") as f:
         jsonStr = ""
         if pretty:
             jsonStr = json.dumps(data, indent=2)
@@ -176,5 +189,5 @@ def writeJSON(filename, data, verbose=True, pretty=False, prepend="", append="")
             print("Wrote data to %s" % filename)
 
 def writeTextFile(filename, text):
-    with open(filename, "w", encoding="utf8", errors="replace") as f:
+    with open(filename, "w", encoding="utf-8", errors="replace") as f:
         f.write(text)

@@ -19,24 +19,33 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", 
 a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
+labelsConfig = config.get("labels", {})
+
+# Ensure all necessary label settings are present with default values
+yearFontSize = labelsConfig.get("yearFontSize", 12)
+groupFontSize = labelsConfig.get("groupFontSize", 10)
+groupFontThickness = labelsConfig.get("groupFontThickness", 0.1)
+countryFontSize = labelsConfig.get("countryFontSize", 10)
+countryFontThickness = labelsConfig.get("countryFontThickness", 0.1)
+
 configLabels = {
     "years": {
-      "fontSize": config["labels"]["yearFontSize"],
-      "thickness": config["labels"]["yearFontSize"],
-      "defaultView": "timelineTunnel"
+        "fontSize": yearFontSize,
+        "thickness": yearFontSize,
+        "defaultView": "timelineTunnel"
     },
     "categoryYears": {
-      "fontSize": config["labels"]["groupFontSize"],
-      "thickness": config["labels"]["groupFontThickness"],
-      "defaultView": "timelineTracks",
-      "faceUp": True,
-      "faceEast": True
+        "fontSize": groupFontSize,
+        "thickness": groupFontThickness,
+        "defaultView": "timelineTracks",
+        "faceUp": True,
+        "faceEast": True
     },
     "countries": {
-      "fontSize": config["labels"]["countryFontSize"],
-      "thickness": config["labels"]["countryFontThickness"],
-      "defaultView": "geographyBars",
-      "layout": "bars"
+        "fontSize": countryFontSize,
+        "thickness": countryFontThickness,
+        "defaultView": "geographyBars",
+        "layout": "bars"
     }
 }
 
@@ -64,7 +73,6 @@ def getYearLabels(userOptions={}):
     options.update(userOptions)
     yearCol = "year"
     if yearCol not in items[0]:
-        # print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
         return (None, None)
 
     years = [item[yearCol] for item in items]
@@ -95,11 +103,9 @@ def getCategoryYearLabels(userOptions={}):
     yearCol = "year"
     categoryCol = "category"
     if yearCol not in items[0]:
-        # print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
         return (None, None)
 
     if categoryCol not in items[0]:
-        # print("`groupByColumn` needs to be set in config yml to support timelineTracks layout")
         return (None, None)
 
     categoryCount = len(categories)
@@ -141,7 +147,6 @@ def getCountryLabels(userOptions={}):
         return (None, None)
 
     if latCol not in items[0] or lonCol not in items[0]:
-        # print("`latitudeColumn` and `latitudeColumn` need to be set in config yml to support country labels; they will not show otherwise.")
         return (None, None)
 
     latRange = (90.0, -90.0)
