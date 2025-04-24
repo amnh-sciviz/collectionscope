@@ -184,7 +184,15 @@ var ItemDetailManager = (function() {
 
     if (image) {
       var img = $img[0];
-      img.src = image.value;
+      // img.src = image.value;
+      if(itemIndex === 126414) {
+        img.src = "../../apps/amnh/img/content/laufer/moon_guitar.jpg";
+      } else if (itemIndex === 215885) {
+        img.src = "../../apps/amnh/img/content/northwest/bracelet.jpg";
+      } else {
+        img.src = "../../img/amnh_collectionscope.jpg";
+      }
+
       if (img.complete) {
         this.onImageLoaded(itemIndex);
       } else {
