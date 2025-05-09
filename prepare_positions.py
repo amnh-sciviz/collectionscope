@@ -19,9 +19,9 @@ parser.add_argument("-config", dest="CONFIG_FILE", default="config-sample.yml", 
 a = parser.parse_args()
 
 config = tu.loadConfig(a.CONFIG_FILE)
-configViews = config["visualizations"]
-configStories = config["stories"] if "stories" in config else {}
-layouts = configViews.keys()
+configViews = config.get("visualizations", [])
+configStories = config.get("stories", {})
+layouts = [view["name"] for view in configViews]
 
 PRECISION = 5
 OUTPUT_DIR = "apps/{appname}/".format(appname=config["name"])
@@ -52,7 +52,7 @@ if len(items) < 1:
 
 def itemHasStory(item):
     global itemIdsWithStory
-    if item["_id"] in itemIdsWithStory:
+    if item["Content"] in itemIdsWithStory:  # Updated to use 'Content' as the identifier column
         return True
     return False
 
@@ -65,7 +65,7 @@ def getTimelineTunnelLayout(userOptions={}):
     options.update(userOptions)
 
     cfg = {}
-    yearCol = "year"
+    yearCol = config.get("dateColumn", "Year")  # Default to "Year"
     dimensions = 3
 
     if yearCol not in items[0]:
@@ -91,11 +91,8 @@ def getTimelineTunnelLayout(userOptions={}):
             index = item["index"]
             x = y = 0.5
             z = mu.randomUniform(minZ, maxZ, seed=count+5)
-            # angle =  mu.randomUniform(0, 360, seed=count+7)
             angle =  mu.randomUniform(-240, 60, seed=count+7)
-
             distance =  mu.randomUniform(minDistance, maxDistance, seed=count+9)
-            # ensure story items are visible
             if itemHasStory(item):
                 distance = minDistance * 0.8
             x, y =  mu.translatePoint(x, y, distance, angle)
@@ -113,8 +110,8 @@ def getSphereCategoryTimelineLayout(userOptions={}):
         "layout": "spheres"
     }
 
-    categoryCol = "category"
-    yearCol = "year"
+    categoryCol = config.get("groupByColumn", "Category")  # Default to "Category"
+    yearCol = config.get("dateColumn", "Year")  # Default to "Year"
     if yearCol not in items[0]:
         print("`dateColumn` needs to be set in config yml to support timelineTracks layout")
         return (False, False)
@@ -132,7 +129,6 @@ def getSphereCategoryTimelineLayout(userOptions={}):
     maxYear = max(years) + 1
     nUnit = 1.0 / (maxYear-minYear)
 
-    # determine category sphere count range
     minCount = 9999999999
     maxCount = 0
     for i, group in enumerate(groups):
@@ -142,10 +138,9 @@ def getSphereCategoryTimelineLayout(userOptions={}):
             maxCount = max(maxCount, subgroup["count"])
         groups[i]["categoryGroups"] = subgroups
 
-    # assign position values
     values = np.zeros(len(items) * dimensions)
     for i, group in enumerate(groups):
-        z = mu.norm(group[yearCol], (minYear, maxYear)) + nUnit*0.5 # place spheres in the center of the year
+        z = mu.norm(group[yearCol], (minYear, maxYear)) + nUnit*0.5
         subgroups = group["categoryGroups"]
         subgroupLookup = lu.createLookup(subgroups, categoryCol)
         for j, category in enumerate(categories):
@@ -158,7 +153,6 @@ def getSphereCategoryTimelineLayout(userOptions={}):
                 for catItem in subgroup["items"]:
                     itemIndex = catItem["index"]
                     cy = y
-                    # a bit of a hack to ensure highighted items are visible
                     if itemHasStory(catItem):
                         cy = y + 1.25
                     values[itemIndex*dimensions] = round(x, PRECISION)
@@ -166,7 +160,6 @@ def getSphereCategoryTimelineLayout(userOptions={}):
                     values[itemIndex*dimensions+2] = round(z, PRECISION)
 
     values = values.tolist()
-
     return (cfg, values)
 
 def getGeographyBarsLayout(userOptions={}):
@@ -175,24 +168,22 @@ def getGeographyBarsLayout(userOptions={}):
         "layout": "bars"
     }
 
-    latCol = "lat"
-    lonCol = "lon"
+    latCol = config.get("latitudeColumn", "Latitude")  # Default to "Latitude"
+    lonCol = config.get("longitudeColumn", "Longitude")  # Default to "Longitude"
     if latCol not in items[0] or lonCol not in items[0]:
         print("`latitudeColumn` and `latitudeColumn` need to be set in config yml to support geographyBars layout")
         return (False, False)
 
-    # create unique key for lat lon
     for i, item in enumerate(items):
         items[i]["lonLatKey"] = (mu.roundInt(item[lonCol]*PRECISION), mu.roundInt(item[latCol]*PRECISION))
 
     latRange = (90.0, -90.0)
     lonRange = (-180.0, 180.0)
     dimensions = 3
-    groups = lu.groupList(items, "lonLatKey") # group by lat lon
+    groups = lu.groupList(items, "lonLatKey")
     counts = [group["count"] for group in groups]
     minCount, maxCount = (min(counts), max(counts))
 
-    # assign position values
     values = np.zeros(len(items) * dimensions)
     for group in groups:
         y = mu.norm(group["count"], (minCount, maxCount))
@@ -202,7 +193,6 @@ def getGeographyBarsLayout(userOptions={}):
             x = 1.0 - mu.norm(item[lonCol], lonRange)
             z = 1.0 - mu.norm(item[latCol], latRange)
             itemY = y
-            # a bit of a hack to ensure highighted items are visible
             if itemHasStory(item):
                 itemY = y + 1.05
             values[itemIndex*dimensions] = round(x, PRECISION)
@@ -213,7 +203,8 @@ def getGeographyBarsLayout(userOptions={}):
     return (cfg, values)
 
 jsonPositions = {}
-for layout in layouts:
+for view in configViews:
+    layout = view["name"]
     layoutConfig = {}
     layoutData = None
 
